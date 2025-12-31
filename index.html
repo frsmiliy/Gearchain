@@ -57,15 +57,27 @@
         <h2 class="text-5xl md:text-6xl font-semibold mb-4">Wähle deinen Stil.</h2>
         <p class="text-gray-400 text-lg md:text-xl mb-16 italic">Nur noch wenige Einheiten zum Sonderpreis verfügbar.</p>
         
-        <div class="relative w-full max-w-lg px-6 mb-12 flex justify-center items-center">
-            <img id="gallery-img" src="https://uploads.onecompiler.io/4497sbcyd/4497rqh5b/Screenshot_2025-12-31_at_13-10-38_Kettenr%C3%A4der_Schwungrad_Fingerspitze_Gyroskop_Top_Fingerspitze_Kettenrad_Hand_Spinner_Kette_Getriebe_Metall_Fahrradketten_EDC_Handwerkzeug_-_AliExpress_1420-removebg-p.png" alt="GearChain Silber" class="w-full h-auto object-contain drop-shadow-[0_0_60px_rgba(255,255,255,0.15)] transition-opacity duration-500" style="transform: rotate(0deg);">
-        </div>
+<div class="relative w-full max-w-lg px-6 mb-12 flex justify-center items-center">
+    <img id="gallery-img" 
+         src="silver.png" 
+         alt="GearChain Silber" 
+         class="w-full h-auto object-contain drop-shadow-[0_0_60px_rgba(255,255,255,0.15)] transition-opacity duration-500" 
+         style="transform: rotate(0deg);">
+</div>
 
-        <div class="flex gap-8 mb-4">
-            <div onclick="updateGallery('Silber', 'https://uploads.onecompiler.io/4497sbcyd/4497rqh5b/Screenshot_2025-12-31_at_13-10-38_Kettenr%C3%A4der_Schwungrad_Fingerspitze_Gyroskop_Top_Fingerspitze_Kettenrad_Hand_Spinner_Kette_Getriebe_Metall_Fahrradketten_EDC_Handwerkzeug_-_AliExpress_1420-removebg-p.png', 3)" class="color-dot active bg-[#e5e5e5]" id="dot-silber"></div>
-            <div onclick="updateGallery('Gold', 'https://uploads.onecompiler.io/4497sbcyd/4497rqh5b/Screenshot_2025-12-31_at_13-10-43_Kettenr%C3%A4der_Schwungrad_Fingerspitze_Gyroskop_Top_Fingerspitze_Kettenrad_Hand_Spinner_Kette_Getriebe_Metall_Fahrradketten_EDC_Handwerkzeug_-_AliExpress_1420-removebg-p.png', 3)" class="color-dot bg-[#b4923e]" id="dot-gold"></div>
-            <div onclick="updateGallery('Schwarz', 'https://uploads.onecompiler.io/4497sbcyd/4497rqh5b/Screenshot_2025-12-31_at_13-11-02_Kettenr%C3%A4der_Schwungrad_Fingerspitze_Gyroskop_Top_Fingerspitze_Kettenrad_Hand_Spinner_Kette_Getriebe_Metall_Fahrradketten_EDC_Handwerkzeug_-_AliExpress_1420-removebg-p.png', 2)" class="color-dot bg-[#1d1d1f]" id="dot-schwarz"></div>
-        </div>
+<div class="flex gap-8 mb-4">
+    <div onclick="updateGallery('Silber', 'silver.png', 3)" 
+         class="color-dot active bg-[#e5e5e5]" 
+         id="dot-silber"></div>
+    
+    <div onclick="updateGallery('Gold', 'gold.png', 3)" 
+         class="color-dot bg-[#b4923e]" 
+         id="dot-gold"></div>
+    
+    <div onclick="updateGallery('Schwarz', 'black.png', 2)" 
+         class="color-dot bg-[#1d1d1f]" 
+         id="dot-schwarz"></div>
+</div>
         
         <p id="gallery-label" class="text-2xl font-medium mb-2">Silber</p>
         <span id="stock-display" class="bg-red-500/20 text-red-400 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">Nur noch 3 verfügbar</span>
