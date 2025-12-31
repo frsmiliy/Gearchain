@@ -160,14 +160,13 @@
         }
 
      async function processOrder() {
-    const emailField = document.getElementById('email-field');
-    const email = emailField.value;
+            const email = document.getElementById('email-field').value;
+            const btn = document.getElementById('submit-btn');
 
-    // Einfache Validierung
-    if(!email.includes('@') || email.length < 5) {
-        document.getElementById('error-popup').style.display = 'flex';
-        return;
-    }
+            if(!email.includes('@')) {
+                document.getElementById('error-popup').style.display = 'flex';
+                return;
+            }
 
     // Daten an Formspree senden
     const response = await fetch("https://formspree.io/f/mvzgprag", {
