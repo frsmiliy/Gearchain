@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GearChain - Apple Experience</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; background-color: #ffffff; color: #1d1d1f; }
+        .apple-blur { backdrop-filter: saturate(180%) blur(20px); background: rgba(255, 255, 255, 0.72); }
+        .btn-apple { background-color: #0071e3; color: white; border-radius: 980px; padding: 8px 16px; font-size: 12px; transition: all 0.3s ease; }
+        .color-dot { width: 44px; height: 44px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; padding: 3px; background-clip: content-box; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .color-dot.active { border-color: #ffffff; transform: scale(1.1); }
+        .section-dark { background-color: #000000; color: #ffffff; }
+        .hidden { display: none; }
+        .fade-in { animation: fadeIn 0.8s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Popup Styles */
+        #error-popup {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4); z-index: 1000; display: none;
+            align-items: center; justify-content: center; backdrop-filter: blur(5px);
+        }
+        .popup-content {
+            background: white; padding: 40px; border-radius: 24px;
+            max-width: 400px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="fixed top-0 w-full z-50 apple-blur border-b border-gray-100">
+        <div class="max-w-6xl mx-auto px-6 h-12 flex items-center justify-between">
+            <span class="text-xl font-semibold tracking-tight">GearChain</span>
+            <a href="#buy" class="btn-apple font-medium">Vorbestellen</a>
+        </div>
+    </nav>
+
+    <section class="h-screen flex flex-col items-center justify-center text-center px-4 bg-white">
+        <p class="text-orange-600 text-sm font-semibold mb-3 tracking-wide">LIMITIERTES PREORDER-ANGEBOT</p>
+        <h1 class="text-7xl md:text-9xl font-semibold tracking-tighter mb-6">GearChain</h1>
+        <p class="text-2xl md:text-3xl text-gray-500 font-light mb-12">Präzise entwickelt. Wunderschön gefertigt.</p>
+        <div class="flex flex-col items-center gap-2 mb-10">
+            <div class="flex items-center gap-4">
+                <span class="text-4xl font-semibold text-black">€1.99</span>
+                <span class="text-gray-400 line-through text-2xl">€2.49</span>
+            </div>
+            <span class="text-orange-500 font-bold text-sm uppercase tracking-tighter">Spare 20% (€0.50) durch Vorbestellung</span>
+        </div>
+        <a href="#explore" class="text-blue-600 text-xl hover:underline flex items-center gap-1">Mehr erfahren <span class="text-2xl">›</span></a>
+    </section>
+
+    <section id="explore" class="section-dark min-h-screen flex flex-col items-center justify-center py-24 text-center overflow-hidden">
+        <h2 class="text-5xl md:text-6xl font-semibold mb-4">Wähle deinen Stil.</h2>
+        <p class="text-gray-400 text-lg md:text-xl mb-16 italic">Nur noch wenige Einheiten zum Sonderpreis verfügbar.</p>
+        
+        <div class="relative w-full max-w-lg px-6 mb-12 flex justify-center items-center">
+            <img id="gallery-img" src="https://uploads.onecompiler.io/4497sbcyd/4497rqh5b/Screenshot_2025-12-31_at_13-10-38_Kettenr%C3%A4der_Schwungrad_Fingerspitze_Gyroskop_Top_Fingerspitze_Kettenrad_Hand_Spinner_Kette_Getriebe_Metall_Fahrradketten_EDC_Handwerkzeug_-_AliExpress_1420-removebg-p.png" alt="GearChain Silber" class="w-full h-auto object-contain drop-shadow-[0_0_60px_rgba(255,255,255,0.15)] transition-opacity duration-500" style="transform: rotate(0deg);">
+        </div>
+
+        <div class="flex gap-8 mb-4">
+            <div onclick="updateGallery('Silber', 'https://uploads.onecompiler.io/4497sbcyd/4497rqh5b/Screenshot_2025-12-31_at_13-10-38_Kettenr%C3%A4der_Schwungrad_Fingerspitze_Gyroskop_Top_Fingerspitze_Kettenrad_Hand_Spinner_Kette_Getriebe_Metall_Fahrradketten_EDC_Handwerkzeug_-_AliExpress_1420-removebg-p.png', 3)" class="color-dot active bg-[#e5e5e5]" id="dot-silber"></div>
+            <div onclick="updateGallery('Gold', 'https://uploads.onecompiler.io/4497sbcyd/4497rqh5b/Screenshot_2025-12-31_at_13-10-43_Kettenr%C3%A4der_Schwungrad_Fingerspitze_Gyroskop_Top_Fingerspitze_Kettenrad_Hand_Spinner_Kette_Getriebe_Metall_Fahrradketten_EDC_Handwerkzeug_-_AliExpress_1420-removebg-p.png', 3)" class="color-dot bg-[#b4923e]" id="dot-gold"></div>
+            <div onclick="updateGallery('Schwarz', 'https://uploads.onecompiler.io/4497sbcyd/4497rqh5b/Screenshot_2025-12-31_at_13-11-02_Kettenr%C3%A4der_Schwungrad_Fingerspitze_Gyroskop_Top_Fingerspitze_Kettenrad_Hand_Spinner_Kette_Getriebe_Metall_Fahrradketten_EDC_Handwerkzeug_-_AliExpress_1420-removebg-p.png', 2)" class="color-dot bg-[#1d1d1f]" id="dot-schwarz"></div>
+        </div>
+        
+        <p id="gallery-label" class="text-2xl font-medium mb-2">Silber</p>
+        <span id="stock-display" class="bg-red-500/20 text-red-400 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">Nur noch 3 verfügbar</span>
+    </section>
+
+    <section id="buy" class="min-h-screen bg-[#f5f5f7] flex flex-col items-center justify-center py-24 px-6">
+        <div class="max-w-3xl w-full mb-20">
+            <div class="bg-white rounded-[40px] p-12 md:p-20 shadow-sm relative overflow-hidden">
+                <div id="buy-form" class="w-full text-center fade-in">
+                    <p class="text-orange-600 font-bold text-xs tracking-widest uppercase mb-4">20% Rabatt-Aktion</p>
+                    <div class="text-6xl font-bold mb-2">€1.99 <span class="text-gray-200 text-3xl line-through align-middle ml-3">€2.49</span></div>
+                    <p class="text-gray-400 mb-12">Vorbesteller-Preis inklusive MwSt.</p>
+                    
+                    <div class="max-w-sm mx-auto">
+                        <p class="text-sm font-semibold mb-6 text-gray-400">Farbe: <span id="buy-color-name" class="text-black">Silber</span></p>
+                        <input type="email" id="email-field" placeholder="E-Mail für Bestätigung" class="w-full px-6 py-5 rounded-2xl bg-gray-50 border border-gray-100 mb-4 outline-none text-center text-lg">
+                        <button onclick="processOrder()" class="w-full bg-black text-white py-5 rounded-2xl font-semibold text-lg hover:bg-gray-800 transition-all">GearChain vorbestellen</button>
+                    </div>
+                </div>
+
+                <div id="success-screen" class="hidden text-center fade-in">
+                    <div class="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-8">
+                        <svg class="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                    </div>
+                    <h3 class="text-4xl font-semibold mb-4">Erfolgreich reserviert!</h3>
+                    <p class="text-gray-500 text-lg">GearChain in <span id="success-color" class="font-bold text-black">Silber</span></p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="w-full max-w-5xl border-t border-gray-200 pt-8 pb-12 text-[12px] text-gray-500 leading-relaxed">
+            <div class="mb-4">GearChain Preorder-Service Deutschland</div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h4 class="font-semibold mb-2 text-black">Impressum</h4>
+                    <p>GearChain Inc. c/o The SmartTools Ag<br>Boyenstraße 27, 10115 Berlin<br>Geschäftsführer: Robert Vogt</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-2 text-black">Kontakt</h4>
+                    <p>Support: robert.vogt@mailbox.org<br>Tel: +49 (0) 174 3580 329<br>Registergericht: Amtsgericht Berlin (Mitte), HRB 123456</p>
+                </div>
+            </div>
+        </footer>
+    </section>
+
+    <div id="error-popup">
+        <div class="popup-content">
+            <div class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </div>
+            <h3 class="text-2xl font-semibold mb-2">E-Mail ungültig</h3>
+            <p class="text-gray-500 mb-8">Bitte gib eine korrekte E-Mail-Adresse ein, um deine Vorbestellung zu sichern.</p>
+            <button onclick="closePopup()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-medium">Verstanden</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSelection = "Silber";
+        const gearImage = document.getElementById('gallery-img');
+
+        // Dezentere Scroll Rotation (Faktor 0.08 statt 0.12)
+        window.addEventListener('scroll', () => {
+            const rotation = window.scrollY * 0.08; 
+            gearImage.style.transform = `rotate(${rotation}deg)`;
+        });
+
+        function updateGallery(name, imgSrc, stock) {
+            currentSelection = name;
+            gearImage.style.opacity = '0';
+            setTimeout(() => {
+                gearImage.src = imgSrc;
+                gearImage.style.opacity = '1';
+                document.getElementById('gallery-label').innerText = name;
+                document.getElementById('buy-color-name').innerText = name;
+                document.getElementById('success-color').innerText = name;
+                document.getElementById('stock-display').innerText = `Nur noch ${stock} verfügbar`;
+            }, 300);
+            document.querySelectorAll('.color-dot').forEach(dot => dot.classList.remove('active'));
+            document.getElementById('dot-' + name.toLowerCase()).classList.add('active');
+        }
+
+        function processOrder() {
+            const email = document.getElementById('email-field').value;
+            if(!email.includes('@') || email.length < 5) {
+                document.getElementById('error-popup').style.display = 'flex';
+                return;
+            }
+            document.getElementById('buy-form').classList.add('hidden');
+            document.getElementById('success-screen').classList.remove('hidden');
+        }
+
+        function closePopup() { document.getElementById('error-popup').style.display = 'none'; }
+    </script>
+</body>
+</html>
