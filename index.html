@@ -18,7 +18,6 @@
         .fade-in { animation: fadeIn 0.8s ease forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Popup Styles */
         #error-popup {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.4); z-index: 1000; display: none;
@@ -50,34 +49,57 @@
             </div>
             <span class="text-orange-500 font-bold text-sm uppercase tracking-tighter">Spare 20% (€0.50) durch Vorbestellung</span>
         </div>
-        <a href="#explore" class="text-blue-600 text-xl hover:underline flex items-center gap-1">Mehr erfahren <span class="text-2xl">›</span></a>
+        <a href="#how-it-works" class="text-blue-600 text-xl hover:underline flex items-center gap-1">Mehr erfahren <span class="text-2xl">›</span></a>
+    </section>
+
+    <section id="how-it-works" class="py-32 bg-white">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-20">
+                <h2 class="text-5xl md:text-6xl font-semibold tracking-tight">Mechanik in Bewegung.</h2>
+                <p class="text-xl text-gray-500 mt-6 max-w-2xl mx-auto">Zwei präzise gefertigte Zahnräder, verbunden durch eine Edelstahlkette. Ein haptisches Erlebnis für jeden Moment.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="rounded-3xl overflow-hidden bg-[#f5f5f7] aspect-square flex items-center justify-center relative">
+                    <video class="w-full h-full object-cover" autoplay loop muted playsinline>
+                        <source src="video1.mp4" type="video/mp4">
+                    </video>
+                    <div class="absolute bottom-8 left-8 text-left">
+                        <p class="text-sm font-semibold uppercase tracking-widest text-gray-400">Design</p>
+                        <p class="text-xl font-medium text-black">Flüssige Dynamik</p>
+                    </div>
+                </div>
+
+                <div class="rounded-3xl overflow-hidden bg-[#f5f5f7] aspect-square flex items-center justify-center relative">
+                    <video class="w-full h-full object-cover" autoplay loop muted playsinline>
+                        <source src="video2.mp4" type="video/mp4">
+                    </video>
+                    <div class="absolute bottom-8 left-8 text-left">
+                        <p class="text-sm font-semibold uppercase tracking-widest text-gray-400">Material</p>
+                        <p class="text-xl font-medium text-black">Echter Edelstahl</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 
     <section id="explore" class="section-dark min-h-screen flex flex-col items-center justify-center py-24 text-center overflow-hidden">
         <h2 class="text-5xl md:text-6xl font-semibold mb-4">Wähle deinen Stil.</h2>
         <p class="text-gray-400 text-lg md:text-xl mb-16 italic">Nur noch wenige Einheiten zum Sonderpreis verfügbar.</p>
         
-<div class="relative w-full max-w-lg px-6 mb-12 flex justify-center items-center">
-    <img id="gallery-img" 
-         src="silver.png" 
-         alt="GearChain Silber" 
-         class="w-full h-auto object-contain drop-shadow-[0_0_60px_rgba(255,255,255,0.15)] transition-opacity duration-500" 
-         style="transform: rotate(0deg);">
-</div>
+        <div class="relative w-full max-w-lg px-6 mb-12 flex justify-center items-center">
+            <img id="gallery-img" 
+                 src="silver.png" 
+                 alt="GearChain Silber" 
+                 class="w-full h-auto object-contain drop-shadow-[0_0_60px_rgba(255,255,255,0.15)] transition-opacity duration-500" 
+                 style="transform: rotate(0deg);">
+        </div>
 
-<div class="flex gap-8 mb-4">
-    <div onclick="updateGallery('Silber', 'silver.png', 3)" 
-         class="color-dot active bg-[#e5e5e5]" 
-         id="dot-silber"></div>
-    
-    <div onclick="updateGallery('Gold', 'gold.png', 3)" 
-         class="color-dot bg-[#b4923e]" 
-         id="dot-gold"></div>
-    
-    <div onclick="updateGallery('Schwarz', 'black.png', 2)" 
-         class="color-dot bg-[#1d1d1f]" 
-         id="dot-schwarz"></div>
-</div>
+        <div class="flex gap-8 mb-4">
+            <div onclick="updateGallery('Silber', 'silver.png', 3)" class="color-dot active bg-[#e5e5e5]" id="dot-silber"></div>
+            <div onclick="updateGallery('Gold', 'gold.png', 3)" class="color-dot bg-[#b4923e]" id="dot-gold"></div>
+            <div onclick="updateGallery('Schwarz', 'black.png', 2)" class="color-dot bg-[#1d1d1f]" id="dot-schwarz"></div>
+        </div>
         
         <p id="gallery-label" class="text-2xl font-medium mb-2">Silber</p>
         <span id="stock-display" class="bg-red-500/20 text-red-400 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">Nur noch 3 verfügbar</span>
@@ -103,33 +125,32 @@
                         <svg class="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                     </div>
                     <h3 class="text-4xl font-semibold mb-4">Erfolgreich reserviert!</h3>
-                    <p class="text-gray-500 text-lg">GearChain in <span id="success-color" class="font-bold text-black">Silber</span></p>
+                    <p class="text-gray-500 text-lg text-black">GearChain in <span id="success-color" class="font-bold">Silber</span></p>
                 </div>
             </div>
         </div>
 
-        <footer class="w-full max-w-5xl border-t border-gray-200 pt-8 pb-12 text-[12px] text-gray-500 leading-relaxed">
-            <div class="mb-4">GearChain Preorder-Service Deutschland</div>
+        <footer class="w-full max-w-5xl border-t border-gray-200 pt-8 pb-12 text-[12px] text-gray-500 leading-relaxed text-center md:text-left">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                    <h4 class="font-semibold mb-2 text-black">Impressum</h4>
+                    <h4 class="font-semibold mb-2 text-black text-[14px]">Impressum</h4>
                     <p>GearChain Inc. c/o The SmartTools Ag<br>Boyenstraße 27, 10115 Berlin<br>Geschäftsführer: Robert Vogt</p>
                 </div>
                 <div>
-                    <h4 class="font-semibold mb-2 text-black">Kontakt</h4>
-                    <p>Support: robert.vogt@mailbox.org<br>Tel: +49 (0) 174 3580 329<br>Registergericht: Amtsgericht Berlin (Mitte), HRB 123456</p>
+                    <h4 class="font-semibold mb-2 text-black text-[14px]">Kontakt</h4>
+                    <p>Support: robert.vogt@mailbox.org<br>Tel: +49 (0) 174 3580 329</p>
                 </div>
             </div>
         </footer>
     </section>
 
-    <div id="error-popup">
-        <div class="popup-content">
+    <div id="error-popup" onclick="closePopup()">
+        <div class="popup-content" onclick="event.stopPropagation()">
             <div class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </div>
-            <h3 class="text-2xl font-semibold mb-2">E-Mail ungültig</h3>
-            <p class="text-gray-500 mb-8">Bitte gib eine korrekte E-Mail-Adresse ein, um deine Vorbestellung zu sichern.</p>
+            <h3 class="text-2xl font-semibold mb-2 text-black">E-Mail ungültig</h3>
+            <p class="text-gray-500 mb-8">Bitte gib eine korrekte E-Mail-Adresse ein.</p>
             <button onclick="closePopup()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-medium">Verstanden</button>
         </div>
     </div>
@@ -138,7 +159,6 @@
         let currentSelection = "Silber";
         const gearImage = document.getElementById('gallery-img');
 
-        // Dezentere Scroll Rotation (Faktor 0.08 statt 0.12)
         window.addEventListener('scroll', () => {
             const rotation = window.scrollY * 0.08; 
             gearImage.style.transform = `rotate(${rotation}deg)`;
@@ -159,35 +179,31 @@
             document.getElementById('dot-' + name.toLowerCase()).classList.add('active');
         }
 
-     async function processOrder() {
+        async function processOrder() {
             const email = document.getElementById('email-field').value;
-            const btn = document.getElementById('submit-btn');
-
             if(!email.includes('@')) {
                 document.getElementById('error-popup').style.display = 'flex';
                 return;
             }
 
-    // Daten an Formspree senden
-    const response = await fetch("https://formspree.io/f/mvzgprag", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            email: email,
-            product: "GearChain",
-            color: currentSelection,
-            price: "1.99 Euro"
-        })
-    });
+            const response = await fetch("https://formspree.io/f/mvzgprag", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    email: email,
+                    product: "GearChain",
+                    color: currentSelection,
+                    price: "1.99 Euro"
+                })
+            });
 
-    if (response.ok) {
-        // Erfolg: Zeige den Erfolgsscreen
-        document.getElementById('buy-form').classList.add('hidden');
-        document.getElementById('success-screen').classList.remove('hidden');
-    } else {
-        alert("Ein Fehler ist aufgetreten. Bitte versuche es später erneut.");
-    }
-}
+            if (response.ok) {
+                document.getElementById('buy-form').classList.add('hidden');
+                document.getElementById('success-screen').classList.remove('hidden');
+            } else {
+                alert("Ein Fehler ist aufgetreten.");
+            }
+        }
 
         function closePopup() { document.getElementById('error-popup').style.display = 'none'; }
     </script>
