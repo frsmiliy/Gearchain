@@ -159,15 +159,36 @@
             document.getElementById('dot-' + name.toLowerCase()).classList.add('active');
         }
 
-        function processOrder() {
-            const email = document.getElementById('email-field').value;
-            if(!email.includes('@') || email.length < 5) {
-                document.getElementById('error-popup').style.display = 'flex';
-                return;
-            }
-            document.getElementById('buy-form').classList.add('hidden');
-            document.getElementById('success-screen').classList.remove('hidden');
-        }
+     async function processOrder() {
+    const emailField = document.getElementById('email-field');
+    const email = emailField.value;
+
+    // Einfache Validierung
+    if(!email.includes('@') || email.length < 5) {
+        document.getElementById('error-popup').style.display = 'flex';
+        return;
+    }
+
+    // Daten an Formspree senden
+    const response = await fetch("https://formspree.io/f/mvzgprag", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            email: email,
+            product: "GearChain",
+            color: currentSelection,
+            price: "1.99 Euro"
+        })
+    });
+
+    if (response.ok) {
+        // Erfolg: Zeige den Erfolgsscreen
+        document.getElementById('buy-form').classList.add('hidden');
+        document.getElementById('success-screen').classList.remove('hidden');
+    } else {
+        alert("Ein Fehler ist aufgetreten. Bitte versuche es später erneut.");
+    }
+}
 
         function closePopup() { document.getElementById('error-popup').style.display = 'none'; }
     </script>
