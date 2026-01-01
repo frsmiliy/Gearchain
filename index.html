@@ -13,14 +13,29 @@
         .btn-apple { background-color: #0071e3; color: white; border-radius: 980px; padding: 10px 22px; font-size: 14px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .btn-apple:hover { background-color: #0077ed; transform: scale(1.02); }
 
-        .reveal-item { opacity: 0; transform: translateY(60px); transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1); will-change: transform, opacity; }
-        .reveal-item.active { opacity: 1; transform: translateY(0); }
+        /* APPLE SCROLL REVEAL ANIMATION */
+        .reveal-item { 
+            opacity: 0; 
+            transform: translateY(60px); 
+            transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1); 
+            will-change: transform, opacity;
+        }
+        .reveal-item.active { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
+
         .delay-1 { transition-delay: 0.15s; }
         .delay-2 { transition-delay: 0.3s; }
         .delay-3 { transition-delay: 0.45s; }
 
+        /* CLEAN SWIPE ANIMATION */
         #swipe-area { overflow: visible; touch-action: pan-y; }
-        #gallery-img { transform-origin: center; will-change: transform, opacity; transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease; }
+        #gallery-img { 
+            transform-origin: center;
+            will-change: transform, opacity;
+            transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease;
+        }
         .slide-exit-left { transform: translateX(-150px) rotate(var(--scroll-rot)) !important; opacity: 0; }
         .slide-exit-right { transform: translateX(150px) rotate(var(--scroll-rot)) !important; opacity: 0; }
         .slide-enter-left { transform: translateX(150px) rotate(var(--scroll-rot)) !important; opacity: 0; }
@@ -47,10 +62,12 @@
         <p class="text-orange-600 text-sm font-semibold mb-3 tracking-wide uppercase reveal-item active">Limited Preorder</p>
         <h1 class="text-7xl md:text-9xl font-semibold tracking-tighter mb-4 reveal-item active delay-1">GearChain</h1>
         <p class="text-gray-400 text-sm font-medium uppercase tracking-[0.2em] mb-10 reveal-item active delay-2">Präzisions-Engineering aus Deutschland</p>
+        
         <div class="flex items-center gap-4 mb-10 justify-center reveal-item active delay-3">
-            <span class="text-4xl font-semibold text-black">€1.99</span>
+            <span class="text-4xl font-semibold">€1.99</span>
             <span class="text-gray-300 line-through text-2xl">€2.49</span>
         </div>
+        
         <div class="mb-12 px-6 py-2 bg-gray-50 rounded-full border border-gray-100 reveal-item active delay-3">
             <p class="text-xs font-medium text-gray-500 uppercase tracking-widest">Aktion endet: <span id="countdown" class="text-black font-bold ml-1">--:--:--</span></p>
         </div>
@@ -60,8 +77,11 @@
         <div class="max-w-6xl mx-auto px-6">
             <div class="text-center mb-24 reveal-item">
                 <h2 class="text-5xl md:text-7xl font-semibold tracking-tight text-black mb-6">Einfach. Faszinierend.</h2>
-                <p class="text-xl text-gray-400 font-light max-w-2xl mx-auto leading-relaxed">Ein haptisches Erlebnis, das durch deutsche Ingenieurskunst definiert wird.</p>
+                <p class="text-xl text-gray-400 font-light max-w-2xl mx-auto leading-relaxed">
+                    Ein haptisches Erlebnis, das durch deutsche Ingenieurskunst definiert wird.
+                </p>
             </div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
                 <div class="reveal-item delay-1">
                     <div class="rounded-[44px] overflow-hidden bg-black aspect-square shadow-2xl relative group">
@@ -69,12 +89,25 @@
                             <source src="video1.mp4" type="video/mp4">
                         </video>
                     </div>
+                    <div class="mt-10 px-4">
+                        <h3 class="text-2xl font-semibold mb-3">Laufruhe neu definiert</h3>
+                        <p class="text-gray-500 leading-relaxed text-lg">Zertifizierte Kugellager für einen Spin, der niemals aufzuhören scheint.</p>
+                    </div>
                 </div>
+
                 <div class="reveal-item delay-2">
                     <div class="rounded-[44px] overflow-hidden bg-black aspect-square shadow-2xl relative group flex items-center justify-center">
                         <video id="v2" autoplay loop muted playsinline class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-1000">
                             <source src="video2.mp4" type="video/mp4">
                         </video>
+                        <div id="v2-error" class="hidden absolute inset-0 bg-gray-900 flex flex-col items-center justify-center p-10 text-center">
+                            <span class="text-4xl mb-4">⚙️</span>
+                            <p class="text-white/60 text-sm">Mechanik wird geladen...</p>
+                        </div>
+                    </div>
+                    <div class="mt-10 px-4">
+                        <h3 class="text-2xl font-semibold mb-3">Echte Kettendynamik</h3>
+                        <p class="text-gray-500 leading-relaxed text-lg">Jedes Glied ist auf maximale Haptik ausgelegt – spürbare Qualität bei jeder Bewegung.</p>
                     </div>
                 </div>
             </div>
@@ -85,16 +118,18 @@
         <div class="reveal-item">
             <h2 class="text-5xl md:text-6xl font-semibold mb-4 text-white tracking-tight">Dein Style.</h2>
             <p class="text-gray-500 text-lg mb-20">Wische zum Entdecken.</p>
+            
             <div id="swipe-area" class="relative w-full max-w-lg px-6 mb-16 mx-auto flex justify-center items-center cursor-grab">
                 <img id="gallery-img" src="silver.png" alt="GearChain" class="w-full h-auto object-contain drop-shadow-[0_0_60px_rgba(255,255,255,0.15)]">
             </div>
+
             <div class="flex justify-center gap-8 mb-6">
                 <div onclick="updateByClick(0)" class="color-dot active bg-[#e5e5e5]" id="dot-0"></div>
                 <div onclick="updateByClick(1)" class="color-dot bg-[#b4923e]" id="dot-1"></div>
                 <div onclick="updateByClick(2)" class="color-dot bg-[#1d1d1f]" id="dot-2"></div>
             </div>
             <p id="gallery-label" class="text-2xl font-medium mb-2 text-white">Silber</p>
-            <span id="stock-display" class="bg-white/10 text-white text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest italic tracking-wider">Laden...</span>
+            <span id="stock-display" class="bg-white/10 text-white text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest italic">In Deutschland gefertigt</span>
         </div>
     </section>
 
@@ -109,12 +144,13 @@
                         <button onclick="processOrder()" id="order-btn" class="w-full bg-black text-white py-5 rounded-2xl font-semibold text-lg shadow-xl hover:bg-gray-800 transition-all">Zertifikat sichern</button>
                     </div>
                 </div>
+
                 <div id="success-screen" class="hidden text-black">
                     <div class="glass-card p-12 rounded-[40px] mb-8 shadow-2xl">
                         <p class="text-[10px] font-bold uppercase tracking-[0.4em] text-gray-400 mb-8">Zertifikat</p>
                         <div class="text-6xl font-black tracking-tighter mb-8">GC-<span id="order-id">0000</span></div>
                         <p class="text-2xl font-medium mb-1" id="cert-color">Silber Edition</p>
-                        <p class="text-gray-400 mb-8" id="cert-type">Status</p>
+                        <p class="text-gray-400 mb-8" id="cert-type">Ready for Pickup</p>
                         <div class="inline-block px-10 py-3 bg-black text-white rounded-full font-bold">€1.99</div>
                     </div>
                     <p class="text-gray-500">Mache jetzt einen Screenshot.</p>
@@ -124,47 +160,36 @@
     </section>
 
     <script>
-        // ==========================================
-        // ZENTRALE LAGER-STEUERUNG (STOCK CONTROL)
-        // ==========================================
         const PRODUCTS = [
-            { 
-                name: "Silber", 
-                img: "silver.png", 
-                stock: 7,        // Sofort verfügbar
-                preorder: 20     // Auf dem Weg / Vorbestellbar
-            },
-            { 
-                name: "Gold", 
-                img: "gold.png", 
-                stock: 6, 
-                preorder: 20 
-            },
-            { 
-                name: "Schwarz", 
-                img: "black.png", 
-                stock: 7, 
-                preorder: 8 
-            }
+            { name: "Silber", img: "silver.png", stock: 2 },
+            { name: "Gold", img: "gold.png", stock: 2 },
+            { name: "Schwarz", img: "black.png", stock: 0 }
         ];
-        // ==========================================
-
         let currentIndex = 0;
         let isAnimating = false;
         let scrollRotation = 180;
         const gearImg = document.getElementById('gallery-img');
         const DEADLINE = new Date("January 5, 2026 23:59:59").getTime();
 
+        // REVEAL OBSERVER
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
+                    // Falls das Video im Viewport ist, starte es sicherheitshalber
                     const video = entry.target.querySelector('video');
                     if(video) video.play();
                 }
             });
         }, { threshold: 0.1 });
+
         document.querySelectorAll('.reveal-item').forEach(el => observer.observe(el));
+
+        // VIDEO 2 FIX & ERROR HANDLING
+        const v2 = document.getElementById('v2');
+        v2.onerror = function() {
+            document.getElementById('v2-error').classList.remove('hidden');
+        };
 
         window.addEventListener('scroll', () => {
             scrollRotation = 180 + (window.scrollY * 0.12);
@@ -172,10 +197,11 @@
             if(!isAnimating) gearImg.style.transform = `rotate(${scrollRotation}deg)`;
         });
 
-        // SWIPE LOGIK
+        // SWIPE
         let touchStartX = 0;
         let touchEndX = 0;
         const swipeArea = document.getElementById('swipe-area');
+
         swipeArea.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX, {passive: true});
         swipeArea.addEventListener('touchend', e => {
             touchEndX = e.changedTouches[0].screenX;
@@ -191,31 +217,6 @@
             animateGallery(index, index > currentIndex ? 'left' : 'right');
         }
 
-        // AKTUELLE ANZEIGE AKTUALISIEREN
-        function updateStockDisplay() {
-            const p = PRODUCTS[currentIndex];
-            const sEl = document.getElementById('stock-display');
-            const btn = document.getElementById('order-btn');
-            const tag = document.getElementById('preorder-tag');
-
-            if(p.stock > 0) {
-                sEl.innerText = `${p.stock} sofort verfügbar`;
-                sEl.className = "bg-white/10 text-white text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest italic";
-                btn.innerText = "Zertifikat sichern";
-                tag.classList.add('hidden');
-            } else if (p.preorder > 0) {
-                sEl.innerText = `${p.preorder} auf dem Weg - jetzt vorbestellen`;
-                sEl.className = "bg-orange-500/40 text-orange-200 text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest italic";
-                btn.innerText = "Jetzt vorbestellen";
-                tag.classList.remove('hidden');
-            } else {
-                sEl.innerText = `Ausverkauft`;
-                sEl.className = "bg-red-500/40 text-red-200 text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest italic";
-                btn.innerText = "Nicht verfügbar";
-                btn.disabled = true;
-            }
-        }
-
         function animateGallery(nextIndex, direction) {
             isAnimating = true;
             const exitClass = direction === 'left' ? 'slide-exit-left' : 'slide-exit-right';
@@ -228,7 +229,21 @@
                 gearImg.src = p.img;
                 document.getElementById('gallery-label').innerText = p.name;
                 
-                updateStockDisplay();
+                const sEl = document.getElementById('stock-display');
+                const btn = document.getElementById('order-btn');
+                const tag = document.getElementById('preorder-tag');
+
+                if(p.stock > 0) {
+                    sEl.innerText = `${p.stock} sofort verfügbar`;
+                    sEl.className = "bg-white/10 text-white text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest";
+                    btn.innerText = "Zertifikat sichern";
+                    tag.classList.add('hidden');
+                } else {
+                    sEl.innerText = `Vorbestellung aktiv`;
+                    sEl.className = "bg-red-500/40 text-red-200 text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest";
+                    btn.innerText = "Jetzt vorbestellen";
+                    tag.classList.remove('hidden');
+                }
 
                 document.querySelectorAll('.color-dot').forEach((d, i) => d.classList.toggle('active', i === currentIndex));
                 gearImg.classList.remove(exitClass);
@@ -249,33 +264,15 @@
         }
         setInterval(updateTimer, 1000);
         updateTimer();
-        updateStockDisplay(); // Initialer Call
 
-        // KAUF PROZESS
         function processOrder() {
             const email = document.getElementById('email-field').value;
             if(!email.includes('@')) { alert("E-Mail ungültig"); return; }
-            
-            const p = PRODUCTS[currentIndex];
-            let statusText = "";
-
-            // LOGIK: STOCK REDUZIEREN
-            if(p.stock > 0) {
-                p.stock--;
-                statusText = "Abholung Schule (Sofort)";
-            } else if (p.preorder > 0) {
-                p.preorder--;
-                statusText = "Vorbestellung (Wartezeit)";
-            }
-
-            // UI Update
             document.getElementById('order-id').innerText = Math.floor(Math.random() * 9000 + 1000);
-            document.getElementById('cert-color').innerText = p.name + " Edition";
-            document.getElementById('cert-type').innerText = statusText;
+            document.getElementById('cert-color').innerText = PRODUCTS[currentIndex].name + " Edition";
+            document.getElementById('cert-type').innerText = PRODUCTS[currentIndex].stock > 0 ? "Abholung Schule" : "Vorbestellung (Wartezeit)";
             document.getElementById('buy-form').classList.add('hidden');
             document.getElementById('success-screen').classList.remove('hidden');
-            
-            updateStockDisplay(); // Anzeige im Hintergrund aktualisieren
             window.location.hash = "buy";
         }
         document.documentElement.style.setProperty('--scroll-rot', '180deg');
