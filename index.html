@@ -146,34 +146,49 @@
         </div>
     </div>
 
-    <div id="impressum-page" class="hidden min-h-screen bg-white py-20 px-6">
-        <div class="max-w-2xl mx-auto">
-            <button onclick="hidePages()" class="text-blue-600 mb-10 font-medium">← Zurück</button>
-            <h1 class="text-5xl font-bold mb-8 tracking-tight">Impressum</h1>
-            <div class="text-gray-600 space-y-8 leading-relaxed text-lg">
-                <section>
-                    <h2 class="text-black font-semibold text-xl mb-2">Angaben gemäß § 5 TMG</h2>
-                    <p>
-                        GearChain i.G. <br>                    
-                        Boyenstraße 27<br>
-                        10115 Berlin
-                    </p>
-                </section>
-                <section>
-                    <h2 class="text-black font-semibold text-xl mb-2">Kontakt</h2>
-                    <p>E-Mail: robert.vogt@mailbox.org<br>
-                    Telefon: +49 (0) 174 3580 329
-                    </p>
-                </section>
-                <section>
-                    <h2 class="text-black font-semibold text-xl mb-2">Verantwortlich für den Inhalt</h2>
-                    <p>Robert Vogt</p>
-                </section>
-                <p class="text-sm text-gray-400 italic"></p>
-            </div>
-            <button onclick="hidePages()" class="mt-12 btn-apple w-full py-4 text-lg">Schließen</button>
-        </div>
+<footer class="py-10 text-center text-gray-400 text-xs border-t border-gray-100">
+    <div class="flex justify-center gap-6 mb-2">
+        <button type="button" onclick="showPrivacy()" class="hover:text-black">Datenschutzerklärung</button>
+        <button type="button" onclick="showImpressum()" class="hover:text-black">Impressum</button>
     </div>
+    <p>© 2026 GearChain – Precision Engineering</p>
+</footer>
+
+<div id="impressum-page" class="hidden min-h-screen bg-white py-20 px-6">
+    <div class="max-w-2xl mx-auto">
+        <button onclick="hidePages()" class="text-blue-600 mb-10 font-medium">← Zurück</button>
+        <h1 class="text-5xl font-bold mb-8 tracking-tight">Impressum</h1>
+        <div class="text-gray-600 space-y-8 leading-relaxed text-lg">
+            <section>
+                <h2 class="text-black font-semibold text-xl mb-2">Angaben gemäß § 5 TMG</h2>
+                <p>
+                    <strong>GearChain i.G.</strong><br>
+                    Vertreten durch: Robert Vogt<br>
+                    Boyenstraße 27<br>
+                    10115 Berlin<br>
+                    Deutschland
+                </p>
+            </section>
+            <section>
+                <h2 class="text-black font-semibold text-xl mb-2">Kontakt</h2>
+                <p>
+                    E-Mail: robert.vogt@mailbox.org<br>
+                    Telefon: +49 (0) 1743580 329
+                </p>
+            </section>
+            <section>
+                <h2 class="text-black font-semibold text-xl mb-2">Verantwortlich für den Inhalt</h2>
+                <p>Robert Vogt</p>
+            </section>
+            <section class="border-t pt-6">
+                <p class="text-sm text-gray-500">
+                    Gewerbe in Anmeldung/Gründung. Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.
+                </p>
+            </section>
+        </div>
+        <button onclick="hidePages()" class="mt-12 btn-apple w-full py-4 text-lg">Schließen</button>
+    </div>
+</div>
 
     <script>
         const SUPABASE_URL = 'https://nyekitzejjvhbyvaziwl.supabase.co';
