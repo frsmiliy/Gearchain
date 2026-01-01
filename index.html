@@ -14,21 +14,25 @@
         .color-dot { width: 44px; height: 44px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; padding: 3px; background-clip: content-box; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .color-dot.active { border-color: #ffffff; transform: scale(1.1); }
         .section-dark { background-color: #000000; color: #ffffff; }
-        .hidden { display: none; }
-        .fade-in { animation: fadeIn 0.8s ease forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Bild Initial-Rotation (180 Grad Fix) */
-        #gallery-img { transform: rotate(180deg); will-change: transform; transition: opacity 0.5s ease; }
-
-        #error-popup {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.4); z-index: 1000; display: none;
-            align-items: center; justify-content: center; backdrop-filter: blur(5px);
+        /* SWIPE ANIMATION CSS */
+        #swipe-area { overflow: visible; perspective: 1000px; touch-action: pan-y; }
+        #gallery-img { 
+            transform: rotate(180deg); 
+            will-change: transform, opacity; 
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.4s ease; 
         }
-        .popup-content {
-            background: white; padding: 40px; border-radius: 24px;
-            max-width: 400px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        .slide-exit-left { transform: rotate(210deg) translateX(-150px) scale(0.8) !important; opacity: 0; }
+        .slide-exit-right { transform: rotate(150deg) translateX(150px) scale(0.8) !important; opacity: 0; }
+        .slide-enter-left { transform: rotate(210deg) translateX(150px) scale(0.8) !important; opacity: 0; }
+        .slide-enter-right { transform: rotate(150deg) translateX(-150px) scale(0.8) !important; opacity: 0; }
+
+        /* ZERTIFIKAT GLAS EFFEKT */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
@@ -47,193 +51,159 @@
     <section class="h-screen flex flex-col items-center justify-center text-center px-4 bg-white">
         <p class="text-orange-600 text-sm font-semibold mb-3 tracking-wide">LIMITIERTES PREORDER-ANGEBOT</p>
         <h1 class="text-7xl md:text-9xl font-semibold tracking-tighter mb-6">GearChain</h1>
-        <p class="text-2xl md:text-3xl text-gray-500 font-light mb-12">Präzise entwickelt. Wunderschön gefertigt.</p>
-        
-        <div class="flex flex-col items-center gap-2 mb-10 text-black">
-            <div class="flex items-center gap-4">
-                <span id="current-price" class="text-4xl font-semibold text-black">€1.99</span>
-                <span id="old-price" class="text-gray-400 line-through text-2xl">€2.49</span>
-            </div>
-            <span id="discount-label" class="text-orange-500 font-bold text-sm uppercase tracking-tighter">Spare 20% (€0.50) durch Vorbestellung</span>
+        <div class="flex items-center gap-4 mb-10 justify-center">
+            <span class="text-4xl font-semibold text-black">€1.99</span>
+            <span class="text-gray-400 line-through text-2xl">€2.49</span>
         </div>
-
         <div class="mb-12 px-6 py-2 bg-gray-50 rounded-full border border-gray-100">
             <p class="text-xs font-medium text-gray-500 uppercase tracking-widest">Aktion endet in: <span id="countdown" class="text-black font-bold ml-1">--:--:--:--</span></p>
         </div>
-
-        <a href="#how-it-works" class="text-blue-600 text-xl hover:underline flex items-center gap-1">Mehr erfahren <span class="text-2xl">›</span></a>
+        <a href="#how-it-works" class="text-blue-600 text-xl hover:underline flex items-center gap-1">Mehr erfahren ›</a>
     </section>
 
     <section id="how-it-works" class="py-24 bg-white border-t border-gray-50">
         <div class="max-w-6xl mx-auto px-6 text-center">
-            <h2 class="text-4xl md:text-5xl font-semibold tracking-tight mb-16 text-black">Einfach. Faszinierend.</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="rounded-[32px] overflow-hidden bg-[#f5f5f7] relative shadow-inner aspect-square">
-                    <video autoplay loop muted playsinline class="w-full h-full object-cover">
-                        <source src="video1.mp4" type="video/mp4">
-                    </video>
-                </div>
-                <div class="rounded-[32px] overflow-hidden bg-[#f5f5f7] relative shadow-inner aspect-square">
-                    <video autoplay loop muted playsinline class="w-full h-full object-cover">
-                        <source src="video2.mp4" type="video/mp4">
-                    </video>
-                </div>
+                <div class="rounded-[32px] overflow-hidden bg-[#f5f5f7] aspect-square"><video autoplay loop muted playsinline class="w-full h-full object-cover"><source src="video1.mp4" type="video/mp4"></video></div>
+                <div class="rounded-[32px] overflow-hidden bg-[#f5f5f7] aspect-square"><video autoplay loop muted playsinline class="w-full h-full object-cover"><source src="video2.mp4" type="video/mp4"></video></div>
             </div>
         </div>
     </section>
 
-    <section id="explore" class="section-dark min-h-screen flex flex-col items-center justify-center py-24 text-center overflow-hidden relative">
+    <section id="explore" class="section-dark min-h-screen flex flex-col items-center justify-center py-24 text-center overflow-hidden">
         <h2 class="text-5xl md:text-6xl font-semibold mb-4">Wähle deinen Stil.</h2>
-        <p class="text-gray-400 text-lg md:text-xl mb-16 italic">Wische zum Wechseln der Farbe.</p>
+        <p class="text-gray-400 text-lg mb-16 italic text-sm">Wische nach links oder rechts.</p>
         
         <div id="swipe-area" class="relative w-full max-w-lg px-6 mb-12 flex justify-center items-center cursor-grab active:cursor-grabbing">
-            <img id="gallery-img" src="silver.png" alt="GearChain" class="w-full h-auto object-contain drop-shadow-[0_0_60px_rgba(255,255,255,0.15)]">
+            <img id="gallery-img" src="silver.png" alt="GearChain" class="w-full h-auto object-contain drop-shadow-[0_0_60px_rgba(255,255,255,0.2)]">
         </div>
 
         <div class="flex gap-8 mb-4">
-            <div onclick="updateGallery(0)" class="color-dot active bg-[#e5e5e5]" id="dot-0"></div>
-            <div onclick="updateGallery(1)" class="color-dot bg-[#b4923e]" id="dot-1"></div>
-            <div onclick="updateGallery(2)" class="color-dot bg-[#1d1d1f]" id="dot-2"></div>
+            <div onclick="updateByClick(0)" class="color-dot active bg-[#e5e5e5]" id="dot-0"></div>
+            <div onclick="updateByClick(1)" class="color-dot bg-[#b4923e]" id="dot-1"></div>
+            <div onclick="updateByClick(2)" class="color-dot bg-[#1d1d1f]" id="dot-2"></div>
         </div>
-        
         <p id="gallery-label" class="text-2xl font-medium mb-2">Silber</p>
-        <span id="stock-display" class="bg-red-500/20 text-red-400 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">Lade Bestand...</span>
+        <span id="stock-display" class="bg-white/10 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">Lade...</span>
     </section>
 
     <section id="buy" class="min-h-screen bg-[#f5f5f7] flex flex-col items-center justify-center py-24 px-6 text-black">
         <div class="max-w-3xl w-full">
-            <div id="main-buy-card" class="bg-white rounded-[40px] p-12 md:p-20 shadow-sm relative overflow-hidden text-center">
-                
-                <div id="buy-form" class="fade-in">
-                    <p class="text-orange-600 font-bold text-xs tracking-widest uppercase mb-4 italic">Aktion läuft</p>
-                    <div class="text-6xl font-bold mb-2"><span class="price-val">€1.99</span></div>
-                    <p class="text-gray-400 mb-12">Bezahlung bei Abholung in der Schule.</p>
-                    
+            <div id="main-buy-card" class="bg-white rounded-[40px] p-12 shadow-sm text-center">
+                <div id="buy-form">
+                    <p class="text-6xl font-bold mb-12 text-black">€1.99</p>
                     <div class="max-w-sm mx-auto">
                         <p class="text-sm font-semibold mb-6 text-gray-400">Farbe: <span id="buy-color-name" class="text-black">Silber</span></p>
-                        <input type="email" id="email-field" placeholder="E-Mail eingeben" class="w-full px-6 py-5 rounded-2xl bg-gray-50 border border-gray-100 mb-4 outline-none text-center text-lg focus:ring-2 focus:ring-blue-500 transition-all">
-                        <button onclick="processOrder()" id="order-btn" class="w-full bg-black text-white py-5 rounded-2xl font-semibold text-lg hover:bg-gray-800 transition-all shadow-lg">Zertifikat anfordern</button>
+                        <input type="email" id="email-field" placeholder="E-Mail eingeben" class="w-full px-6 py-5 rounded-2xl bg-gray-50 border mb-4 outline-none text-center text-lg">
+                        <button onclick="processOrder()" id="order-btn" class="w-full bg-black text-white py-5 rounded-2xl font-semibold text-lg shadow-lg">Zertifikat anfordern</button>
                     </div>
                 </div>
 
-                <div id="success-screen" class="hidden text-center fade-in">
-                    <div class="p-8 rounded-3xl bg-white mb-8 border-2 border-black">
-                        <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400 mb-4">Offizielles Zertifikat</p>
-                        <div class="text-4xl font-black tracking-tighter mb-4">GC-<span id="order-id">0000</span></div>
-                        <p class="text-xl font-medium mb-1" id="cert-color">Silber Edition</p>
-                        <p class="text-2xl font-bold" id="cert-price">€1.99</p>
+                <div id="success-screen" class="hidden fade-in">
+                    <div class="glass-card p-10 rounded-[32px] border border-gray-100 mb-8">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400 mb-6">Offizielles Zertifikat</p>
+                        <div class="text-5xl font-black tracking-tighter mb-6">GC-<span id="order-id">0000</span></div>
+                        <p class="text-2xl font-medium mb-1" id="cert-color">Silber Edition</p>
+                        <p class="text-gray-500 mb-6" id="cert-type">Abholung Schule</p>
+                        <div class="inline-block px-6 py-2 bg-black text-white rounded-full font-bold">€1.99</div>
                     </div>
                     <h3 class="text-2xl font-semibold mb-2">Screenshot machen!</h3>
-                    <p class="text-gray-500">Zeig das Robert in der Schule.</p>
+                    <p class="text-gray-500">Zeig das Zertifikat Robert in der Schule.</p>
                 </div>
-
             </div>
         </div>
     </section>
 
     <script>
-        // --- KONFIGURATION ---
         const PRODUCTS = [
             { name: "Silber", img: "silver.png", stock: 2 },
             { name: "Gold", img: "gold.png", stock: 2 },
             { name: "Schwarz", img: "black.png", stock: 0 }
         ];
         let currentIndex = 0;
+        let isAnimating = false;
         const DEADLINE = new Date("January 5, 2026 23:59:59").getTime();
+        const gearImg = document.getElementById('gallery-img');
 
-        const gearImage = document.getElementById('gallery-img');
-        
-        // --- SWIPE LOGIK ---
+        // SWIPE LOGIK
         let touchStartX = 0;
         let touchEndX = 0;
         const swipeArea = document.getElementById('swipe-area');
 
-        swipeArea.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX);
+        swipeArea.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX, {passive: true});
         swipeArea.addEventListener('touchend', e => {
             touchEndX = e.changedTouches[0].screenX;
             handleSwipe();
-        });
+        }, {passive: true});
 
         function handleSwipe() {
-            if (touchStartX - touchEndX > 50) { // Swipe Links
-                currentIndex = (currentIndex + 1) % PRODUCTS.length;
-                updateGallery(currentIndex);
-            }
-            if (touchEndX - touchStartX > 50) { // Swipe Rechts
-                currentIndex = (currentIndex - 1 + PRODUCTS.length) % PRODUCTS.length;
-                updateGallery(currentIndex);
+            if (isAnimating) return;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 50) {
+                const dir = diff > 0 ? 'left' : 'right';
+                const next = dir === 'left' ? (currentIndex + 1) % PRODUCTS.length : (currentIndex - 1 + PRODUCTS.length) % PRODUCTS.length;
+                animateGallery(next, dir);
             }
         }
 
-        // --- GALERIE UPDATE ---
-        function updateGallery(index) {
-            currentIndex = index;
-            const p = PRODUCTS[index];
-            
-            gearImage.style.opacity = '0';
+        function updateByClick(index) {
+            if (isAnimating || index === currentIndex) return;
+            animateGallery(index, index > currentIndex ? 'left' : 'right');
+        }
+
+        function animateGallery(nextIndex, direction) {
+            isAnimating = true;
+            const exitClass = direction === 'left' ? 'slide-exit-left' : 'slide-exit-right';
+            const enterClass = direction === 'left' ? 'slide-enter-left' : 'slide-enter-right';
+
+            gearImg.classList.add(exitClass);
+
             setTimeout(() => {
-                gearImage.src = p.img;
-                gearImage.style.opacity = '1';
+                currentIndex = nextIndex;
+                const p = PRODUCTS[currentIndex];
+                gearImg.src = p.img;
                 document.getElementById('gallery-label').innerText = p.name;
                 document.getElementById('buy-color-name').innerText = p.name;
                 
-                const stockEl = document.getElementById('stock-display');
-                if(p.stock > 0) {
-                    stockEl.innerText = `Nur noch ${p.stock} sofort verfügbar`;
-                    stockEl.className = "bg-green-500/20 text-green-400 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest";
-                    document.getElementById('order-btn').innerText = "Zertifikat anfordern";
-                } else {
-                    stockEl.innerText = `Ausverkauft - Jetzt vorbestellen`;
-                    stockEl.className = "bg-red-500/20 text-red-400 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest";
-                    document.getElementById('order-btn').innerText = "Jetzt vorbestellen";
-                }
-            }, 300);
+                // Stock Update
+                const sEl = document.getElementById('stock-display');
+                sEl.innerText = p.stock > 0 ? `Nur noch ${p.stock} sofort verfügbar` : `Ausverkauft - Jetzt vorbestellen`;
+                
+                document.querySelectorAll('.color-dot').forEach((d, i) => d.classList.toggle('active', i === currentIndex));
 
-            document.querySelectorAll('.color-dot').forEach((dot, i) => {
-                dot.classList.toggle('active', i === index);
-            });
+                gearImg.classList.remove(exitClass);
+                gearImg.classList.add(enterClass);
+                void gearImg.offsetWidth;
+                gearImg.classList.remove(enterClass);
+                isAnimating = false;
+            }, 400);
         }
 
-        // --- SMOOTH ROTATION (180 GRAD START) ---
-        let currentRotation = 180;
-        let targetRotation = 180;
+        // SCROLL ROTATION
+        let curRot = 180;
         window.addEventListener('scroll', () => {
-            targetRotation = 180 + (window.scrollY * 0.1);
+            const tarRot = 180 + (window.scrollY * 0.1);
+            curRot += (tarRot - curRot) * 0.1;
+            if(!isAnimating) gearImg.style.transform = `rotate(${curRot}deg)`;
         });
 
-        function animate() {
-            currentRotation += (targetRotation - currentRotation) * 0.08;
-            gearImage.style.transform = `rotate(${currentRotation}deg)`;
-            requestAnimationFrame(animate);
-        }
-        animate();
-
-        // --- TIMER ---
+        // TIMER
         function updateTimer() {
-            const now = new Date().getTime();
-            const diff = DEADLINE - now;
-            if (diff <= 0) {
-                document.getElementById('countdown').innerText = "AKTION BEENDET";
-                return;
-            }
-            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const diff = DEADLINE - new Date().getTime();
+            if (diff <= 0) { document.getElementById('countdown').innerText = "AKTION BEENDET"; return; }
             const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const s = Math.floor((diff % (1000 * 60)) / 1000);
-            document.getElementById('countdown').innerText = `${d}T ${h}Std ${m}Min ${s}Sek`;
+            document.getElementById('countdown').innerText = `${h}Std ${m}Min ${s}Sek`;
         }
         setInterval(updateTimer, 1000);
         updateTimer();
 
-        // --- BESTELLUNG ---
         async function processOrder() {
             const email = document.getElementById('email-field').value;
-            if(!email.includes('@')) { alert("Bitte E-Mail eingeben"); return; }
-            
-            const orderID = Math.floor(Math.random() * 9000 + 1000);
-            document.getElementById('order-id').innerText = orderID;
+            if(!email.includes('@')) { alert("E-Mail ungültig"); return; }
+            document.getElementById('order-id').innerText = Math.floor(Math.random() * 9000 + 1000);
             document.getElementById('cert-color').innerText = PRODUCTS[currentIndex].name + " Edition";
-            
             document.getElementById('buy-form').classList.add('hidden');
             document.getElementById('success-screen').classList.remove('hidden');
         }
