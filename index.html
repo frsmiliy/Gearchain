@@ -30,117 +30,147 @@
         .color-dot { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: 0.3s; position: relative; }
         .color-dot.active::after { content: ''; position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px; border: 2px solid #0071e3; border-radius: 50%; }
         .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.3); }
+        
+        /* Checkbox Styling */
+        .checkbox-container { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 24px; font-size: 14px; color: #86868b; }
+        .checkbox-container input { width: 18px; height: 18px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <nav class="fixed top-0 w-full z-50 apple-blur border-b border-gray-100">
-        <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-            <span class="text-xl font-semibold tracking-tight text-black">GearChain</span>
-            <a href="#buy" class="btn-apple font-medium">Sichern</a>
-        </div>
-    </nav>
-
-    <section class="h-screen flex flex-col items-center justify-center text-center px-4 bg-white">
-        <p class="text-orange-600 text-sm font-semibold mb-3 tracking-wide uppercase">Limited Preorder</p>
-        <h1 class="text-7xl md:text-9xl font-semibold tracking-tighter mb-4">GearChain</h1>
-        <p class="text-gray-400 text-sm font-medium uppercase tracking-[0.2em] mb-10">Präzisions-Engineering aus Deutschland</p>
-        
-        <div class="flex items-center gap-4 mb-10 justify-center">
-            <span id="hero-price-sale" class="text-4xl font-semibold text-black">--.--€</span>
-            <span id="hero-price-regular" class="text-gray-300 line-through text-2xl">--.--€</span>
-        </div>
-        
-        <div class="mb-12 px-6 py-2 bg-gray-50 rounded-full border border-gray-100">
-            <p class="text-xs font-medium text-gray-500 uppercase tracking-widest">Aktion endet: <span id="countdown" class="text-black font-bold ml-1">Lädt...</span></p>
-        </div>
-    </section>
-
-    <section id="how-it-works" class="py-32 bg-[#fafafa] border-t border-gray-100">
-        <div class="max-w-6xl mx-auto px-6 text-center">
-            <div class="mb-24 reveal-item">
-                <h2 class="text-5xl md:text-7xl font-semibold tracking-tight text-black mb-6">Faszinierend.</h2>
-                <p class="text-xl text-gray-500 max-w-2xl mx-auto">Ein Klick, der alles verändert.</p>
+    <div id="main-content">
+        <nav class="fixed top-0 w-full z-50 apple-blur border-b border-gray-100">
+            <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
+                <span class="text-xl font-semibold tracking-tight text-black">GearChain</span>
+                <a href="#buy" class="btn-apple font-medium">Sichern</a>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
-                <div class="reveal-item">
-                    <div class="rounded-[44px] overflow-hidden bg-black aspect-square shadow-2xl">
-                        <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-80">
-                            <source src="video1.mp4" type="video/mp4">
-                        </video>
+        </nav>
+
+        <section class="h-screen flex flex-col items-center justify-center text-center px-4 bg-white">
+            <p class="text-orange-600 text-sm font-semibold mb-3 tracking-wide uppercase">Limited Preorder</p>
+            <h1 class="text-7xl md:text-9xl font-semibold tracking-tighter mb-4">GearChain</h1>
+            <p class="text-gray-400 text-sm font-medium uppercase tracking-[0.2em] mb-10">Präzisions-Engineering aus Deutschland</p>
+            
+            <div class="flex items-center gap-4 mb-10 justify-center">
+                <span id="hero-price-sale" class="text-4xl font-semibold text-black">--.--€</span>
+                <span id="hero-price-regular" class="text-gray-300 line-through text-2xl">--.--€</span>
+            </div>
+            
+            <div class="mb-12 px-6 py-2 bg-gray-50 rounded-full border border-gray-100">
+                <p class="text-xs font-medium text-gray-500 uppercase tracking-widest">Aktion endet: <span id="countdown" class="text-black font-bold ml-1">Lädt...</span></p>
+            </div>
+        </section>
+
+        <section id="how-it-works" class="py-32 bg-[#fafafa] border-t border-gray-100">
+            <div class="max-w-6xl mx-auto px-6 text-center">
+                <div class="mb-24 reveal-item">
+                    <h2 class="text-5xl md:text-7xl font-semibold tracking-tight text-black mb-6">Faszinierend.</h2>
+                    <p class="text-xl text-gray-500 max-w-2xl mx-auto">Ein Klick, der alles verändert.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+                    <div class="reveal-item">
+                        <div class="rounded-[44px] overflow-hidden bg-black aspect-square shadow-2xl">
+                            <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-80">
+                                <source src="video1.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                    </div>
+                    <div class="reveal-item">
+                        <div class="rounded-[44px] overflow-hidden bg-black aspect-square shadow-2xl">
+                            <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-80">
+                                <source src="video2.mp4" type="video/mp4">
+                            </video>
+                        </div>
                     </div>
                 </div>
-                <div class="reveal-item">
-                    <div class="rounded-[44px] overflow-hidden bg-black aspect-square shadow-2xl">
-                        <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-80">
-                            <source src="video2.mp4" type="video/mp4">
-                        </video>
-                    </div>
+            </div>
+        </section>
+
+        <section id="explore" class="bg-black py-32 text-center overflow-hidden">
+            <div class="reveal-item">
+                <h2 class="text-5xl md:text-6xl font-semibold mb-4 text-white tracking-tight">Wähle deinen Stil.</h2>
+                <div id="swipe-area" class="relative w-full max-w-lg px-6 mb-16 mx-auto flex justify-center items-center">
+                    <img id="gallery-img" src="silber.png" alt="GearChain" class="w-full h-auto object-contain select-none">
                 </div>
+                <div class="flex justify-center gap-10 mb-8">
+                    <div onclick="updateByClick(0)" class="color-dot active bg-[#e5e5e5]" id="dot-0"></div>
+                    <div onclick="updateByClick(1)" class="color-dot bg-[#b4923e]" id="dot-1"></div>
+                    <div onclick="updateByClick(2)" class="color-dot bg-[#333333]" id="dot-2"></div>
+                </div>
+                <p id="gallery-label" class="text-2xl font-medium mb-2 text-white italic">Lade Modelle...</p>
+                <span id="stock-display" class="bg-white/10 text-white text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest">Warten</span>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="explore" class="bg-black py-32 text-center overflow-hidden">
-        <div class="reveal-item">
-            <h2 class="text-5xl md:text-6xl font-semibold mb-4 text-white tracking-tight">Wähle deinen Stil.</h2>
-            <div id="swipe-area" class="relative w-full max-w-lg px-6 mb-16 mx-auto flex justify-center items-center">
-                <img id="gallery-img" src="silber.png" alt="GearChain" class="w-full h-auto object-contain select-none">
-            </div>
-            <div class="flex justify-center gap-10 mb-8">
-                <div onclick="updateByClick(0)" class="color-dot active bg-[#e5e5e5]" id="dot-0"></div>
-                <div onclick="updateByClick(1)" class="color-dot bg-[#b4923e]" id="dot-1"></div>
-                <div onclick="updateByClick(2)" class="color-dot bg-[#333333]" id="dot-2"></div>
-            </div>
-            <p id="gallery-label" class="text-2xl font-medium mb-2 text-white italic">Lade Modelle...</p>
-            <span id="stock-display" class="bg-white/10 text-white text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest">Warten</span>
-        </div>
-    </section>
-
-    <section id="buy" class="min-h-screen bg-[#f5f5f7] flex flex-col items-center justify-center py-24 px-6">
-        <div class="max-w-3xl w-full reveal-item">
-            <div id="main-buy-card" class="bg-white rounded-[48px] p-12 md:p-20 text-center shadow-sm">
-                <div id="buy-form">
-                    <p id="preorder-tag" class="text-orange-600 font-bold text-xs tracking-widest uppercase mb-4 hidden">Vorbestellung</p>
-                    <div id="form-price" class="text-7xl font-bold mb-12 tracking-tighter text-black">€--.--</div>
-                    
-                    <div class="max-w-sm mx-auto text-black">
-                        <input type="text" id="name-field" placeholder="Vollständiger Name" class="input-apple">
-                        <input type="email" id="email-field" placeholder="E-Mail Adresse" class="input-apple">
+        <section id="buy" class="min-h-screen bg-[#f5f5f7] flex flex-col items-center justify-center py-24 px-6">
+            <div class="max-w-3xl w-full reveal-item">
+                <div id="main-buy-card" class="bg-white rounded-[48px] p-12 md:p-20 text-center shadow-sm">
+                    <div id="buy-form">
+                        <p id="preorder-tag" class="text-orange-600 font-bold text-xs tracking-widest uppercase mb-4 hidden">Vorbestellung</p>
+                        <div id="form-price" class="text-7xl font-bold mb-12 tracking-tighter text-black">€--.--</div>
                         
-                        <label class="checkbox-container">
-                            <input type="checkbox" id="privacy-check">
-                            <span>Ich akzeptiere die <a href="javascript:void(0)" onclick="openPrivacy()" class="text-blue-600 underline">Datenschutzerklärung</a>.</span>
-                        </label>
+                        <div class="max-w-sm mx-auto text-black">
+                            <input type="text" id="name-field" placeholder="Vollständiger Name" class="input-apple">
+                            <input type="email" id="email-field" placeholder="E-Mail Adresse" class="input-apple">
+                            
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="privacy-check">
+                                <span>Ich akzeptiere die <button type="button" onclick="showPrivacy()" class="text-blue-600 underline">Datenschutzerklärung</button>.</span>
+                            </div>
 
-                        <button onclick="processOrder()" id="order-btn" class="w-full bg-black text-white py-5 rounded-2xl font-semibold text-lg hover:bg-gray-800 transition-all">Zertifikat sichern</button>
+                            <button onclick="processOrder()" id="order-btn" class="w-full bg-black text-white py-5 rounded-2xl font-semibold text-lg hover:bg-gray-800 transition-all">Zertifikat sichern</button>
+                        </div>
+                    </div>
+                    
+                    <div id="success-screen" class="hidden text-black">
+                        <div class="glass-card p-12 rounded-[40px] mb-8 shadow-2xl">
+                            <p class="text-[10px] font-bold uppercase tracking-[0.4em] text-gray-400 mb-8">Zertifikat für <span id="cert-name-display"></span></p>
+                            <div class="text-6xl font-black tracking-tighter mb-8">GC-<span id="order-id">0000</span></div>
+                            <p class="text-2xl font-medium mb-1" id="cert-color">Edition</p>
+                            <p class="text-gray-400 mb-8" id="cert-type">Ready</p>
+                            <div id="cert-price-final" class="inline-block px-10 py-3 bg-black text-white rounded-full font-bold">€0.00</div>
+                        </div>
+                        <p class="text-sm text-gray-500">Du hast soeben eine Bestätigung per E-Mail erhalten.</p>
                     </div>
                 </div>
+            </div>
+        </section>
+        
+        <footer class="py-10 text-center text-gray-400 text-xs">
+            <button onclick="showPrivacy()" class="hover:text-black">Datenschutz</button>
+            <p class="mt-2">© 2026 GearChain</p>
+        </footer>
+    </div>
+
+    <div id="privacy-page" class="hidden min-h-screen bg-white py-20 px-6">
+        <div class="max-w-2xl mx-auto">
+            <button onclick="hidePrivacy()" class="text-blue-600 mb-10 font-medium">← Zurück zum Produkt</button>
+            <h1 class="text-4xl font-bold mb-8">Datenschutzerklärung</h1>
+            
+            <div class="text-gray-600 space-y-6 leading-relaxed">
+                <section>
+                    <h2 class="text-black font-semibold text-xl mb-2">1. Verantwortlich</h2>
+                    <p>GearChain Projekt-Team. Kontakt über das Bestellformular.</p>
+                </section>
                 
-                <div id="success-screen" class="hidden text-black">
-                    <div class="glass-card p-12 rounded-[40px] mb-8 shadow-2xl">
-                        <p class="text-[10px] font-bold uppercase tracking-[0.4em] text-gray-400 mb-8">Zertifikat für <span id="cert-name-display"></span></p>
-                        <div class="text-6xl font-black tracking-tighter mb-8">GC-<span id="order-id">0000</span></div>
-                        <p class="text-2xl font-medium mb-1" id="cert-color">Edition</p>
-                        <p class="text-gray-400 mb-8" id="cert-type">Ready</p>
-                        <div id="cert-price-final" class="inline-block px-10 py-3 bg-black text-white rounded-full font-bold">€0.00</div>
-                    </div>
-                    <p class="text-sm text-gray-500">Du hast soeben eine Bestätigung per E-Mail erhalten.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+                <section>
+                    <h2 class="text-black font-semibold text-xl mb-2">2. Datenerhebung</h2>
+                    <p>Wir erheben deinen Namen und deine E-Mail-Adresse. Diese Daten sind notwendig, um deine Reservierung zuzuordnen und dir eine Bestätigung zu senden.</p>
+                </section>
 
-    <div id="privacy-modal" style="display:none; position:fixed; inset:0; z-index:100; align-items:center; justify-content:center; background:rgba(0,0,0,0.4); backdrop-filter:blur(10px); padding:20px;">
-        <div style="background:white; width:100%; max-width:600px; border-radius:30px; padding:40px; box-shadow:0 25px 50px -12px rgba(0,0,0,0.25);">
-            <h2 class="text-3xl font-bold mb-6">Datenschutzerklärung</h2>
-            <div class="text-gray-600 space-y-4 text-left text-sm">
-                <p><strong>1. Datenerhebung:</strong> Wir speichern deinen Namen und deine E-Mail Adresse ausschließlich zur Abwicklung deiner Reservierung.</p>
-                <p><strong>2. Dienste:</strong> Deine Daten werden sicher in einer Supabase-Datenbank verarbeitet.</p>
-                <p><strong>3. Bestätigung:</strong> Du erhältst eine einmalige Bestätigungs-E-Mail über Formspree.</p>
-                <p><strong>4. Löschung:</strong> Nach Abschluss der Aktion (Schulverkauf) werden alle persönlichen Daten gelöscht.</p>
+                <section>
+                    <h2 class="text-black font-semibold text-xl mb-2">3. Drittanbieter</h2>
+                    <p><strong>Supabase:</strong> Wir speichern den Lagerbestand und deine Reservierung verschlüsselt in einer Datenbank.</p>
+                    <p><strong>Formspree:</strong> Dieser Dienst leitet deine Bestelldaten sicher an unsere E-Mail weiter, damit wir dich kontaktieren können.</p>
+                </section>
+
+                <section>
+                    <h2 class="text-black font-semibold text-xl mb-2">4. Deine Rechte</h2>
+                    <p>Du kannst jederzeit die Löschung deiner Daten fordern. Schicke uns dazu einfach eine Nachricht.</p>
+                </section>
             </div>
-            <button onclick="closePrivacy()" class="mt-10 btn-apple w-full">Verstanden</button>
+            
+            <button onclick="hidePrivacy()" class="mt-12 btn-apple w-full">Verstanden und Zurück</button>
         </div>
     </div>
 
@@ -230,11 +260,9 @@
             const updateData = p.stock > 0 ? { stock_ready: p.stock - 1 } : { stock_incoming: p.preorder - 1 };
             const orderID = "GC-" + Math.floor(Math.random() * 9000 + 1000);
             
-            // 1. Supabase Update
             const { error } = await supabaseClient.from('products').update(updateData).eq('id', p.db_id);
             
             if (!error) {
-                // 2. Formspree E-Mail senden
                 fetch(FORMSPREE_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -248,7 +276,6 @@
                     })
                 });
 
-                // 3. UI Update
                 document.getElementById('cert-name-display').innerText = name;
                 document.getElementById('order-id').innerText = orderID.replace("GC-", "");
                 document.getElementById('cert-color').innerText = p.name + " Edition";
@@ -274,8 +301,17 @@
             document.getElementById('countdown').innerText = `${d > 0 ? d + 'T ' : ''}${h}H ${m}M ${s}S`;
         }
 
-        function openPrivacy() { document.getElementById('privacy-modal').style.display = 'flex'; }
-        function closePrivacy() { document.getElementById('privacy-modal').style.display = 'none'; }
+        // NAVIGATION LOGIC
+        function showPrivacy() {
+            document.getElementById('main-content').classList.add('hidden');
+            document.getElementById('privacy-page').classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        function hidePrivacy() {
+            document.getElementById('privacy-page').classList.add('hidden');
+            document.getElementById('main-content').classList.remove('hidden');
+        }
 
         const observer = new IntersectionObserver(entries => {
             entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); });
