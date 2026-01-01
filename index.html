@@ -231,10 +231,12 @@
             const card = document.getElementById('main-buy-card');
             const btn = document.getElementById('order-btn');
 
+            // Validierung zurücksetzen
             nameField.classList.remove('input-error');
             emailField.classList.remove('input-error');
             card.classList.remove('shake');
 
+            // Validierung prüfen
             let hasError = false;
             if (!nameField.value.trim()) { nameField.classList.add('input-error'); hasError = true; }
             if (!emailField.value.trim() || !emailField.value.includes('@')) { emailField.classList.add('input-error'); hasError = true; }
@@ -245,6 +247,7 @@
                 return;
             }
 
+            // Button-Status ändern
             btn.innerText = "Verarbeitung...";
             btn.disabled = true;
 
@@ -253,34 +256,41 @@
             const isPreorder = currentProduct.stock <= 0;
             const finalPrice = isPreorder ? currentProduct.price_preorder : currentProduct.price_sale;
 
-            // 1. Bestellung in 'orders' anlegen
-            const { error: orderError } = await supabaseClient.from('orders').insert([{
-                product_id: currentProduct.db_id,
-                customer_name: nameField.value,
-                customer_email: emailField.value,
-                gc_code: gcCode
-            }]);
+            try {
+                // 1. Bestellung in Supabase Tabelle 'orders' anlegen
+                const { error: orderError } = await supabaseClient.from('orders').insert([{
+                    product_id: currentProduct.db_id,
+                    customer_name: nameField.value,
+                    customer_email: emailField.value,
+                    gc_code: gcCode
+                }]);
 
-            if (orderError) {
-                alert("Fehler beim Speichern: " + orderError.message);
-                btn.disabled = false;
-                btn.innerText = "Zertifikat sichern";
-                return;
-            }
+                if (orderError) throw orderError;
 
-            // 2. Bestand in 'products' verringern
-            // Wir nutzen rpc() für eine atomare Operation (verhindert Race Conditions)
-            // Falls du keine SQL-Function hast, nutzen wir hier das direkte Update:
-            const stockField = isPreorder ? 'stock_incoming' : 'stock_ready';
-            const newValue = isPreorder ? (currentProduct.preorder - 1) : (currentProduct.stock - 1);
+                // 2. Bestand in 'products' verringern
+                const stockField = isPreorder ? 'stock_incoming' : 'stock_ready';
+                const newValue = isPreorder ? (currentProduct.preorder - 1) : (currentProduct.stock - 1);
 
-            const { error: updateError } = await supabaseClient
-                .from('products')
-                .update({ [stockField]: newValue })
-                .eq('id', currentProduct.db_id);
+                const { error: updateError } = await supabaseClient
+                    .from('products')
+                    .update({ [stockField]: newValue })
+                    .eq('id', currentProduct.db_id);
 
-            if (!updateError) {
-                // UI Erfolgsschleife (SVG & Zertifikat)
+                if (updateError) throw updateError;
+
+                // 3. E-Mail Versand triggern (Edge Function)
+                // Hinweis: Die Function 'send-confirmation' muss in Supabase angelegt sein
+                supabaseClient.functions.invoke('send-confirmation', {
+                    body: { 
+                        email: emailField.value, 
+                        name: nameField.value, 
+                        gcCode: gcCode,
+                        product: currentProduct.name,
+                        price: finalPrice
+                    }
+                }).catch(e => console.error("Mail-Trigger Fehler:", e));
+
+                // 4. Erfolgserlebnis anzeigen (Apple Style Checkmark)
                 document.getElementById('buy-form').innerHTML = `
                     <div class="animate-in fade-in zoom-in duration-500 text-left">
                         <div class="flex justify-center mb-6">
@@ -329,12 +339,15 @@
 
                         <p class="text-center text-[10px] text-gray-400 mt-8 italic">
                             Bitte mache jetzt einen Screenshot für deine Unterlagen.<br>
-                            Zertifikat wird per Mail validiert.
+                            Bestätigung wird an ${emailField.value} gesendet.
                         </p>
                     </div>`;
-            } else {
-                alert("Bestands-Update fehlgeschlagen: " + updateError.message);
+
+            } catch (err) {
+                console.error("Prozess-Fehler:", err);
+                alert("Ein Fehler ist aufgetreten: " + err.message);
                 btn.disabled = false;
+                btn.innerText = "Zertifikat sichern";
             }
         }
 
