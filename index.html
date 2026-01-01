@@ -193,13 +193,11 @@
             document.getElementById('gallery-label').innerText = p.name + " Edition";
             
             if (p.stock > 0) {
-                // Grün für verfügbar
                 sEl.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5 mb-0.5"></span> ${p.stock} sofort verfügbar`;
                 sEl.className = "bg-green-500/10 text-green-500 text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest";
                 priceDisplay.innerText = `€${p.price_sale}`;
                 tag.classList.add('hidden');
             } else {
-                // Rot für Vorbestellung
                 sEl.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-red-500 mr-1.5 mb-0.5"></span> ${p.preorder} Plätze (Vorbestellung)`;
                 sEl.className = "bg-red-500/10 text-red-500 text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest";
                 priceDisplay.innerText = `€${p.price_preorder}`;
@@ -257,13 +255,24 @@
                 product_id: PRODUCTS[currentIndex].db_id,
                 customer_name: nameField.value,
                 customer_email: emailField.value,
-                gc_code: gcCode // Code in DB speichern falls Spalte existiert
+                gc_code: gcCode
             }]);
 
             if (!error) {
                 document.getElementById('buy-form').innerHTML = `
                     <div class="animate-in fade-in zoom-in duration-500 text-left">
-                        <div class="flex justify-center mb-6 text-green-500 text-5xl">✅</div>
+                        <div class="flex justify-center mb-6">
+                            <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="50" cy="50" r="48" fill="url(#paint0_linear)" />
+                                <path d="M30 52L44 66L70 34" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                                <defs>
+                                    <linearGradient id="paint0_linear" x1="50" y1="0" x2="50" y2="100" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#34C759"/>
+                                        <stop offset="1" stop-color="#28CD41"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
                         <h3 class="text-3xl font-bold text-center mb-8 tracking-tight">Reserviert!</h3>
                         
                         <div class="bg-[#f5f5f7] rounded-3xl p-6 mb-6 border border-gray-100">
