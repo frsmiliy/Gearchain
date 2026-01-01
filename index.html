@@ -11,173 +11,175 @@
     <style>
         html { scroll-behavior: smooth; }
         body { font-family: 'Inter', sans-serif; background-color: #ffffff; color: #1d1d1f; overflow-x: hidden; }
-        .apple-blur { backdrop-filter: saturate(180%) blur(20px); background: rgba(255, 255, 255, 0.8); }
+        .apple-blur { backdrop-filter: saturate(180%) blur(20px); background: rgba(255, 255, 255, 0.72); }
         
-        /* Input Styling */
+        /* Input Styling & Error States */
         .input-apple { 
-            width: 100%; padding: 18px; border-radius: 14px; 
-            background-color: #f5f5f7; border: 1px solid #d2d2d7; 
+            width: 100%; padding: 20px; border-radius: 16px; 
+            background-color: #f5f5f7; border: 1px solid #e5e5e7; 
             margin-bottom: 12px; outline: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-            text-align: center; font-size: 17px;
+            text-align: center; font-size: 16px;
         }
         .input-apple:focus { background-color: white; border-color: #0071e3; box-shadow: 0 0 0 4px rgba(0,113,227,0.1); }
         
-        /* Error States */
+        /* Fehler-Zustand */
         .input-error { border-color: #ff3b30 !important; background-color: #fff2f1 !important; }
         .text-error { color: #ff3b30 !important; }
 
+        /* Apple Shake Animation */
         @keyframes appleShake {
             0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-7px); }
-            40%, 80% { transform: translateX(7px); }
+            20% { transform: translateX(-8px); }
+            40% { transform: translateX(8px); }
+            60% { transform: translateX(-8px); }
+            80% { transform: translateX(8px); }
         }
         .shake { animation: appleShake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
 
-        /* Buttons */
-        .btn-nav { background-color: #0071e3; color: white; border-radius: 980px; padding: 6px 14px; font-size: 12px; font-weight: 500; transition: all 0.2s; }
-        .btn-nav:hover { background-color: #0077ed; }
-        
-        .btn-order { background-color: #000; color: white; padding: 18px; border-radius: 16px; width: 100%; font-weight: 600; font-size: 17px; transition: all 0.2s; cursor: pointer; }
-        .btn-order:active { transform: scale(0.97); opacity: 0.8; }
+        .btn-apple { background-color: #000; color: white; border-radius: 980px; padding: 12px 24px; font-size: 14px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .btn-apple:hover { transform: scale(1.02); }
+        .btn-order { background-color: #000; color: white; padding: 20px; border-radius: 18px; width: 100%; font-weight: 600; font-size: 17px; transition: all 0.2s; }
+        .btn-order:active { transform: scale(0.98); opacity: 0.8; }
 
         .reveal-item { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
         .reveal-item.active { opacity: 1; transform: translateY(0); }
         
-        /* Gallery */
-        #gallery-img { transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); max-height: 400px; }
-        .slide-exit { opacity: 0; transform: scale(0.95) translateY(10px); }
-        .slide-enter { opacity: 0; transform: scale(1.05) translateY(-10px); }
+        #gallery-img { transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .slide-exit { opacity: 0; transform: scale(0.9) translateX(-20px); }
+        .slide-enter { opacity: 0; transform: scale(1.1) translateX(20px); }
         
-        .color-dot { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; transition: 0.3s; position: relative; }
-        .color-dot::before { content: ''; position: absolute; inset: -6px; border: 2px solid transparent; border-radius: 50%; transition: 0.2s; }
-        .color-dot.active::before { border-color: #86868b; }
+        .color-dot { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: 0.3s; position: relative; }
+        .color-dot.active::after { content: ''; position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px; border: 2px solid #0071e3; border-radius: 50%; }
+        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.3); }
         
-        .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(0,0,0,0.05); }
+        .checkbox-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 24px; font-size: 14px; color: #86868b; transition: all 0.3s; }
     </style>
 </head>
 <body>
 
     <div id="main-content">
-        <nav class="fixed top-0 w-full z-50 apple-blur border-b border-gray-200/50">
-            <div class="max-w-5xl mx-auto px-6 h-12 flex items-center justify-between">
-                <span class="text-[19px] font-semibold tracking-tight">GearChain</span>
-                <a href="#buy" class="btn-nav">Sichern</a>
+        <nav class="fixed top-0 w-full z-50 apple-blur border-b border-gray-100">
+            <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
+                <span class="text-xl font-semibold tracking-tight">GearChain</span>
+                <a href="#buy" class="btn-apple">Sichern</a>
             </div>
         </nav>
 
-        <section class="min-h-screen flex flex-col items-center justify-center text-center px-6 bg-white pt-12">
-            <p class="text-[#f56300] text-[13px] font-semibold mb-3 tracking-wide uppercase">Limited Preorder</p>
-            <h1 class="text-6xl md:text-8xl font-semibold tracking-tighter mb-4 text-[#1d1d1f]">GearChain</h1>
-            <p class="text-[#86868b] text-lg font-normal mb-10 max-w-xl">Präzisions-Engineering für deinen Alltag. Minimalistisch, robust und zeitlos.</p>
+        <section class="h-screen flex flex-col items-center justify-center text-center px-4 bg-white">
+            <p class="text-orange-600 text-sm font-semibold mb-3 tracking-wide uppercase">Limited Preorder</p>
+            <h1 class="text-7xl md:text-9xl font-semibold tracking-tighter mb-4">GearChain</h1>
+            <p class="text-gray-400 text-sm font-medium uppercase tracking-[0.2em] mb-10">Präzisions-Engineering aus Deutschland</p>
             
-            <div class="flex items-baseline gap-3 mb-10 justify-center">
-                <span id="hero-price-sale" class="text-4xl font-semibold text-[#1d1d1f]">--.--€</span>
-                <span id="hero-price-regular" class="text-[#86868b] line-through text-xl">--.--€</span>
+            <div class="flex items-center gap-4 mb-10 justify-center">
+                <span id="hero-price-sale" class="text-4xl font-semibold text-black">--.--€</span>
+                <span id="hero-price-regular" class="text-gray-300 line-through text-2xl">--.--€</span>
             </div>
             
-            <div class="px-5 py-2 bg-[#f5f5f7] rounded-full">
-                <p class="text-[11px] font-semibold text-[#424245] uppercase tracking-widest">Aktion endet: <span id="countdown" class="text-black font-bold ml-1">--:--:--</span></p>
+            <div class="mb-12 px-6 py-2 bg-gray-50 rounded-full border border-gray-100">
+                <p class="text-xs font-medium text-gray-500 uppercase tracking-widest">Aktion endet: <span id="countdown" class="text-black font-bold ml-1">Lädt...</span></p>
             </div>
         </section>
 
-        <section class="py-24 bg-[#fafafa]">
-            <div class="max-w-5xl mx-auto px-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="reveal-item rounded-[32px] overflow-hidden bg-black aspect-[4/5] shadow-xl">
-                        <video autoplay loop muted playsinline class="w-full h-full object-cover">
-                            <source src="video1.mp4" type="video/mp4">
-                        </video>
+        <section id="how-it-works" class="py-32 bg-[#fafafa] border-t border-gray-100">
+            <div class="max-w-6xl mx-auto px-6 text-center">
+                <div class="mb-24 reveal-item">
+                    <h2 class="text-5xl md:text-7xl font-semibold tracking-tight text-black mb-6">Faszinierend.</h2>
+                    <p class="text-xl text-gray-500 max-w-2xl mx-auto">Ein Klick, der alles verändert.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+                    <div class="reveal-item">
+                        <div class="rounded-[44px] overflow-hidden bg-black aspect-square shadow-2xl">
+                            <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-80">
+                                <source src="video1.mp4" type="video/mp4">
+                            </video>
+                        </div>
                     </div>
-                    <div class="reveal-item rounded-[32px] overflow-hidden bg-[#e5e5e7] aspect-[4/5] shadow-xl">
-                        <video autoplay loop muted playsinline class="w-full h-full object-cover">
-                            <source src="video2.mp4" type="video/mp4">
-                        </video>
+                    <div class="reveal-item">
+                        <div class="rounded-[44px] overflow-hidden bg-black aspect-square shadow-2xl">
+                            <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-80">
+                                <source src="video2.mp4" type="video/mp4">
+                            </video>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="explore" class="bg-black py-24 text-center">
-            <div class="max-w-5xl mx-auto px-6">
-                <div class="reveal-item">
-                    <h2 class="text-4xl md:text-5xl font-semibold mb-12 text-white tracking-tight">Finde dein Modell.</h2>
-                    <div class="relative h-[400px] flex items-center justify-center mb-12">
-                        <img id="gallery-img" src="silber.png" alt="GearChain" class="object-contain w-full h-full">
-                    </div>
-                    
-                    <div class="flex justify-center gap-6 mb-6">
-                        <div onclick="updateByClick(0)" class="color-dot active bg-[#d2d2d7]" id="dot-0"></div>
-                        <div onclick="updateByClick(1)" class="color-dot bg-[#e1ccb7]" id="dot-1"></div>
-                        <div onclick="updateByClick(2)" class="color-dot bg-[#363535]" id="dot-2"></div>
-                    </div>
-                    
-                    <p id="gallery-label" class="text-xl font-medium text-white mb-2 tracking-tight">Silber Edition</p>
-                    <span id="stock-display" class="inline-block bg-[#1d1d1f] text-[#86868b] text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">Wird geladen...</span>
+        <section id="explore" class="bg-black py-32 text-center overflow-hidden">
+            <div class="reveal-item">
+                <h2 class="text-5xl md:text-6xl font-semibold mb-4 text-white tracking-tight">Wähle deinen Stil.</h2>
+                <div id="swipe-area" class="relative w-full max-w-lg px-6 mb-16 mx-auto flex justify-center items-center">
+                    <img id="gallery-img" src="silber.png" alt="GearChain" class="w-full h-auto object-contain select-none">
                 </div>
+                <div class="flex justify-center gap-10 mb-8">
+                    <div onclick="updateByClick(0)" class="color-dot active bg-[#e5e5e5]" id="dot-0"></div>
+                    <div onclick="updateByClick(1)" class="color-dot bg-[#b4923e]" id="dot-1"></div>
+                    <div onclick="updateByClick(2)" class="color-dot bg-[#333333]" id="dot-2"></div>
+                </div>
+                <p id="gallery-label" class="text-2xl font-medium mb-2 text-white italic">Lade Modelle...</p>
+                <span id="stock-display" class="bg-white/10 text-white text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest">Warten</span>
             </div>
         </section>
 
-        <section id="buy" class="min-h-screen bg-[#f5f5f7] flex flex-col items-center justify-center py-20 px-6">
-            <div class="max-w-[440px] w-full reveal-item">
-                <div class="bg-white rounded-[32px] p-8 md:p-12 text-center shadow-lg border border-gray-200/50">
+        <section id="buy" class="min-h-screen bg-[#f5f5f7] flex flex-col items-center justify-center py-24 px-6">
+            <div class="max-w-md w-full reveal-item">
+                <div id="main-buy-card" class="bg-white rounded-[40px] p-10 md:p-16 text-center shadow-sm">
                     <div id="buy-form">
-                        <p id="preorder-tag" class="text-[#f56300] font-bold text-[11px] uppercase tracking-widest mb-2 hidden">Vorbestellung</p>
-                        <div id="form-price" class="text-5xl font-bold mb-10 tracking-tight text-[#1d1d1f]">€--.--</div>
+                        <p id="preorder-tag" class="text-orange-600 font-bold text-xs tracking-widest uppercase mb-4 hidden">Vorbestellung</p>
+                        <div id="form-price" class="text-6xl font-bold mb-12 tracking-tighter text-black">€--.--</div>
                         
                         <div class="space-y-1">
                             <input type="text" id="name-field" placeholder="Vollständiger Name" class="input-apple">
                             <input type="email" id="email-field" placeholder="E-Mail Adresse" class="input-apple">
                             
-                            <div class="flex items-center justify-center gap-3 py-4 mb-4 text-[#86868b] text-[13px]" id="privacy-container">
-                                <input type="checkbox" id="privacy-check" class="w-4 h-4 rounded-sm accent-[#0071e3]">
-                                <span>Ich akzeptiere den <button type="button" onclick="showPrivacy()" class="text-[#0071e3] hover:underline">Datenschutz</button>.</span>
+                            <div class="checkbox-container" id="privacy-container">
+                                <input type="checkbox" id="privacy-check" class="w-4 h-4">
+                                <span>Ich akzeptiere den <button type="button" onclick="showPrivacy()" class="text-blue-600 underline">Datenschutz</button>.</span>
                             </div>
 
                             <button onclick="processOrder()" id="order-btn" class="btn-order">Zertifikat sichern</button>
                         </div>
                     </div>
                     
-                    <div id="success-screen" class="hidden animate-in fade-in duration-500">
-                        <div class="glass-card p-8 rounded-[24px] mb-6 shadow-sm border border-gray-100">
-                            <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-[#86868b] mb-6">Reservierungs-ID</p>
-                            <div class="text-5xl font-bold tracking-tighter mb-6 text-black">GC-<span id="order-id">0000</span></div>
-                            <div class="space-y-1 mb-8">
-                                <p class="text-lg font-semibold text-black" id="cert-color">Edition</p>
-                                <p class="text-[#86868b] text-sm" id="cert-type">Ready for Pickup</p>
-                            </div>
-                            <div id="cert-price-final" class="inline-block px-6 py-2 bg-black text-white rounded-full text-sm font-semibold tracking-tight">€0.00</div>
+                    <div id="success-screen" class="hidden text-black">
+                        <div class="glass-card p-10 rounded-[30px] mb-8 shadow-2xl">
+                            <p class="text-[10px] font-bold uppercase tracking-[0.4em] text-gray-400 mb-8">Zertifikat für <span id="cert-name-display"></span></p>
+                            <div class="text-5xl font-black tracking-tighter mb-8">GC-<span id="order-id">0000</span></div>
+                            <p class="text-xl font-medium mb-1" id="cert-color">Edition</p>
+                            <p class="text-gray-400 text-sm mb-8" id="cert-type">Ready</p>
+                            <div id="cert-price-final" class="inline-block px-8 py-3 bg-black text-white rounded-full font-bold">€0.00</div>
                         </div>
-                        <p class="text-[13px] text-[#86868b]">Vielen Dank, <span id="cert-name-display" class="text-black font-medium"></span>. Wir haben dir eine Bestätigung gesendet.</p>
+                        <p class="text-sm text-gray-500">Bestätigung wurde versendet.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <footer class="py-12 text-center text-[#86868b] text-[12px]">
-            <div class="max-w-5xl mx-auto px-6 border-t border-gray-200 pt-8">
-                <button type="button" onclick="showPrivacy()" class="hover:text-black transition-colors">Datenschutz</button>
-                <span class="mx-3">|</span>
-                <span>© 2026 GearChain Project</span>
-            </div>
+        <footer class="py-10 text-center text-gray-400 text-xs">
+            <button type="button" onclick="showPrivacy()" class="hover:text-black">Datenschutzerklärung</button>
+            <p class="mt-2">© 2026 GearChain</p>
         </footer>
     </div>
 
     <div id="privacy-page" class="hidden min-h-screen bg-white py-20 px-6">
-        <div class="max-w-xl mx-auto">
-            <button onclick="hidePrivacy()" class="text-[#0071e3] mb-12 font-medium flex items-center gap-2"><span>←</span> Zurück</button>
-            <h1 class="text-4xl font-semibold mb-8 tracking-tight">Datenschutz.</h1>
-            <div class="text-[#424245] space-y-8 text-lg leading-relaxed">
-                <p>Im Rahmen dieses Schulprojekts nehmen wir den Schutz deiner Daten ernst. Wir erheben nur das Nötigste.</p>
+        <div class="max-w-2xl mx-auto">
+            <button onclick="hidePrivacy()" class="text-blue-600 mb-10 font-medium">← Zurück</button>
+            <h1 class="text-5xl font-bold mb-8 tracking-tight">Datenschutz.</h1>
+            <div class="text-gray-600 space-y-6 leading-relaxed">
                 <section>
-                    <h2 class="text-[#1d1d1f] font-semibold text-xl mb-3">Datenverarbeitung</h2>
-                    <p>Dein Name und deine E-Mail werden sicher in unserer Datenbank (Supabase) gespeichert, um deine Reservierung zu verifizieren.</p>
+                    <h2 class="text-black font-semibold text-xl mb-2">1. Datenerhebung</h2>
+                    <p>Wir speichern deinen Namen und deine E-Mail-Adresse ausschließlich zur Abwicklung deiner Reservierung im Rahmen des Schulprojekts.</p>
                 </section>
                 <section>
-                    <h2 class="text-[#1d1d1f] font-semibold text-xl mb-3">Löschung</h2>
-                    <p>Nach Beendigung des Projekts (Ende 2026) werden alle personenbezogenen Datensätze unwiderruflich gelöscht.</p>
+                    <h2 class="text-black font-semibold text-xl mb-2">2. Dienste</h2>
+                    <p>Daten werden sicher in <strong>Supabase</strong> verarbeitet. Die Benachrichtigung erfolgt über <strong>Formspree</strong>.</p>
+                </section>
+                <section>
+                    <h2 class="text-black font-semibold text-xl mb-2">3. Löschung</h2>
+                    <p>Nach Abschluss des Verkaufs werden alle persönlichen Daten vollständig aus unseren Systemen gelöscht.</p>
                 </section>
             </div>
-            <button onclick="hidePrivacy()" class="mt-16 w-full py-4 bg-[#f5f5f7] rounded-2xl font-semibold text-[#1d1d1f]">Verstanden</button>
+            <button onclick="hidePrivacy()" class="mt-12 btn-apple w-full py-4 text-lg">Verstanden</button>
         </div>
     </div>
 
@@ -191,52 +193,50 @@
         let currentIndex = 0;
         let DEADLINE;
 
+        // DATENDURCHREICHUNG
         async function loadData() {
-            try {
-                const { data: prodData } = await supabaseClient.from('products').select('*').order('id', { ascending: true });
-                if (prodData) {
-                    PRODUCTS = prodData.map(item => ({
-                        db_id: item.id,
-                        name: item.name,
-                        img: item.name.toLowerCase() + ".png",
-                        stock: item.stock_ready,
-                        preorder: item.stock_incoming,
-                        price_sale: item.price_sale,
-                        price_regular: item.price_regular,
-                        price_preorder: item.price_preorder
-                    }));
-                    updateGalleryUI();
-                    document.getElementById('hero-price-sale').innerText = `€${PRODUCTS[0].price_sale}`;
-                    document.getElementById('hero-price-regular').innerText = `€${PRODUCTS[0].price_regular}`;
-                }
-                const { data: setData } = await supabaseClient.from('settings').select('value').eq('name', 'sale_deadline').single();
-                DEADLINE = setData ? new Date(setData.value).getTime() : new Date("2026-01-10T23:59:59").getTime();
-            } catch (e) { console.error("Load error:", e); }
+            const { data: prodData } = await supabaseClient.from('products').select('*').order('id', { ascending: true });
+            if (prodData && prodData.length > 0) {
+                PRODUCTS = prodData.map(item => ({
+                    db_id: item.id,
+                    name: item.name,
+                    img: (item.name.toLowerCase() === "silber" ? "silber" : item.name.toLowerCase() === "schwarz" ? "schwarz" : "gold") + ".png",
+                    stock: item.stock_ready,
+                    preorder: item.stock_incoming,
+                    price_sale: item.price_sale,
+                    price_regular: item.price_regular,
+                    price_preorder: item.price_preorder
+                }));
+                updateGalleryUI();
+                document.getElementById('hero-price-sale').innerText = `€${PRODUCTS[0].price_sale}`;
+                document.getElementById('hero-price-regular').innerText = `€${PRODUCTS[0].price_regular}`;
+            }
+            const { data: setData } = await supabaseClient.from('settings').select('value').eq('name', 'sale_deadline').single();
+            DEADLINE = setData ? new Date(setData.value).getTime() : new Date("January 10, 2026 23:59:59").getTime();
         }
 
+        // UI UPDATES
         function updateGalleryUI() {
             if (PRODUCTS.length === 0) return;
             const p = PRODUCTS[currentIndex];
-            const img = document.getElementById('gallery-img');
-            const sEl = document.getElementById('stock-display');
-            const priceDisplay = document.getElementById('form-price');
-            const tag = document.getElementById('preorder-tag');
-
-            img.src = p.img;
             document.getElementById('gallery-label').innerText = p.name + " Edition";
+            const sEl = document.getElementById('stock-display');
+            const tag = document.getElementById('preorder-tag');
+            const priceDisplay = document.getElementById('form-price');
 
             if (p.stock > 0) {
                 sEl.innerText = `${p.stock} sofort verfügbar`;
-                sEl.style.color = "#34c759";
+                sEl.className = "bg-white/10 text-white text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest";
                 tag.classList.add('hidden');
                 priceDisplay.innerText = `€${p.price_sale}`;
             } else {
                 sEl.innerText = `${p.preorder} Plätze für Vorbestellung`;
-                sEl.style.color = "#f56300";
+                sEl.className = "bg-orange-500/30 text-orange-100 text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest";
                 tag.classList.remove('hidden');
                 priceDisplay.innerText = `€${p.price_preorder}`;
             }
             document.querySelectorAll('.color-dot').forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
+            document.getElementById('gallery-img').src = p.img;
         }
 
         function updateByClick(index) {
@@ -252,57 +252,71 @@
             }, 300);
         }
 
+        // VALIDIERUNG & BESTELLUNG
+        function applyError(el) {
+            el.classList.add('input-error', 'shake');
+            setTimeout(() => el.classList.remove('shake'), 450);
+        }
+
         async function processOrder() {
             const nameEl = document.getElementById('name-field');
             const emailEl = document.getElementById('email-field');
             const privCheck = document.getElementById('privacy-check');
-            const btn = document.getElementById('order-btn');
+            const privCont = document.getElementById('privacy-container');
 
             let valid = true;
-            if (nameEl.value.trim().length < 2) { nameEl.classList.add('input-error', 'shake'); valid = false; }
-            if (!emailEl.value.includes('@')) { emailEl.classList.add('input-error', 'shake'); valid = false; }
-            if (!privCheck.checked) { document.getElementById('privacy-container').classList.add('text-error', 'shake'); valid = false; }
+            if (nameEl.value.trim().length < 2) { applyError(nameEl); valid = false; }
+            if (!emailEl.value.includes('@')) { applyError(emailEl); valid = false; }
+            if (!privCheck.checked) { applyError(privCont); privCont.classList.add('text-error'); valid = false; }
 
-            if (!valid) {
-                setTimeout(() => {
-                    nameEl.classList.remove('shake');
-                    emailEl.classList.remove('shake');
-                    document.getElementById('privacy-container').classList.remove('shake');
-                }, 500);
-                return;
-            }
-
-            btn.disabled = true;
-            btn.innerText = "Sende...";
+            if (!valid) return;
 
             const p = PRODUCTS[currentIndex];
-            const finalPrice = p.stock > 0 ? p.price_sale : p.price_preorder;
-            const orderID = Math.floor(Math.random() * 9000 + 1000);
-
-            // Supabase Update
+            const currentPrice = p.stock > 0 ? p.price_sale : p.price_preorder;
             const updateData = p.stock > 0 ? { stock_ready: p.stock - 1 } : { stock_incoming: p.preorder - 1 };
-            await supabaseClient.from('products').update(updateData).eq('id', p.db_id);
-
-            // Success UI
-            document.getElementById('cert-name-display').innerText = nameEl.value;
-            document.getElementById('order-id').innerText = orderID;
-            document.getElementById('cert-color').innerText = p.name + " Edition";
-            document.getElementById('cert-type').innerText = p.stock > 0 ? "Ready for Pickup" : "Preorder Slot";
-            document.getElementById('cert-price-final').innerText = `€${finalPrice}`;
+            const orderID = "GC-" + Math.floor(Math.random() * 9000 + 1000);
             
-            document.getElementById('buy-form').classList.add('hidden');
-            document.getElementById('success-screen').classList.remove('hidden');
+            const { error } = await supabaseClient.from('products').update(updateData).eq('id', p.db_id);
+            
+            if (!error) {
+                fetch(FORMSPREE_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ Name: nameEl.value, Email: emailEl.value, Produkt: p.name, Bestellnummer: orderID })
+                });
+
+                document.getElementById('cert-name-display').innerText = nameEl.value;
+                document.getElementById('order-id').innerText = orderID.replace("GC-", "");
+                document.getElementById('cert-color').innerText = p.name + " Edition";
+                document.getElementById('cert-type').innerText = p.stock > 0 ? "Abholung Schule" : "Vorbestellung";
+                document.getElementById('cert-price-final').innerText = `€${currentPrice}`;
+                
+                document.getElementById('buy-form').classList.add('hidden');
+                document.getElementById('success-screen').classList.remove('hidden');
+                loadData();
+            }
         }
 
-        function showPrivacy() { document.getElementById('main-content').classList.add('hidden'); document.getElementById('privacy-page').classList.remove('hidden'); window.scrollTo(0,0); }
-        function hidePrivacy() { document.getElementById('privacy-page').classList.add('hidden'); document.getElementById('main-content').classList.remove('hidden'); }
+        // NAVIGATION
+        function showPrivacy() {
+            document.getElementById('main-content').classList.add('hidden');
+            document.getElementById('privacy-page').classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+        function hidePrivacy() {
+            document.getElementById('privacy-page').classList.add('hidden');
+            document.getElementById('main-content').classList.remove('hidden');
+        }
 
-        // Event Listeners for Live Correction
+        // LIVE-KORREKTUR
         ['name-field', 'email-field'].forEach(id => {
             document.getElementById(id).addEventListener('input', function() { this.classList.remove('input-error'); });
         });
-        document.getElementById('privacy-check').addEventListener('change', function() { if(this.checked) document.getElementById('privacy-container').classList.remove('text-error'); });
+        document.getElementById('privacy-check').addEventListener('change', function() {
+            if(this.checked) document.getElementById('privacy-container').classList.remove('input-error', 'text-error');
+        });
 
+        // TIMER & ANIMATION
         function updateTimer() {
             if(!DEADLINE) return;
             const diff = DEADLINE - new Date().getTime();
