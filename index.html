@@ -3,121 +3,300 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GearChain - Precision Engineering</title>
+    <title>GearChain - Apple Experience</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
     <style>
         html { scroll-behavior: smooth; }
-        body { font-family: sans-serif; background: #ffffff; color: #1d1d1f; }
+        body { font-family: 'Inter', sans-serif; background-color: #ffffff; color: #1d1d1f; overflow-x: hidden; }
         .apple-blur { backdrop-filter: saturate(180%) blur(20px); background: rgba(255, 255, 255, 0.72); }
-        .input-apple { width: 100%; padding: 20px; border-radius: 16px; background: #f5f5f7; border: 1px solid #e5e5e7; text-align: center; }
-        .btn-order { background: #0071e3; color: white; padding: 20px; border-radius: 18px; width: 100%; font-weight: 600; cursor: pointer; }
         
-        /* Sichtbarkeit standardmäßig an, um "Ausblenden" zu verhindern */
-        .reveal-item { opacity: 1; transition: all 0.8s; }
-        #video-box { width: 100%; max-width: 1100px; height: 500px; background: #000; border-radius: 32px; margin: 40px auto; overflow: hidden; }
+        /* Input & Buttons */
+        .input-apple { width: 100%; padding: 20px; border-radius: 16px; background-color: #f5f5f7; border: 1px solid #e5e5e7; margin-bottom: 12px; outline: none; transition: all 0.3s; text-align: center; font-size: 16px; }
+        
+        /* Blau statt Lila beim Fokus */
+        .input-apple:focus { 
+            background-color: white; 
+            border-color: #0071e3 !important; 
+            box-shadow: 0 0 0 4px rgba(0,113,227,0.1); 
+        }
+        
+        /* Fehler-Status */
+        .input-error { border-color: #ff3b30 !important; background-color: #fff2f1 !important; }
+
+        .btn-apple { background-color: #0071e3; color: white; border-radius: 980px; padding: 10px 22px; font-size: 14px; font-weight: 500; transition: all 0.3s; }
+        .btn-apple:hover { background-color: #0077ed; transform: scale(1.02); }
+        
+        /* Zertifikat sichern Button jetzt Blau */
+        .btn-order { background-color: #0071e3; color: white; padding: 20px; border-radius: 18px; width: 100%; font-weight: 600; font-size: 17px; transition: all 0.2s; }
+        .btn-order:hover { background-color: #0077ed; }
+        .btn-order:active { transform: scale(0.98); opacity: 0.8; }
+
+        /* Shake Animation */
+        @keyframes appleShake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-8px); }
+            40% { transform: translateX(8px); }
+            60% { transform: translateX(-8px); }
+            80% { transform: translateX(8px); }
+        }
+        .shake { animation: appleShake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+
+        /* Animation Classes */
+        .reveal-item { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+        .reveal-item.active { opacity: 1; transform: translateY(0); }
+        
+        #hero-content { transition: opacity 0.1s linear; }
+        #gallery-img { transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .slide-exit { opacity: 0; transform: scale(0.95); }
+        
+        .color-dot { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
+        .color-dot:hover { transform: scale(1.2); }
+        .color-dot.active::after { content: ''; position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px; border: 2px solid #0071e3; border-radius: 50%; }
+        
+        .color-tooltip { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); margin-bottom: 10px; padding: 4px 10px; background: black; color: white; font-size: 10px; border-radius: 6px; opacity: 0; pointer-events: none; transition: 0.3s; white-space: nowrap; }
+        .color-dot:hover .color-tooltip { opacity: 1; transform: translateX(-50%) translateY(-5px); }
+
+        .checkbox-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 24px; margin-bottom: 24px; font-size: 14px; color: #86868b; }
     </style>
 </head>
-<body class="js-enabled">
+<body>
 
-    <nav class="fixed top-0 w-full z-50 apple-blur border-b border-gray-100 h-14 flex items-center justify-between px-6">
-        <span class="text-xl font-semibold">GearChain</span>
-        <a href="#buy" class="bg-[#0071e3] text-white px-4 py-1.5 rounded-full text-sm">Sichern</a>
-    </nav>
-
-    <section class="h-screen flex flex-col items-center justify-center text-center">
-        <h1 class="text-7xl md:text-9xl font-bold tracking-tighter">GearChain</h1>
-        <p id="countdown" class="mt-4 font-mono text-xl">Lädt...</p>
-    </section>
-
-    <section id="explore" class="py-20 bg-black text-white text-center reveal-item">
-        <h2 class="text-4xl mb-10">Wähle deinen Stil.</h2>
-        <img id="gallery-img" src="silber.png" class="max-w-xs mx-auto mb-10">
-        <div class="flex justify-center gap-6">
-            <button onclick="updateSelection(0)" class="w-8 h-8 rounded-full bg-gray-400 border-2 border-white"></button>
-            <button onclick="updateSelection(1)" class="w-8 h-8 rounded-full bg-yellow-600"></button>
-            <button onclick="updateSelection(2)" class="w-8 h-8 rounded-full bg-gray-900"></button>
-        </div>
-        <p id="gallery-label" class="mt-4 text-xl">Silber Edition</p>
-    </section>
-
-    <section id="buy" class="py-20 bg-gray-50 flex justify-center px-6">
-        <div class="max-w-md w-full bg-white p-10 rounded-[40px] shadow-sm text-center" id="buy-content">
-            <div id="price-display" class="text-5xl font-bold mb-8">€2.49</div>
-            <input type="text" id="name" placeholder="Name" class="input-apple mb-4">
-            <input type="email" id="email" placeholder="E-Mail" class="input-apple mb-4">
-            <div class="mb-6 text-sm text-gray-500">
-                <input type="checkbox" id="privacy"> Akzeptiere Datenschutz
+    <div id="main-content">
+        <nav class="fixed top-0 w-full z-50 apple-blur border-b border-gray-100">
+            <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
+                <span class="text-xl font-semibold tracking-tight">GearChain</span>
+                <div class="flex items-center">
+                    <div class="flex items-center border-r border-gray-300 pr-3 mr-3 md:pr-4 md:mr-4">
+                        <span class="text-[8px] md:text-[10px] font-medium uppercase tracking-[0.15em] text-gray-500">Made in Germany</span>
+                    </div>
+                    <a href="#buy" class="btn-apple">Sichern</a>
+                </div>
             </div>
-            <button onclick="handlePurchase()" id="submit-btn" class="btn-order">Zertifikat sichern</button>
+        </nav>
+
+        <section id="hero-section" class="h-screen flex flex-col items-center justify-center text-center px-4 bg-white sticky top-0 -z-10">
+            <div id="hero-content">
+                <p class="text-orange-600 text-sm font-semibold mb-3 tracking-wide uppercase">Limited Preorder</p>
+                <h1 class="text-7xl md:text-9xl font-semibold tracking-tighter mb-4">GearChain</h1>
+                <p class="text-gray-400 text-sm font-medium uppercase tracking-[0.2em] mb-10">Präzisions-Engineering aus Deutschland</p>
+                
+                <div class="flex items-center gap-4 mb-10 justify-center">
+                    <span id="hero-price-sale" class="text-4xl font-semibold text-black">--.--€</span>
+                    <span id="hero-price-regular" class="text-gray-300 line-through text-2xl">--.--€</span>
+                </div>
+                
+                <div class="mb-12 px-6 py-2 bg-gray-50 rounded-full border border-gray-100 inline-block">
+                    <p class="text-xs font-medium text-gray-500 uppercase tracking-widest">Aktion endet: <span id="countdown" class="text-black font-bold ml-1">Lädt...</span></p>
+                </div>
+            </div>
+        </section>
+
+        <div class="h-10"></div>
+
+        <section id="explore" class="relative z-10 bg-black py-32 text-center overflow-hidden">
+            <div class="reveal-item">
+                <h2 class="text-5xl md:text-6xl font-semibold mb-4 text-white tracking-tight">Wähle deinen Stil.</h2>
+                <div class="relative w-full max-w-lg px-6 mb-16 mx-auto flex justify-center items-center">
+                    <img id="gallery-img" src="silber.png" alt="GearChain" class="w-full h-auto object-contain select-none">
+                </div>
+                <div class="flex justify-center gap-10 mb-8">
+                    <div onmouseover="updateHoverLabel('Silber')" onmouseout="updateHoverLabel('')" onclick="updateByClick(0)" class="color-dot active bg-[#e5e5e5]" id="dot-0"><span class="color-tooltip">Silber</span></div>
+                    <div onmouseover="updateHoverLabel('Gold')" onmouseout="updateHoverLabel('')" onclick="updateByClick(1)" class="color-dot bg-[#b4923e]" id="dot-1"><span class="color-tooltip">Gold</span></div>
+                    <div onmouseover="updateHoverLabel('Schwarz')" onmouseout="updateHoverLabel('')" onclick="updateByClick(2)" class="color-dot bg-[#333333]" id="dot-2"><span class="color-tooltip">Schwarz</span></div>
+                </div>
+                <p id="gallery-label" class="text-2xl font-medium mb-2 text-white italic">Modelle laden...</p>
+                <span id="stock-display" class="bg-white/10 text-white text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest">Warten</span>
+            </div>
+        </section>
+
+        <section id="buy" class="relative z-10 min-h-screen bg-[#f5f5f7] flex flex-col items-center justify-center py-24 px-6">
+            <div class="max-w-md w-full reveal-item">
+                <div id="main-buy-card" class="bg-white rounded-[40px] p-10 md:p-16 text-center shadow-sm">
+                    <div id="buy-form">
+                        <p id="preorder-tag" class="text-orange-600 font-bold text-xs tracking-widest uppercase mb-4 hidden">Vorbestellung</p>
+                        <div id="form-price" class="text-6xl font-bold mb-12 tracking-tighter text-black">€--.--</div>
+                        <div class="space-y-1">
+                            <input type="text" id="name-field" placeholder="Vollständiger Name" class="input-apple">
+                            <input type="email" id="email-field" placeholder="E-Mail Adresse" class="input-apple">
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="privacy-check" class="w-4 h-4">
+                                <span>Ich akzeptiere die <button onclick="showPrivacy()" class="text-blue-600 underline">Datenschutzerklärung</button>.</span>
+                            </div>
+                            <button onclick="processOrder()" id="order-btn" class="btn-order">Zertifikat sichern</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="relative z-10 py-10 text-center text-gray-400 text-xs border-t border-gray-100 bg-white">
+            <div class="flex justify-center gap-6 mb-2">
+                <button onclick="showPrivacy()" class="hover:text-black">Datenschutzerklärung</button>
+                <button onclick="showImpressum()" class="hover:text-black">Impressum</button>
+            </div>
+            <p>© 2026 GearChain – Precision Engineering</p>
+        </footer>
+    </div>
+
+    <div id="privacy-page" class="hidden min-h-screen bg-white py-20 px-6 z-[100] relative">
+        <div class="max-w-2xl mx-auto">
+            <button onclick="hidePages()" class="text-blue-600 mb-10 font-medium">← Zurück</button>
+            <h1 class="text-5xl font-bold mb-8 tracking-tight">Datenschutzerklärung</h1>
+            <p class="text-gray-600 text-lg">Wir speichern deine Daten ausschließlich zur Abwicklung der Reservierung.</p>
+            <button onclick="hidePages()" class="mt-12 btn-apple w-full py-4 text-lg">Verstanden</button>
         </div>
-    </section>
+    </div>
+
+    <div id="impressum-page" class="hidden min-h-screen bg-white py-20 px-6 z-[100] relative">
+        <div class="max-w-2xl mx-auto">
+            <button onclick="hidePages()" class="text-blue-600 mb-10 font-medium">← Zurück</button>
+            <h1 class="text-5xl font-bold mb-8 tracking-tight">Impressum</h1>
+            <p class="text-gray-600 text-lg"><strong>GearChain i.G.</strong><br>Robert Vogt<br>Boyenstraße 27<br>10115 Berlin</p>
+            <p class="text-gray-600 text-lg mt-4">E-Mail: robert.vogt@mailbox.org<br>Telefon: +49 (0) 1743580 329</p>
+            <button onclick="hidePages()" class="mt-12 btn-apple w-full py-4 text-lg">Schließen</button>
+        </div>
+    </div>
 
     <script>
         const SUPABASE_URL = 'https://nyekitzejjvhbyvaziwl.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55ZWtpdHplamp2aGJ5dmF6aXdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyNDgyMDksImV4cCI6MjA4MjgyNDIwOX0.vR9NZ7A9XAXTt7D5gNJwFxzL9upfNvc3RDUXKSdHtj4';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // Fallback-Daten, falls DB nicht lädt
-        let products = [
-            {id: 1, name: 'Silber', price_sale: 2.49},
-            {id: 2, name: 'Gold', price_sale: 2.49},
-            {id: 3, name: 'Schwarz', price_sale: 2.49}
-        ];
-        let currentIdx = 0;
+        let PRODUCTS = [];
+        let currentIndex = 0;
+        let DEADLINE;
 
-        async function init() {
-            try {
-                const { data, error } = await supabase.from('products').select('*').order('id');
-                if (data && data.length > 0) products = data;
-                updateUI();
-            } catch (e) { console.log("Nutze Fallback-Daten"); }
-            startTimer();
+        window.addEventListener('scroll', () => {
+            const heroContent = document.getElementById('hero-content');
+            const scrollPercent = window.scrollY / (window.innerHeight * 0.6);
+            heroContent.style.opacity = Math.max(0, 1 - scrollPercent);
+        });
+
+        function showPrivacy() { document.getElementById('main-content').classList.add('hidden'); document.getElementById('privacy-page').classList.remove('hidden'); window.scrollTo(0,0); }
+        function showImpressum() { document.getElementById('main-content').classList.add('hidden'); document.getElementById('impressum-page').classList.remove('hidden'); window.scrollTo(0,0); }
+        function hidePages() { document.getElementById('privacy-page').classList.add('hidden'); document.getElementById('impressum-page').classList.add('hidden'); document.getElementById('main-content').classList.remove('hidden'); }
+
+        async function loadData() {
+            const { data: prodData } = await supabaseClient.from('products').select('*').order('id', { ascending: true });
+            if (prodData && prodData.length > 0) {
+                PRODUCTS = prodData.map(item => ({
+                    db_id: item.id, name: item.name, img: item.name.toLowerCase() + ".png",
+                    stock: item.stock_ready, preorder: item.stock_incoming,
+                    price_sale: item.price_sale, price_regular: item.price_regular, price_preorder: item.price_preorder
+                }));
+                document.getElementById('hero-price-sale').innerText = `€${PRODUCTS[0].price_sale}`;
+                document.getElementById('hero-price-regular').innerText = `€${PRODUCTS[0].price_regular}`;
+                updateGalleryUI();
+            }
+            const { data: setData } = await supabaseClient.from('settings').select('value').eq('name', 'sale_deadline').single();
+            DEADLINE = setData ? new Date(setData.value).getTime() : new Date("2026-01-10T23:59:59").getTime();
         }
 
-        function updateSelection(idx) {
-            currentIdx = idx;
-            updateUI();
-        }
-
-        function updateUI() {
-            const p = products[currentIdx];
-            document.getElementById('gallery-img').src = p.name.toLowerCase() + ".png";
+        function updateGalleryUI() {
+            if (PRODUCTS.length === 0) return;
+            const p = PRODUCTS[currentIndex];
             document.getElementById('gallery-label').innerText = p.name + " Edition";
-            document.getElementById('price-display').innerText = `€${parseFloat(p.price_sale).toFixed(2)}`;
+            const sEl = document.getElementById('stock-display');
+            const priceDisplay = document.getElementById('form-price');
+            const tag = document.getElementById('preorder-tag');
+            
+            if (p.stock > 0) {
+                sEl.innerText = `${p.stock} sofort verfügbar`;
+                priceDisplay.innerText = `€${p.price_sale}`;
+                tag.classList.add('hidden');
+            } else {
+                sEl.innerText = `${p.preorder} Plätze (Vorbestellung)`;
+                priceDisplay.innerText = `€${p.price_preorder}`;
+                tag.classList.remove('hidden');
+            }
+            document.querySelectorAll('.color-dot').forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
+            document.getElementById('gallery-img').src = p.img;
         }
 
-        async function handlePurchase() {
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            if(!name || !email) return alert("Bitte Felder füllen");
-
-            const gcCode = "GC-" + Math.random().toString(36).substring(2, 6).toUpperCase();
-            
-            const { error } = await supabase.from('orders').insert([
-                { customer_name: name, customer_email: email, product_id: products[currentIdx].id, gc_code: gcCode }
-            ]);
-
-            if(!error) {
-                document.getElementById('buy-content').innerHTML = `<h2>Erfolg!</h2><p>Code: <b>${gcCode}</b></p>`;
+        function updateHoverLabel(name) {
+            if (name === "") {
+                updateGalleryUI();
             } else {
-                alert("Fehler: " + error.message);
+                document.getElementById('gallery-label').innerText = name;
             }
         }
 
-        function startTimer() {
-            const end = new Date("2026-01-15T23:59:59").getTime();
-            setInterval(() => {
-                const now = new Date().getTime();
-                const d = end - now;
-                const h = Math.floor(d / 3600000);
-                const m = Math.floor((d % 3600000) / 60000);
-                const s = Math.floor((d % 60000) / 1000);
-                document.getElementById('countdown').innerText = `${h}h ${m}m ${s}s`;
-            }, 1000);
+        function updateByClick(index) {
+            if (currentIndex === index) return;
+            const img = document.getElementById('gallery-img');
+            img.classList.add('slide-exit');
+            setTimeout(() => {
+                currentIndex = index;
+                updateGalleryUI();
+                img.classList.remove('slide-exit');
+            }, 250);
         }
 
-        init();
+        // NEUE PROZESS-FUNKTION MIT SHAKE & RED FOCUS
+        async function processOrder() {
+            const nameField = document.getElementById('name-field');
+            const emailField = document.getElementById('email-field');
+            const privacyCheck = document.getElementById('privacy-check');
+            const card = document.getElementById('main-buy-card');
+            const btn = document.getElementById('order-btn');
+
+            // Reset
+            nameField.classList.remove('input-error');
+            emailField.classList.remove('input-error');
+            card.classList.remove('shake');
+
+            let hasError = false;
+
+            if (!nameField.value.trim()) { nameField.classList.add('input-error'); hasError = true; }
+            if (!emailField.value.trim() || !emailField.value.includes('@')) { emailField.classList.add('input-error'); hasError = true; }
+            if (!privacyCheck.checked) { hasError = true; }
+
+            if (hasError) {
+                setTimeout(() => card.classList.add('shake'), 10);
+                return;
+            }
+
+            btn.innerText = "Verarbeitung...";
+            btn.disabled = true;
+
+            const { error } = await supabaseClient.from('orders').insert([{
+                product_id: PRODUCTS[currentIndex].db_id,
+                customer_name: nameField.value,
+                customer_email: emailField.value
+            }]);
+
+            if (!error) {
+                document.getElementById('buy-form').innerHTML = `
+                    <div class="py-10">
+                        <div class="text-6xl mb-6">✅</div>
+                        <h3 class="text-2xl font-bold mb-2">Reserviert!</h3>
+                        <p class="text-gray-500 text-sm">Prüfe dein Postfach für dein Zertifikat.</p>
+                    </div>`;
+            } else {
+                alert("Fehler: " + error.message);
+                btn.disabled = false;
+                btn.innerText = "Zertifikat sichern";
+            }
+        }
+
+        function updateTimer() {
+            if(!DEADLINE) return;
+            const diff = DEADLINE - new Date().getTime();
+            if (diff <= 0) { document.getElementById('countdown').innerText = "BEENDET"; return; }
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24)), h = Math.floor((diff / (1000 * 60 * 60)) % 24), m = Math.floor((diff / (1000 * 60)) % 60), s = Math.floor((diff / 1000) % 60);
+            document.getElementById('countdown').innerText = `${d > 0 ? d + 'D ' : ''}${h}H ${m}M ${s}S`;
+        }
+
+        setInterval(updateTimer, 1000);
+        loadData();
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal-item').forEach(el => observer.observe(el));
     </script>
 </body>
 </html>
