@@ -88,8 +88,8 @@
                 <div onclick="updateByClick(1)" class="color-dot bg-[#b4923e]" id="dot-1"></div>
                 <div onclick="updateByClick(2)" class="color-dot bg-[#1d1d1f]" id="dot-2"></div>
             </div>
-            <p id="gallery-label" class="text-2xl font-medium mb-2 text-white italic">Lade Bestand...</p>
-            <span id="stock-display" class="bg-white/10 text-white text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest">---</span>
+            <p id="gallery-label" class="text-2xl font-medium mb-2 text-white italic">Verbindung wird aufgebaut...</p>
+            <span id="stock-display" class="bg-white/10 text-white text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest">Warten</span>
         </div>
     </section>
 
@@ -119,9 +119,8 @@
     </section>
 
     <script>
-        // --- SUPABASE SETUP ---
-        const SUPABASE_URL = 'DEINE_SUPABASE_URL'; // HIER EINTRAGEN
-        const SUPABASE_KEY = 'DEIN_SUPABASE_ANON_KEY'; // HIER EINTRAGEN
+        const SUPABASE_URL = 'https://nyekitzejjvhbyvaziwl.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55ZWtpdHplamp2aGJ5dmF6aXdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyNDgyMDksImV4cCI6MjA4MjgyNDIwOX0.vR9NZ7A9XAXTt7D5gNJwFxzL9upfNvc3RDUXKSdHtj4';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         let PRODUCTS = [];
@@ -129,14 +128,22 @@
         let isAnimating = false;
         const DEADLINE = new Date("January 5, 2026 23:59:59").getTime();
 
-        // 1. STOCK LADEN
         async function loadStock() {
             const { data, error } = await supabaseClient
                 .from('products')
                 .select('*')
                 .order('id', { ascending: true });
 
-            if (error) { console.error("Error:", error); return; }
+            if (error) { 
+                console.error("Datenbank-Fehler:", error); 
+                document.getElementById('gallery-label').innerText = "Fehler: Tabelle prüfen!";
+                return; 
+            }
+
+            if (!data || data.length === 0) {
+                document.getElementById('gallery-label').innerText = "Tabelle ist leer!";
+                return;
+            }
 
             PRODUCTS = data.map(item => ({
                 db_id: item.id,
@@ -177,7 +184,6 @@
             }
         }
 
-        // 2. KAUF ABWICKELN
         async function processOrder() {
             const email = document.getElementById('email-field').value;
             if(!email.includes('@')) { alert("E-Mail ungültig"); return; }
@@ -202,13 +208,12 @@
                 document.getElementById('cert-type').innerText = p.stock > 0 ? "Abholung Schule" : "Vorbestellung (Wartezeit)";
                 document.getElementById('buy-form').classList.add('hidden');
                 document.getElementById('success-screen').classList.remove('hidden');
-                loadStock(); // Stock im Hintergrund neu laden
+                loadStock();
             } else {
-                alert("Fehler beim Bestellen. Bitte versuche es erneut.");
+                alert("Fehler beim Kauf. Hast du die UPDATE-Policy in Supabase erstellt?");
             }
         }
 
-        // --- RESTLICHE LOGIK (SWIPE, TIMER, REVEAL) ---
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
         }, { threshold: 0.1 });
@@ -237,7 +242,7 @@
             document.getElementById('countdown').innerText = `${h}h ${m}m ${s}s`;
         }
         setInterval(updateTimer, 1000);
-        loadStock(); // Startet den Datenabruf
+        loadStock();
     </script>
 </body>
 </html>
