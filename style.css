@@ -140,3 +140,18 @@
     border-color: #ff3b30 !important; 
     background-color: #fff2f1 !important; 
 }
+/* Ändere das hier, damit Inhalte standardmäßig sichtbar sind, falls das JS hakt */
+.reveal-item { 
+    opacity: 1; 
+    transform: none; 
+    transition: all 0.8s ease-out; 
+}
+/* Nur wenn JavaScript bereit ist, fügen wir die Animation hinzu */
+.js-enabled .reveal-item { 
+    opacity: 0; 
+    transform: translateY(30px); 
+}
+.js-enabled .reveal-item.active { 
+    opacity: 1; 
+    transform: translateY(0); 
+}
