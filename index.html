@@ -13,7 +13,6 @@
         body { font-family: 'Inter', sans-serif; background-color: #ffffff; color: #1d1d1f; overflow-x: hidden; }
         .apple-blur { backdrop-filter: saturate(180%) blur(20px); background: rgba(255, 255, 255, 0.72); }
         
-        /* Input Styling */
         .input-apple { 
             width: 100%; padding: 20px; border-radius: 16px; 
             background-color: #f5f5f7; border: 1px solid #e5e5e7; 
@@ -22,7 +21,6 @@
         }
         .input-apple:focus { background-color: white; border-color: #0071e3; box-shadow: 0 0 0 4px rgba(0,113,227,0.1); }
         .input-error { border-color: #ff3b30 !important; background-color: #fff2f1 !important; }
-        .text-error { color: #ff3b30 !important; }
 
         @keyframes appleShake {
             0%, 100% { transform: translateX(0); }
@@ -50,7 +48,7 @@
         .color-dot.active::after { content: ''; position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px; border: 2px solid #0071e3; border-radius: 50%; }
         .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.3); }
         
-        .checkbox-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 24px; margin-bottom: 24px; font-size: 14px; color: #86868b; transition: all 0.3s; }
+        .checkbox-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 24px; margin-bottom: 24px; font-size: 14px; color: #86868b; }
     </style>
 </head>
 <body>
@@ -60,8 +58,8 @@
             <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
                 <span class="text-xl font-semibold tracking-tight">GearChain</span>
                 <div class="flex items-center">
-                    <div class="hidden md:flex items-center border-r border-gray-300 pr-4 mr-4">
-                        <span class="text-[10px] font-medium uppercase tracking-[0.15em] text-gray-500">Made in Germany</span>
+                    <div class="flex items-center border-r border-gray-300 pr-3 mr-3 md:pr-4 md:mr-4">
+                        <span class="text-[8px] md:text-[10px] font-medium uppercase tracking-[0.15em] text-gray-500">Made in Germany</span>
                     </div>
                     <a href="#buy" class="btn-apple">Sichern</a>
                 </div>
@@ -72,10 +70,12 @@
             <p class="text-orange-600 text-sm font-semibold mb-3 tracking-wide uppercase">Limited Preorder</p>
             <h1 class="text-7xl md:text-9xl font-semibold tracking-tighter mb-4">GearChain</h1>
             <p class="text-gray-400 text-sm font-medium uppercase tracking-[0.2em] mb-10">Präzisions-Engineering aus Deutschland</p>
+            
             <div class="flex items-center gap-4 mb-10 justify-center">
                 <span id="hero-price-sale" class="text-4xl font-semibold text-black">--.--€</span>
                 <span id="hero-price-regular" class="text-gray-300 line-through text-2xl">--.--€</span>
             </div>
+            
             <div class="mb-12 px-6 py-2 bg-gray-50 rounded-full border border-gray-100">
                 <p class="text-xs font-medium text-gray-500 uppercase tracking-widest">Aktion endet: <span id="countdown" class="text-black font-bold ml-1">Lädt...</span></p>
             </div>
@@ -84,7 +84,7 @@
         <section id="explore" class="bg-black py-32 text-center overflow-hidden">
             <div class="reveal-item">
                 <h2 class="text-5xl md:text-6xl font-semibold mb-4 text-white tracking-tight">Wähle deinen Stil.</h2>
-                <div id="swipe-area" class="relative w-full max-w-lg px-6 mb-16 mx-auto flex justify-center items-center">
+                <div class="relative w-full max-w-lg px-6 mb-16 mx-auto flex justify-center items-center">
                     <img id="gallery-img" src="silber.png" alt="GearChain" class="w-full h-auto object-contain select-none">
                 </div>
                 <div class="flex justify-center gap-10 mb-8">
@@ -92,7 +92,7 @@
                     <div onclick="updateByClick(1)" class="color-dot bg-[#b4923e]" id="dot-1"></div>
                     <div onclick="updateByClick(2)" class="color-dot bg-[#333333]" id="dot-2"></div>
                 </div>
-                <p id="gallery-label" class="text-2xl font-medium mb-2 text-white italic">Lade Modelle...</p>
+                <p id="gallery-label" class="text-2xl font-medium mb-2 text-white italic">Modelle laden...</p>
                 <span id="stock-display" class="bg-white/10 text-white text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest">Warten</span>
             </div>
         </section>
@@ -106,80 +106,55 @@
                         <div class="space-y-1">
                             <input type="text" id="name-field" placeholder="Vollständiger Name" class="input-apple">
                             <input type="email" id="email-field" placeholder="E-Mail Adresse" class="input-apple">
-                            <div class="checkbox-container" id="privacy-container">
+                            <div class="checkbox-container">
                                 <input type="checkbox" id="privacy-check" class="w-4 h-4">
-                                <span>Ich akzeptiere die <button type="button" onclick="showPrivacy()" class="text-blue-600 underline">Datenschutzerklärung</button>.</span>
+                                <span>Ich akzeptiere die <button onclick="showPrivacy()" class="text-blue-600 underline">Datenschutzerklärung</button>.</span>
                             </div>
                             <button onclick="processOrder()" id="order-btn" class="btn-order">Zertifikat sichern</button>
-                        </div>
-                    </div>
-                    <div id="success-screen" class="hidden text-black">
-                        <div class="glass-card p-10 rounded-[30px] mb-8 shadow-2xl">
-                            <p class="text-[10px] font-bold uppercase tracking-[0.4em] text-gray-400 mb-8">Zertifikat für <span id="cert-name-display"></span></p>
-                            <div class="text-5xl font-black tracking-tighter mb-8">GC-<span id="order-id">0000</span></div>
-                            <p class="text-xl font-medium mb-1" id="cert-color">Edition</p>
-                            <p class="text-gray-400 text-sm mb-8" id="cert-type">Ready</p>
-                            <div id="cert-price-final" class="inline-block px-8 py-3 bg-black text-white rounded-full font-bold">€0.00</div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
+        <footer class="py-10 text-center text-gray-400 text-xs border-t border-gray-100">
+            <div class="flex justify-center gap-6 mb-2">
+                <button onclick="showPrivacy()" class="hover:text-black">Datenschutzerklärung</button>
+                <button onclick="showImpressum()" class="hover:text-black">Impressum</button>
+            </div>
+            <p>© 2026 GearChain – Precision Engineering</p>
+        </footer>
+    </div>
+
     <div id="privacy-page" class="hidden min-h-screen bg-white py-20 px-6">
         <div class="max-w-2xl mx-auto">
             <button onclick="hidePages()" class="text-blue-600 mb-10 font-medium">← Zurück</button>
             <h1 class="text-5xl font-bold mb-8 tracking-tight">Datenschutzerklärung</h1>
             <div class="text-gray-600 space-y-6 leading-relaxed text-lg">
-                <p>Wir speichern deinen Namen und deine E-Mail-Adresse ausschließlich zur Abwicklung deiner Reservierung im Rahmen des Schulprojekts. Die Daten werden nach Abschluss des Verkaufs vollständig gelöscht.</p>
+                <p>Wir speichern deine Daten ausschließlich zur Abwicklung der Reservierung. Nach Abschluss des Projekts werden alle Daten gelöscht.</p>
             </div>
             <button onclick="hidePages()" class="mt-12 btn-apple w-full py-4 text-lg">Verstanden</button>
         </div>
     </div>
 
-<footer class="py-10 text-center text-gray-400 text-xs border-t border-gray-100">
-    <div class="flex justify-center gap-6 mb-2">
-        <button type="button" onclick="showPrivacy()" class="hover:text-black">Datenschutzerklärung</button>
-        <button type="button" onclick="showImpressum()" class="hover:text-black">Impressum</button>
-    </div>
-    <p>© 2026 GearChain – Precision Engineering</p>
-</footer>
-
-<div id="impressum-page" class="hidden min-h-screen bg-white py-20 px-6">
-    <div class="max-w-2xl mx-auto">
-        <button onclick="hidePages()" class="text-blue-600 mb-10 font-medium">← Zurück</button>
-        <h1 class="text-5xl font-bold mb-8 tracking-tight">Impressum</h1>
-        <div class="text-gray-600 space-y-8 leading-relaxed text-lg">
-            <section>
-                <h2 class="text-black font-semibold text-xl mb-2">Angaben gemäß § 5 TMG</h2>
-                <p>
-                    <strong>GearChain i.G.</strong><br>
-                    Vertreten durch: Robert Vogt<br>
-                    Boyenstraße 27<br>
-                    10115 Berlin<br>
-                    Deutschland
-                </p>
-            </section>
-            <section>
-                <h2 class="text-black font-semibold text-xl mb-2">Kontakt</h2>
-                <p>
-                    E-Mail: robert.vogt@mailbox.org<br>
-                    Telefon: +49 (0) 1743580 329
-                </p>
-            </section>
-            <section>
-                <h2 class="text-black font-semibold text-xl mb-2">Verantwortlich für den Inhalt</h2>
-                <p>Robert Vogt</p>
-            </section>
-            <section class="border-t pt-6">
-                <p class="text-sm text-gray-500">
-                    Gewerbe in Anmeldung/Gründung. Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.
-                </p>
-            </section>
+    <div id="impressum-page" class="hidden min-h-screen bg-white py-20 px-6">
+        <div class="max-w-2xl mx-auto">
+            <button onclick="hidePages()" class="text-blue-600 mb-10 font-medium">← Zurück</button>
+            <h1 class="text-5xl font-bold mb-8 tracking-tight">Impressum</h1>
+            <div class="text-gray-600 space-y-8 leading-relaxed text-lg">
+                <section>
+                    <h2 class="text-black font-semibold text-xl mb-2">Angaben gemäß § 5 TMG</h2>
+                    <p><strong>GearChain i.G.</strong><br>Robert Vogt<br>Boyenstraße 27<br>10115 Berlin</p>
+                </section>
+                <section>
+                    <h2 class="text-black font-semibold text-xl mb-2">Kontakt</h2>
+                    <p>E-Mail: robert.vogt@mailbox.org<br>Telefon: +49 (0) 1743580 329</p>
+                </section>
+                <p class="text-sm text-gray-500 border-t pt-4">Gewerbe in Anmeldung. Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.</p>
+            </div>
+            <button onclick="hidePages()" class="mt-12 btn-apple w-full py-4 text-lg">Schließen</button>
         </div>
-        <button onclick="hidePages()" class="mt-12 btn-apple w-full py-4 text-lg">Schließen</button>
     </div>
-</div>
 
     <script>
         const SUPABASE_URL = 'https://nyekitzejjvhbyvaziwl.supabase.co';
@@ -190,22 +165,9 @@
         let currentIndex = 0;
         let DEADLINE;
 
-        // Navigation Functions
-        function showPrivacy() {
-            document.getElementById('main-content').classList.add('hidden');
-            document.getElementById('privacy-page').classList.remove('hidden');
-            window.scrollTo(0,0);
-        }
-        function showImpressum() {
-            document.getElementById('main-content').classList.add('hidden');
-            document.getElementById('impressum-page').classList.remove('hidden');
-            window.scrollTo(0,0);
-        }
-        function hidePages() {
-            document.getElementById('privacy-page').classList.add('hidden');
-            document.getElementById('impressum-page').classList.add('hidden');
-            document.getElementById('main-content').classList.remove('hidden');
-        }
+        function showPrivacy() { document.getElementById('main-content').classList.add('hidden'); document.getElementById('privacy-page').classList.remove('hidden'); window.scrollTo(0,0); }
+        function showImpressum() { document.getElementById('main-content').classList.add('hidden'); document.getElementById('impressum-page').classList.remove('hidden'); window.scrollTo(0,0); }
+        function hidePages() { document.getElementById('privacy-page').classList.add('hidden'); document.getElementById('impressum-page').classList.add('hidden'); document.getElementById('main-content').classList.remove('hidden'); }
 
         async function loadData() {
             const { data: prodData } = await supabaseClient.from('products').select('*').order('id', { ascending: true });
@@ -213,17 +175,20 @@
                 PRODUCTS = prodData.map(item => ({
                     db_id: item.id,
                     name: item.name,
-                    img: (item.name.toLowerCase() === "silber" ? "silber" : item.name.toLowerCase() === "schwarz" ? "schwarz" : "gold") + ".png",
+                    img: item.name.toLowerCase() + ".png",
                     stock: item.stock_ready,
                     preorder: item.stock_incoming,
                     price_sale: item.price_sale,
                     price_regular: item.price_regular,
                     price_preorder: item.price_preorder
                 }));
+                // FIX: Preise im Hero-Bereich setzen
+                document.getElementById('hero-price-sale').innerText = `€${PRODUCTS[0].price_sale}`;
+                document.getElementById('hero-price-regular').innerText = `€${PRODUCTS[0].price_regular}`;
                 updateGalleryUI();
             }
             const { data: setData } = await supabaseClient.from('settings').select('value').eq('name', 'sale_deadline').single();
-            DEADLINE = setData ? new Date(setData.value).getTime() : new Date("January 10, 2026 23:59:59").getTime();
+            DEADLINE = setData ? new Date(setData.value).getTime() : new Date("2026-01-10T23:59:59").getTime();
         }
 
         function updateGalleryUI() {
@@ -232,13 +197,16 @@
             document.getElementById('gallery-label').innerText = p.name + " Edition";
             const sEl = document.getElementById('stock-display');
             const priceDisplay = document.getElementById('form-price');
+            const tag = document.getElementById('preorder-tag');
             
             if (p.stock > 0) {
                 sEl.innerText = `${p.stock} sofort verfügbar`;
                 priceDisplay.innerText = `€${p.price_sale}`;
+                tag.classList.add('hidden');
             } else {
-                sEl.innerText = `${p.preorder} Plätze für Vorbestellung`;
+                sEl.innerText = `${p.preorder} Plätze (Vorbestellung)`;
                 priceDisplay.innerText = `€${p.price_preorder}`;
+                tag.classList.remove('hidden');
             }
             document.querySelectorAll('.color-dot').forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
             document.getElementById('gallery-img').src = p.img;
@@ -246,15 +214,8 @@
 
         function updateByClick(index) {
             if (currentIndex === index) return;
-            const img = document.getElementById('gallery-img');
-            img.classList.add('slide-exit');
-            setTimeout(() => {
-                currentIndex = index;
-                updateGalleryUI();
-                img.classList.remove('slide-exit');
-                img.classList.add('slide-enter');
-                setTimeout(() => img.classList.remove('slide-enter'), 50);
-            }, 300);
+            currentIndex = index;
+            updateGalleryUI();
         }
 
         function updateTimer() {
@@ -271,7 +232,6 @@
         setInterval(updateTimer, 1000);
         loadData();
 
-        // Reveal Animation
         const observer = new IntersectionObserver(entries => {
             entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); });
         }, { threshold: 0.1 });
