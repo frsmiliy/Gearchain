@@ -8,6 +8,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     
+    <link rel="stylesheet" href="style.css">
+
     <style>
         html { scroll-behavior: smooth; }
         body { font-family: 'Inter', sans-serif; background-color: #ffffff; color: #1d1d1f; overflow-x: hidden; }
@@ -18,10 +20,6 @@
         .input-apple { width: 100%; padding: 20px; border-radius: 16px; background-color: #f5f5f7; border: 1px solid #e5e5e7; margin-bottom: 12px; outline: none; transition: all 0.2s; text-align: center; }
         .input-apple:focus { background-color: white; border-color: #0071e3; box-shadow: 0 0 0 4px rgba(0,113,227,0.1); }
         
-        .checkbox-container { display: flex; align-items: flex-start; gap: 10px; text-align: left; margin-top: 15px; margin-bottom: 20px; cursor: pointer; font-size: 13px; color: #86868b; }
-        .checkbox-container input { width: 18px; height: 18px; cursor: pointer; accent-color: #0071e3; }
-
-        /* WICHTIG: Falls JS nicht lädt, zeigen wir die Items trotzdem (Fallback) */
         .reveal-item { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
         .reveal-item.active { opacity: 1; transform: translateY(0); }
         
@@ -62,7 +60,7 @@
         <div class="max-w-6xl mx-auto px-6 text-center">
             <div class="mb-24 reveal-item">
                 <h2 class="text-5xl md:text-7xl font-semibold tracking-tight text-black mb-6">Faszinierend.</h2>
-                <p class="text-xl text-gray-500 max-w-2xl mx-auto">Ein Klick, der alles verändert. Erlebe mechanische Perfektion in deiner Hand.</p>
+                <p class="text-xl text-gray-500 max-w-2xl mx-auto">Ein Klick, der alles verändert.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
                 <div class="reveal-item">
@@ -71,8 +69,6 @@
                             <source src="video1.mp4" type="video/mp4">
                         </video>
                     </div>
-                    <h3 class="mt-8 text-2xl font-medium text-black">Nahtlos.</h3>
-                    <p class="text-gray-500 mt-2">Gefertigt aus einem Stück.</p>
                 </div>
                 <div class="reveal-item">
                     <div class="rounded-[44px] overflow-hidden bg-black aspect-square shadow-2xl">
@@ -80,8 +76,6 @@
                             <source src="video2.mp4" type="video/mp4">
                         </video>
                     </div>
-                    <h3 class="mt-8 text-2xl font-medium text-black">Präzise.</h3>
-                    <p class="text-gray-500 mt-2">Jedes Detail zählt.</p>
                 </div>
             </div>
         </div>
@@ -90,7 +84,7 @@
     <section id="explore" class="bg-black py-32 text-center overflow-hidden">
         <div class="reveal-item">
             <h2 class="text-5xl md:text-6xl font-semibold mb-4 text-white tracking-tight">Wähle deinen Stil.</h2>
-            <div id="swipe-area" class="relative w-full max-w-lg px-6 mb-16 mx-auto flex justify-center items-center cursor-grab active:cursor-grabbing">
+            <div id="swipe-area" class="relative w-full max-w-lg px-6 mb-16 mx-auto flex justify-center items-center">
                 <img id="gallery-img" src="silber.png" alt="GearChain" class="w-full h-auto object-contain select-none">
             </div>
             <div class="flex justify-center gap-10 mb-8">
@@ -98,7 +92,7 @@
                 <div onclick="updateByClick(1)" class="color-dot bg-[#b4923e]" id="dot-1"></div>
                 <div onclick="updateByClick(2)" class="color-dot bg-[#333333]" id="dot-2"></div>
             </div>
-            <p id="gallery-label" class="text-2xl font-medium mb-2 text-white italic">Lade Modelle...</p>
+            <p id="gallery-label" class="text-2xl font-medium mb-2 text-white italic italic">Lade Modelle...</p>
             <span id="stock-display" class="bg-white/10 text-white text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest">Warten</span>
         </div>
     </section>
@@ -116,7 +110,7 @@
                         
                         <label class="checkbox-container">
                             <input type="checkbox" id="privacy-check">
-                            <span>Ich akzeptiere die <a href="#" class="text-blue-600 underline">Datenschutzerklärung</a>.</span>
+                            <span>Ich akzeptiere die <a href="javascript:void(0)" onclick="openPrivacy()" class="text-blue-600 underline">Datenschutzerklärung</a>.</span>
                         </label>
 
                         <button onclick="processOrder()" id="order-btn" class="w-full bg-black text-white py-5 rounded-2xl font-semibold text-lg hover:bg-gray-800 transition-all">Zertifikat sichern</button>
@@ -136,8 +130,20 @@
         </div>
     </section>
 
+    <div id="privacy-modal">
+        <div class="modal-content">
+            <h2 class="text-3xl font-bold mb-6">Datenschutzerklärung</h2>
+            <div id="privacy-text" class="text-gray-600 space-y-4 text-left">
+                <p><strong>1. Datenerhebung:</strong> Wir speichern deinen Namen und deine E-Mail Adresse ausschließlich zur Abwicklung deiner Reservierung.</p>
+                <p><strong>2. Dienste:</strong> Deine Daten werden sicher in einer Supabase-Datenbank (EU-Server) verarbeitet.</p>
+                <p><strong>3. Bestätigung:</strong> Du erhältst eine einmalige Bestätigungs-E-Mail über Formspree.</p>
+                <p><strong>4. Löschung:</strong> Nach Abschluss der Aktion (Schulverkauf) werden alle persönlichen Daten gelöscht.</p>
+            </div>
+            <button onclick="closePrivacy()" class="mt-10 btn-apple w-full">Verstanden</button>
+        </div>
+    </div>
+
     <script>
-        // Supabase Config
         const SUPABASE_URL = 'https://nyekitzejjvhbyvaziwl.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55ZWtpdHplamp2aGJ5dmF6aXdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyNDgyMDksImV4cCI6MjA4MjgyNDIwOX0.vR9NZ7A9XAXTt7D5gNJwFxzL9upfNvc3RDUXKSdHtj4';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -146,7 +152,6 @@
         let currentIndex = 0;
         let DEADLINE;
 
-        // Daten laden
         async function loadData() {
             const { data: prodData, error: prodError } = await supabaseClient.from('products').select('*').order('id', { ascending: true });
             if (!prodError && prodData.length > 0) {
@@ -161,11 +166,9 @@
                     price_preorder: item.price_preorder
                 }));
                 updateGalleryUI();
-                
                 document.getElementById('hero-price-sale').innerText = `€${PRODUCTS[0].price_sale}`;
                 document.getElementById('hero-price-regular').innerText = `€${PRODUCTS[0].price_regular}`;
             }
-
             const { data: setData } = await supabaseClient.from('settings').select('value').eq('name', 'sale_deadline').single();
             DEADLINE = setData ? new Date(setData.value).getTime() : new Date("January 10, 2026 23:59:59").getTime();
         }
@@ -174,7 +177,6 @@
             if (PRODUCTS.length === 0) return;
             const p = PRODUCTS[currentIndex];
             document.getElementById('gallery-label').innerText = p.name + " Edition";
-            
             const sEl = document.getElementById('stock-display');
             const tag = document.getElementById('preorder-tag');
             const btn = document.getElementById('order-btn');
@@ -193,7 +195,6 @@
                 btn.innerText = "Jetzt vorbestellen";
                 priceDisplay.innerText = `€${p.price_preorder}`;
             }
-
             document.querySelectorAll('.color-dot').forEach((dot, i) => {
                 dot.classList.toggle('active', i === currentIndex);
             });
@@ -234,12 +235,11 @@
                 document.getElementById('cert-color').innerText = p.name + " Edition";
                 document.getElementById('cert-type').innerText = p.stock > 0 ? "Abholung Schule" : "Vorbestellung";
                 document.getElementById('cert-price-final').innerText = `€${currentPrice}`;
-                
                 document.getElementById('buy-form').classList.add('hidden');
                 document.getElementById('success-screen').classList.remove('hidden');
                 loadData();
             } else {
-                alert("Fehler bei der Reservierung. Bitte versuche es erneut.");
+                alert("Fehler bei der Reservierung.");
             }
         }
 
@@ -254,11 +254,14 @@
             document.getElementById('countdown').innerText = `${d > 0 ? d + 'T ' : ''}${h}H ${m}M ${s}S`;
         }
 
-        // Intersection Observer für Reveal Animationen
+        // Modal Steuerung
+        function openPrivacy() { document.getElementById('privacy-modal').style.display = 'flex'; }
+        function closePrivacy() { document.getElementById('privacy-modal').style.display = 'none'; }
+
+        // Animationen
         const observer = new IntersectionObserver(entries => {
             entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); });
         }, { threshold: 0.1 });
-        
         document.querySelectorAll('.reveal-item').forEach(el => observer.observe(el));
 
         setInterval(updateTimer, 1000);
