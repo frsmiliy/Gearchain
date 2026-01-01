@@ -106,13 +106,22 @@
     let currentIdx = 0;
 
     async function init() {
-        // Produkte laden
+        console.log("Versuche Produkte zu laden...");
         const { data, error } = await supabase.from('products').select('*').order('id');
+        
         if (error) {
-            console.error("Fehler beim Laden der Produkte:", error);
-        } else if (data) {
+            console.error("Datenbank-Fehler:", error.message);
+            alert("Fehler beim Laden der Produkte: " + error.message);
+            return;
+        }
+
+        if (data && data.length > 0) {
             products = data;
+            console.log("Produkte geladen:", products);
             updateUI();
+        } else {
+            console.warn("Keine Produkte in der Datenbank gefunden.");
+            alert("Achtung: Die Tabelle 'products' ist leer. Bitte SQL-Befehl ausführen!");
         }
         startTimer();
     }
@@ -123,46 +132,48 @@
     }
 
     function updateUI() {
-        if (!products || !products.length) return;
+        if (!products.length) return;
         const p = products[currentIdx];
-        document.getElementById('gallery-img').src = p.name.toLowerCase() + ".png";
-        document.getElementById('gallery-label').innerText = p.name + " Edition";
-        document.getElementById('price-display').innerText = `€${p.price_sale}`;
-        document.querySelectorAll('.color-dot').forEach((d, i) => d.classList.toggle('active', i === currentIdx));
+        
+        // UI Updates
+        const img = document.getElementById('gallery-img');
+        const label = document.getElementById('gallery-label');
+        const price = document.getElementById('price-display');
+
+        if(img) img.src = p.name.toLowerCase() + ".png";
+        if(label) label.innerText = p.name + " Edition";
+        if(price) price.innerText = `€${p.price_sale.toFixed(2)}`;
+        
+        document.querySelectorAll('.color-dot').forEach((d, i) => {
+            d.classList.toggle('active', i === currentIdx);
+        });
     }
 
     async function handlePurchase() {
-        const name = document.getElementById('name');
-        const email = document.getElementById('email');
-        const privacy = document.getElementById('privacy');
-        const card = document.getElementById('main-buy-card');
+        const nameVal = document.getElementById('name').value;
+        const emailVal = document.getElementById('email').value;
+        const privacyChecked = document.getElementById('privacy').checked;
         const btn = document.getElementById('submit-btn');
 
-        // Validierung
-        if (!name.value || !email.value.includes('@') || !privacy.checked) {
-            card.classList.add('shake');
-            setTimeout(() => card.classList.remove('shake'), 500);
+        if (!nameVal || !emailVal.includes('@') || !privacyChecked) {
+            document.getElementById('main-buy-card').classList.add('shake');
+            setTimeout(() => document.getElementById('main-buy-card').classList.remove('shake'), 500);
             return;
         }
 
         btn.innerText = "Verarbeitung...";
         btn.disabled = true;
 
-        // GC-Code generieren
         const gcCode = "GC-" + Math.random().toString(36).substring(2, 6).toUpperCase();
 
-        // IN DATENBANK SPEICHERN
-        const { error } = await supabase
-            .from('orders')
-            .insert([{
-                customer_name: name.value,
-                customer_email: email.value,
-                product_id: products[currentIdx] ? products[currentIdx].id : null,
-                gc_code: gcCode
-            }]);
+        const { error } = await supabase.from('orders').insert([{
+            customer_name: nameVal,
+            customer_email: emailVal,
+            product_id: products[currentIdx]?.id,
+            gc_code: gcCode
+        }]);
 
         if (!error) {
-            // Erfolg: UI umschalten
             document.getElementById('buy-content').innerHTML = `
                 <div class="animate-in fade-in duration-700">
                     <div class="text-6xl mb-6">✅</div>
@@ -171,12 +182,10 @@
                     <div class="bg-gray-100 p-4 rounded-2xl font-mono text-2xl font-bold tracking-widest text-[#0071e3]">
                         ${gcCode}
                     </div>
-                    <p class="mt-6 text-xs text-gray-400 italic text-center">Bitte mache einen Screenshot dieses Codes.<br>Er dient als Nachweis für deine Preorder.</p>
+                    <p class="mt-6 text-xs text-gray-400 italic text-center">Mache einen Screenshot dieses Codes.</p>
                 </div>`;
         } else {
-            // Fehler anzeigen
-            console.error("Datenbank-Fehler:", error);
-            alert("Datenbank-Fehler: Bitte stelle sicher, dass die Tabelle 'orders' in Supabase angelegt wurde.");
+            alert("Fehler beim Speichern: " + error.message);
             btn.disabled = false;
             btn.innerText = "Zertifikat sichern";
         }
@@ -190,15 +199,18 @@
             const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
             const m = Math.floor((diff / 1000 / 60) % 60);
             const s = Math.floor((diff / 1000) % 60);
-            document.getElementById('countdown').innerText = `${h}H ${m}M ${s}S`;
+            const el = document.getElementById('countdown');
+            if(el) el.innerText = `${h}H ${m}M ${s}S`;
         }, 1000);
     }
 
+    // Animationen
     const observer = new IntersectionObserver(entries => {
         entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); });
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal-item').forEach(el => observer.observe(el));
 
+    // Start
     init();
 </script>
 </body>
