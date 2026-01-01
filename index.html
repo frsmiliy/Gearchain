@@ -15,20 +15,40 @@
         
         /* Input & Buttons */
         .input-apple { width: 100%; padding: 20px; border-radius: 16px; background-color: #f5f5f7; border: 1px solid #e5e5e7; margin-bottom: 12px; outline: none; transition: all 0.3s; text-align: center; font-size: 16px; }
-        .input-apple:focus { background-color: white; border-color: #0071e3; box-shadow: 0 0 0 4px rgba(0,113,227,0.1); }
+        
+        /* Blau statt Lila beim Fokus */
+        .input-apple:focus { 
+            background-color: white; 
+            border-color: #0071e3 !important; 
+            box-shadow: 0 0 0 4px rgba(0,113,227,0.1); 
+        }
+        
+        /* Fehler-Status */
+        .input-error { border-color: #ff3b30 !important; background-color: #fff2f1 !important; }
+
         .btn-apple { background-color: #0071e3; color: white; border-radius: 980px; padding: 10px 22px; font-size: 14px; font-weight: 500; transition: all 0.3s; }
         .btn-apple:hover { background-color: #0077ed; transform: scale(1.02); }
-        .btn-order { background-color: #000; color: white; padding: 20px; border-radius: 18px; width: 100%; font-weight: 600; font-size: 17px; transition: all 0.2s; }
+        
+        /* Zertifikat sichern Button jetzt Blau */
+        .btn-order { background-color: #0071e3; color: white; padding: 20px; border-radius: 18px; width: 100%; font-weight: 600; font-size: 17px; transition: all 0.2s; }
+        .btn-order:hover { background-color: #0077ed; }
         .btn-order:active { transform: scale(0.98); opacity: 0.8; }
+
+        /* Shake Animation */
+        @keyframes appleShake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-8px); }
+            40% { transform: translateX(8px); }
+            60% { transform: translateX(-8px); }
+            80% { transform: translateX(8px); }
+        }
+        .shake { animation: appleShake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
 
         /* Animation Classes */
         .reveal-item { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
         .reveal-item.active { opacity: 1; transform: translateY(0); }
         
-        /* Hero Scroll Fade */
         #hero-content { transition: opacity 0.1s linear; }
-
-        /* Gallery */
         #gallery-img { transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
         .slide-exit { opacity: 0; transform: scale(0.95); }
         
@@ -36,7 +56,6 @@
         .color-dot:hover { transform: scale(1.2); }
         .color-dot.active::after { content: ''; position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px; border: 2px solid #0071e3; border-radius: 50%; }
         
-        /* Tooltip Style */
         .color-tooltip { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); margin-bottom: 10px; padding: 4px 10px; background: black; color: white; font-size: 10px; border-radius: 6px; opacity: 0; pointer-events: none; transition: 0.3s; white-space: nowrap; }
         .color-dot:hover .color-tooltip { opacity: 1; transform: translateX(-50%) translateY(-5px); }
 
@@ -150,7 +169,6 @@
         let currentIndex = 0;
         let DEADLINE;
 
-        // SCROLL OPACITY LOGIC
         window.addEventListener('scroll', () => {
             const heroContent = document.getElementById('hero-content');
             const scrollPercent = window.scrollY / (window.innerHeight * 0.6);
@@ -200,7 +218,7 @@
 
         function updateHoverLabel(name) {
             if (name === "") {
-                updateGalleryUI(); // Restore original label
+                updateGalleryUI();
             } else {
                 document.getElementById('gallery-label').innerText = name;
             }
@@ -215,6 +233,53 @@
                 updateGalleryUI();
                 img.classList.remove('slide-exit');
             }, 250);
+        }
+
+        // NEUE PROZESS-FUNKTION MIT SHAKE & RED FOCUS
+        async function processOrder() {
+            const nameField = document.getElementById('name-field');
+            const emailField = document.getElementById('email-field');
+            const privacyCheck = document.getElementById('privacy-check');
+            const card = document.getElementById('main-buy-card');
+            const btn = document.getElementById('order-btn');
+
+            // Reset
+            nameField.classList.remove('input-error');
+            emailField.classList.remove('input-error');
+            card.classList.remove('shake');
+
+            let hasError = false;
+
+            if (!nameField.value.trim()) { nameField.classList.add('input-error'); hasError = true; }
+            if (!emailField.value.trim() || !emailField.value.includes('@')) { emailField.classList.add('input-error'); hasError = true; }
+            if (!privacyCheck.checked) { hasError = true; }
+
+            if (hasError) {
+                setTimeout(() => card.classList.add('shake'), 10);
+                return;
+            }
+
+            btn.innerText = "Verarbeitung...";
+            btn.disabled = true;
+
+            const { error } = await supabaseClient.from('orders').insert([{
+                product_id: PRODUCTS[currentIndex].db_id,
+                customer_name: nameField.value,
+                customer_email: emailField.value
+            }]);
+
+            if (!error) {
+                document.getElementById('buy-form').innerHTML = `
+                    <div class="py-10">
+                        <div class="text-6xl mb-6">✅</div>
+                        <h3 class="text-2xl font-bold mb-2">Reserviert!</h3>
+                        <p class="text-gray-500 text-sm">Prüfe dein Postfach für dein Zertifikat.</p>
+                    </div>`;
+            } else {
+                alert("Fehler: " + error.message);
+                btn.disabled = false;
+                btn.innerText = "Zertifikat sichern";
+            }
         }
 
         function updateTimer() {
