@@ -13,7 +13,6 @@
         body { font-family: 'Inter', sans-serif; background-color: #ffffff; color: #1d1d1f; overflow-x: hidden; }
         .apple-blur { backdrop-filter: saturate(180%) blur(20px); background: rgba(255, 255, 255, 0.72); }
         
-        /* UI Elements */
         .input-apple { width: 100%; padding: 20px; border-radius: 16px; background-color: #f5f5f7; border: 1px solid #e5e5e7; outline: none; transition: all 0.3s; text-align: center; font-size: 16px; }
         .input-apple:focus { background-color: white; border-color: #0071e3; box-shadow: 0 0 0 4px rgba(0,113,227,0.1); }
         .input-error { border-color: #ff3b30 !important; background-color: #fff2f1 !important; }
@@ -22,20 +21,22 @@
         .btn-order:hover { background-color: #0077ed; }
         .btn-order:active { transform: scale(0.98); }
 
-        /* Animationen */
         @keyframes appleShake {
             0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-8px); }
-            40%, 80% { transform: translateX(8px); }
+            20% { transform: translateX(-8px); }
+            40% { transform: translateX(8px); }
+            60% { transform: translateX(-8px); }
+            80% { transform: translateX(8px); }
         }
         .shake { animation: appleShake 0.4s ease-in-out; }
+        
         .reveal-item { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
         .reveal-item.active { opacity: 1; transform: translateY(0); }
         
-        .color-dot { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.3s; position: relative; }
+        .color-dot { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: 0.3s; position: relative; }
         .color-dot.active::after { content: ''; position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px; border: 2px solid #0071e3; border-radius: 50%; }
-
-        #hero-video-container { width: 100%; height: 60vh; background: #000; overflow: hidden; border-radius: 30px; margin: 40px 0; }
+        
+        #video-box { width: 100%; max-width: 1100px; height: 500px; background: #000; border-radius: 32px; margin: 40px auto; overflow: hidden; }
     </style>
 </head>
 <body>
@@ -50,13 +51,15 @@
     <section class="h-screen flex flex-col items-center justify-center text-center px-4">
         <p class="text-orange-600 text-sm font-semibold mb-3 tracking-widest uppercase">Limited Preorder</p>
         <h1 class="text-7xl md:text-9xl font-semibold tracking-tighter mb-6">GearChain</h1>
-        <div id="countdown" class="text-lg font-medium text-gray-500">Lädt...</div>
+        <div class="px-6 py-2 bg-gray-50 rounded-full border border-gray-100 inline-block">
+            <p class="text-xs font-medium text-gray-500 uppercase tracking-widest">Aktion endet: <span id="countdown" class="text-black font-bold ml-1">Lädt...</span></p>
+        </div>
     </section>
 
-    <section class="max-w-6xl mx-auto px-6 reveal-item">
-        <div id="hero-video-container">
+    <section class="px-6 reveal-item">
+        <div id="video-box">
             <video autoplay muted loop playsinline class="w-full h-full object-cover">
-                <source src="intro-video.mp4" type="video/mp4">
+                <source src="intro.mp4" type="video/mp4">
             </video>
         </div>
     </section>
@@ -70,8 +73,7 @@
                 <div onclick="updateSelection(1)" class="color-dot bg-[#b4923e]" id="dot-1"></div>
                 <div onclick="updateSelection(2)" class="color-dot bg-[#333333]" id="dot-2"></div>
             </div>
-            <p id="gallery-label" class="text-xl italic mb-2">Silber Edition</p>
-            <span id="stock-info" class="text-xs text-gray-400 uppercase tracking-widest">Wird geprüft...</span>
+            <p id="gallery-label" class="text-xl italic">Silber Edition</p>
         </div>
     </section>
 
@@ -86,7 +88,7 @@
                     
                     <div class="flex items-center gap-2 text-sm text-gray-500 py-4">
                         <input type="checkbox" id="privacy" class="w-4 h-4 accent-[#0071e3]">
-                        <label for="privacy">Ich akzeptiere den Datenschutz.</label>
+                        <label for="privacy" class="cursor-pointer">Ich akzeptiere den Datenschutz.</label>
                     </div>
                     
                     <button onclick="handlePurchase()" id="submit-btn" class="btn-order">Zertifikat sichern</button>
@@ -105,8 +107,10 @@
 
         async function init() {
             const { data } = await supabase.from('products').select('*').order('id');
-            products = data;
-            updateUI();
+            if(data) {
+                products = data;
+                updateUI();
+            }
             startTimer();
         }
 
@@ -121,8 +125,6 @@
             document.getElementById('gallery-img').src = p.name.toLowerCase() + ".png";
             document.getElementById('gallery-label').innerText = p.name + " Edition";
             document.getElementById('price-display').innerText = `€${p.price_sale}`;
-            document.getElementById('stock-info').innerText = `${p.stock_ready} Stück sofort lieferbar`;
-            
             document.querySelectorAll('.color-dot').forEach((d, i) => d.classList.toggle('active', i === currentIdx));
         }
 
@@ -131,16 +133,17 @@
             const email = document.getElementById('email');
             const privacy = document.getElementById('privacy');
             const card = document.getElementById('main-buy-card');
+            const btn = document.getElementById('submit-btn');
 
             if (!name.value || !email.value.includes('@') || !privacy.checked) {
-                name.classList.toggle('input-error', !name.value);
-                email.classList.toggle('input-error', !email.value.includes('@'));
                 card.classList.add('shake');
                 setTimeout(() => card.classList.remove('shake'), 500);
                 return;
             }
 
-            // Generiere GC-Code (GC + Zufallsmix)
+            btn.innerText = "Verarbeitung...";
+            btn.disabled = true;
+
             const gcCode = "GC-" + Math.random().toString(36).substring(2, 6).toUpperCase();
 
             const { error } = await supabase.from('orders').insert([{
@@ -155,14 +158,16 @@
                     <div class="animate-in fade-in duration-700">
                         <div class="text-6xl mb-6">✅</div>
                         <h2 class="text-2xl font-bold mb-2">Reserviert!</h2>
-                        <p class="text-gray-500 mb-6 text-sm">Dein persönlicher Zertifikats-Code:</p>
+                        <p class="text-gray-500 mb-6 text-sm">Dein Zertifikats-Code:</p>
                         <div class="bg-gray-100 p-4 rounded-2xl font-mono text-2xl font-bold tracking-widest text-[#0071e3]">
                             ${gcCode}
                         </div>
-                        <p class="mt-6 text-xs text-gray-400">Mache einen Screenshot dieses Codes.</p>
+                        <p class="mt-6 text-xs text-gray-400 italic text-center">Bitte mache einen Screenshot dieses Codes.<br>Er dient als Nachweis für deine Preorder.</p>
                     </div>`;
             } else {
                 alert("Fehler: " + error.message);
+                btn.disabled = false;
+                btn.innerText = "Zertifikat sichern";
             }
         }
 
@@ -171,10 +176,10 @@
             setInterval(() => {
                 const now = new Date().getTime();
                 const diff = deadline - now;
-                const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const s = Math.floor((diff % (1000 * 60)) / 1000);
-                document.getElementById('countdown').innerText = `Aktion endet in: ${h}h ${m}m ${s}s`;
+                const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const m = Math.floor((diff / 1000 / 60) % 60);
+                const s = Math.floor((diff / 1000) % 60);
+                document.getElementById('countdown').innerText = `${h}H ${m}M ${s}S`;
             }, 1000);
         }
 
