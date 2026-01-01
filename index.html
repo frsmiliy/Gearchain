@@ -22,11 +22,9 @@
         }
         .input-apple:focus { background-color: white; border-color: #0071e3; box-shadow: 0 0 0 4px rgba(0,113,227,0.1); }
         
-        /* Fehler-Zustand */
         .input-error { border-color: #ff3b30 !important; background-color: #fff2f1 !important; }
         .text-error { color: #ff3b30 !important; }
 
-        /* Apple Shake Animation */
         @keyframes appleShake {
             0%, 100% { transform: translateX(0); }
             20% { transform: translateX(-8px); }
@@ -36,8 +34,10 @@
         }
         .shake { animation: appleShake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
 
-        .btn-apple { background-color: #000; color: white; border-radius: 980px; padding: 12px 24px; font-size: 14px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .btn-apple:hover { transform: scale(1.02); }
+        /* Blau-Fix für den Sichern Button */
+        .btn-apple { background-color: #0071e3; color: white; border-radius: 980px; padding: 12px 24px; font-size: 14px; font-weight: 500; transition: all 0.3s; }
+        .btn-apple:hover { background-color: #0077ed; transform: scale(1.02); }
+        
         .btn-order { background-color: #000; color: white; padding: 20px; border-radius: 18px; width: 100%; font-weight: 600; font-size: 17px; transition: all 0.2s; }
         .btn-order:active { transform: scale(0.98); opacity: 0.8; }
 
@@ -52,7 +52,8 @@
         .color-dot.active::after { content: ''; position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px; border: 2px solid #0071e3; border-radius: 50%; }
         .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.3); }
         
-        .checkbox-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 24px; font-size: 14px; color: #86868b; transition: all 0.3s; }
+        /* Clean Abstand-Fix */
+        .checkbox-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 24px; margin-bottom: 24px; font-size: 14px; color: #86868b; transition: all 0.3s; }
     </style>
 </head>
 <body>
@@ -193,7 +194,6 @@
         let currentIndex = 0;
         let DEADLINE;
 
-        // DATENDURCHREICHUNG
         async function loadData() {
             const { data: prodData } = await supabaseClient.from('products').select('*').order('id', { ascending: true });
             if (prodData && prodData.length > 0) {
@@ -215,7 +215,6 @@
             DEADLINE = setData ? new Date(setData.value).getTime() : new Date("January 10, 2026 23:59:59").getTime();
         }
 
-        // UI UPDATES
         function updateGalleryUI() {
             if (PRODUCTS.length === 0) return;
             const p = PRODUCTS[currentIndex];
@@ -252,7 +251,6 @@
             }, 300);
         }
 
-        // VALIDIERUNG & BESTELLUNG
         function applyError(el) {
             el.classList.add('input-error', 'shake');
             setTimeout(() => el.classList.remove('shake'), 450);
@@ -297,7 +295,6 @@
             }
         }
 
-        // NAVIGATION
         function showPrivacy() {
             document.getElementById('main-content').classList.add('hidden');
             document.getElementById('privacy-page').classList.remove('hidden');
@@ -308,7 +305,6 @@
             document.getElementById('main-content').classList.remove('hidden');
         }
 
-        // LIVE-KORREKTUR
         ['name-field', 'email-field'].forEach(id => {
             document.getElementById(id).addEventListener('input', function() { this.classList.remove('input-error'); });
         });
@@ -316,15 +312,22 @@
             if(this.checked) document.getElementById('privacy-container').classList.remove('input-error', 'text-error');
         });
 
-        // TIMER & ANIMATION
+        // ZEIT-FIX MIT TAGEN (D)
         function updateTimer() {
             if(!DEADLINE) return;
             const diff = DEADLINE - new Date().getTime();
             if (diff <= 0) { document.getElementById('countdown').innerText = "BEENDET"; return; }
+            
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
             const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
             const m = Math.floor((diff / (1000 * 60)) % 60);
             const s = Math.floor((diff / 1000) % 60);
-            document.getElementById('countdown').innerText = `${h}H ${m}M ${s}S`;
+            
+            let timeStr = "";
+            if(d > 0) timeStr += `${d}D `;
+            timeStr += `${h}H ${m}M ${s}S`;
+            
+            document.getElementById('countdown').innerText = timeStr;
         }
 
         const observer = new IntersectionObserver(entries => {
