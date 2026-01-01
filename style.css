@@ -100,3 +100,43 @@
     background: #d2d2d7;
     border-radius: 10px;
 }
+/* --- Ergänzungen für GearChain --- */
+
+/* Zertifikat sichern Button - Apple Blau */
+.btn-order { 
+    background-color: #0071e3 !important; 
+    color: white !important; 
+    padding: 20px; 
+    border-radius: 18px; 
+    width: 100%; 
+    font-weight: 600; 
+    font-size: 17px; 
+    transition: all 0.2s; 
+}
+.btn-order:hover { background-color: #0077ed !important; transform: scale(1.01); }
+.btn-order:active { transform: scale(0.98); opacity: 0.9; }
+
+/* Input Fokus - Blau statt Lila/Standard */
+.input-apple:focus { 
+    border-color: #0071e3 !important; 
+    box-shadow: 0 0 0 4px rgba(0,113,227,0.1) !important;
+    outline: none;
+}
+
+/* Shake Effekt bei Fehlern */
+@keyframes appleShake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(8px); }
+    60% { transform: translateX(-8px); }
+    80% { transform: translateX(8px); }
+}
+.shake { 
+    animation: appleShake 0.4s cubic-bezier(.36,.07,.19,.97) both; 
+}
+
+/* Fehler-Status für Felder */
+.input-error { 
+    border-color: #ff3b30 !important; 
+    background-color: #fff2f1 !important; 
+}
