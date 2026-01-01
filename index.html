@@ -92,7 +92,7 @@
                 <div onclick="updateByClick(1)" class="color-dot bg-[#b4923e]" id="dot-1"></div>
                 <div onclick="updateByClick(2)" class="color-dot bg-[#333333]" id="dot-2"></div>
             </div>
-            <p id="gallery-label" class="text-2xl font-medium mb-2 text-white italic italic">Lade Modelle...</p>
+            <p id="gallery-label" class="text-2xl font-medium mb-2 text-white italic">Lade Modelle...</p>
             <span id="stock-display" class="bg-white/10 text-white text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest">Warten</span>
         </div>
     </section>
@@ -125,17 +125,18 @@
                         <p class="text-gray-400 mb-8" id="cert-type">Ready</p>
                         <div id="cert-price-final" class="inline-block px-10 py-3 bg-black text-white rounded-full font-bold">€0.00</div>
                     </div>
+                    <p class="text-sm text-gray-500">Du hast soeben eine Bestätigung per E-Mail erhalten.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <div id="privacy-modal">
-        <div class="modal-content">
+    <div id="privacy-modal" style="display:none; position:fixed; inset:0; z-index:100; align-items:center; justify-content:center; background:rgba(0,0,0,0.4); backdrop-filter:blur(10px); padding:20px;">
+        <div style="background:white; width:100%; max-width:600px; border-radius:30px; padding:40px; box-shadow:0 25px 50px -12px rgba(0,0,0,0.25);">
             <h2 class="text-3xl font-bold mb-6">Datenschutzerklärung</h2>
-            <div id="privacy-text" class="text-gray-600 space-y-4 text-left">
+            <div class="text-gray-600 space-y-4 text-left text-sm">
                 <p><strong>1. Datenerhebung:</strong> Wir speichern deinen Namen und deine E-Mail Adresse ausschließlich zur Abwicklung deiner Reservierung.</p>
-                <p><strong>2. Dienste:</strong> Deine Daten werden sicher in einer Supabase-Datenbank (EU-Server) verarbeitet.</p>
+                <p><strong>2. Dienste:</strong> Deine Daten werden sicher in einer Supabase-Datenbank verarbeitet.</p>
                 <p><strong>3. Bestätigung:</strong> Du erhältst eine einmalige Bestätigungs-E-Mail über Formspree.</p>
                 <p><strong>4. Löschung:</strong> Nach Abschluss der Aktion (Schulverkauf) werden alle persönlichen Daten gelöscht.</p>
             </div>
@@ -147,6 +148,7 @@
         const SUPABASE_URL = 'https://nyekitzejjvhbyvaziwl.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55ZWtpdHplamp2aGJ5dmF6aXdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyNDgyMDksImV4cCI6MjA4MjgyNDIwOX0.vR9NZ7A9XAXTt7D5gNJwFxzL9upfNvc3RDUXKSdHtj4';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const FORMSPREE_URL = 'https://formspree.io/f/xkogojjv';
 
         let PRODUCTS = [];
         let currentIndex = 0;
@@ -226,15 +228,33 @@
             const p = PRODUCTS[currentIndex];
             const currentPrice = p.stock > 0 ? p.price_sale : p.price_preorder;
             const updateData = p.stock > 0 ? { stock_ready: p.stock - 1 } : { stock_incoming: p.preorder - 1 };
+            const orderID = "GC-" + Math.floor(Math.random() * 9000 + 1000);
             
+            // 1. Supabase Update
             const { error } = await supabaseClient.from('products').update(updateData).eq('id', p.db_id);
             
             if (!error) {
+                // 2. Formspree E-Mail senden
+                fetch(FORMSPREE_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        Name: name,
+                        Email: email,
+                        Produkt: p.name,
+                        Preis: currentPrice + "€",
+                        Status: p.stock > 0 ? "Sofortkauf" : "Vorbestellung",
+                        Bestellnummer: orderID
+                    })
+                });
+
+                // 3. UI Update
                 document.getElementById('cert-name-display').innerText = name;
-                document.getElementById('order-id').innerText = Math.floor(Math.random() * 9000 + 1000);
+                document.getElementById('order-id').innerText = orderID.replace("GC-", "");
                 document.getElementById('cert-color').innerText = p.name + " Edition";
                 document.getElementById('cert-type').innerText = p.stock > 0 ? "Abholung Schule" : "Vorbestellung";
                 document.getElementById('cert-price-final').innerText = `€${currentPrice}`;
+                
                 document.getElementById('buy-form').classList.add('hidden');
                 document.getElementById('success-screen').classList.remove('hidden');
                 loadData();
@@ -254,11 +274,9 @@
             document.getElementById('countdown').innerText = `${d > 0 ? d + 'T ' : ''}${h}H ${m}M ${s}S`;
         }
 
-        // Modal Steuerung
         function openPrivacy() { document.getElementById('privacy-modal').style.display = 'flex'; }
         function closePrivacy() { document.getElementById('privacy-modal').style.display = 'none'; }
 
-        // Animationen
         const observer = new IntersectionObserver(entries => {
             entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); });
         }, { threshold: 0.1 });
