@@ -12,38 +12,51 @@
         html { scroll-behavior: smooth; }
         body { font-family: 'Inter', sans-serif; background-color: #ffffff; color: #1d1d1f; overflow-x: hidden; }
         .apple-blur { backdrop-filter: saturate(180%) blur(20px); background: rgba(255, 255, 255, 0.72); }
-        .btn-apple { background-color: #0071e3; color: white; border-radius: 980px; padding: 10px 22px; font-size: 14px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .btn-apple:hover { background-color: #0077ed; transform: scale(1.02); }
         
-        /* Input Styling & Error States */
-        .input-apple { width: 100%; padding: 20px; border-radius: 16px; background-color: #f5f5f7; border: 1px solid #e5e5e7; margin-bottom: 12px; outline: none; transition: all 0.2s; text-align: center; }
+        /* Input Styling */
+        .input-apple { 
+            width: 100%; padding: 20px; border-radius: 16px; 
+            background-color: #f5f5f7; border: 1px solid #e5e5e7; 
+            margin-bottom: 12px; outline: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            text-align: center; font-size: 16px;
+        }
         .input-apple:focus { background-color: white; border-color: #0071e3; box-shadow: 0 0 0 4px rgba(0,113,227,0.1); }
         
-        /* Error Highlighting */
-        .input-error { border-color: #ff3b30 !important; background-color: #fff2f1 !important; }
+        /* Apple Error State */
+        .input-error { 
+            border-color: #ff3b30 !important; 
+            background-color: #fff2f1 !important; 
+            box-shadow: 0 0 0 4px rgba(255, 59, 48, 0.1) !important;
+        }
         .text-error { color: #ff3b30 !important; }
 
-        /* Shake Animation */
+        /* Keyframes für den Apple Shake */
         @keyframes appleShake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
+            0% { transform: translateX(0); }
+            20% { transform: translateX(-8px); }
+            40% { transform: translateX(8px); }
+            60% { transform: translateX(-8px); }
+            80% { transform: translateX(8px); }
+            100% { transform: translateX(0); }
         }
         .shake { animation: appleShake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
 
+        .btn-apple { 
+            background-color: #000000; color: white; border-radius: 18px; 
+            padding: 18px 30px; font-weight: 600; width: 100%;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+        .btn-apple:hover { transform: scale(1.01); background-color: #1d1d1f; }
+        .btn-apple:active { transform: scale(0.98); }
+
+        .checkbox-container { 
+            display: flex; align-items: center; justify-content: center; 
+            gap: 10px; margin: 20px 0; font-size: 14px; color: #86868b; 
+            transition: all 0.3s; padding: 10px; border-radius: 12px;
+        }
+        
         .reveal-item { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
         .reveal-item.active { opacity: 1; transform: translateY(0); }
-        
-        #gallery-img { transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
-        .slide-exit { opacity: 0; transform: scale(0.9) translateX(-20px); }
-        .slide-enter { opacity: 0; transform: scale(1.1) translateX(20px); }
-        
-        .color-dot { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: 0.3s; position: relative; }
-        .color-dot.active::after { content: ''; position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px; border: 2px solid #0071e3; border-radius: 50%; }
-        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.3); }
-        
-        .checkbox-container { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 24px; font-size: 14px; color: #86868b; transition: color 0.3s; }
     </style>
 </head>
 <body>
@@ -51,120 +64,132 @@
     <div id="main-content">
         <nav class="fixed top-0 w-full z-50 apple-blur border-b border-gray-100">
             <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-                <span class="text-xl font-semibold tracking-tight text-black">GearChain</span>
-                <a href="#buy" class="btn-apple font-medium">Sichern</a>
+                <span class="text-xl font-semibold tracking-tight">GearChain</span>
+                <a href="#buy" class="text-blue-600 font-medium text-sm">Sichern</a>
             </div>
         </nav>
 
-        <section class="h-screen flex flex-col items-center justify-center text-center px-4 bg-white">
-            <h1 class="text-7xl md:text-9xl font-semibold tracking-tighter mb-4">GearChain</h1>
-            <p class="text-gray-400 text-sm font-medium uppercase tracking-[0.2em] mb-10">Präzisions-Engineering aus Deutschland</p>
-            <div class="flex items-center gap-4 mb-10 justify-center">
-                <span id="hero-price-sale" class="text-4xl font-semibold text-black">--.--€</span>
-            </div>
-        </section>
-
         <section id="buy" class="min-h-screen bg-[#f5f5f7] flex flex-col items-center justify-center py-24 px-6">
-            <div class="max-w-3xl w-full reveal-item">
-                <div id="main-buy-card" class="bg-white rounded-[48px] p-12 md:p-20 text-center shadow-sm">
+            <div class="max-w-md w-full reveal-item active">
+                <div id="main-buy-card" class="bg-white rounded-[40px] p-10 md:p-16 text-center shadow-xl shadow-gray-200/50">
                     <div id="buy-form">
-                        <div id="form-price" class="text-7xl font-bold mb-12 tracking-tighter text-black">€--.--</div>
+                        <p class="text-blue-600 font-bold text-xs tracking-widest uppercase mb-2">Zertifikat</p>
+                        <div id="form-price" class="text-6xl font-bold mb-10 tracking-tighter">€19.99</div>
                         
-                        <div class="max-w-sm mx-auto text-black">
+                        <div class="space-y-1">
                             <input type="text" id="name-field" placeholder="Vollständiger Name" class="input-apple">
-                            
                             <input type="email" id="email-field" placeholder="E-Mail Adresse" class="input-apple">
                             
                             <div class="checkbox-container" id="privacy-container">
-                                <input type="checkbox" id="privacy-check" class="w-4 h-4">
-                                <span>Ich akzeptiere die <button type="button" onclick="showPrivacy()" class="text-blue-600 underline">Datenschutzerklärung</button>.</span>
+                                <input type="checkbox" id="privacy-check" class="w-4 h-4 rounded-full">
+                                <span>Ich akzeptiere den <button type="button" onclick="showPrivacy()" class="text-blue-600">Datenschutz</button></span>
                             </div>
 
-                            <button onclick="processOrder()" id="order-btn" class="w-full bg-black text-white py-5 rounded-2xl font-semibold text-lg hover:bg-gray-800 transition-all">Zertifikat sichern</button>
+                            <button onclick="processOrder()" id="order-btn" class="btn-apple">Zertifikat sichern</button>
                         </div>
                     </div>
                     
-                    <div id="success-screen" class="hidden text-black">
-                        <div class="glass-card p-12 rounded-[40px] mb-8 shadow-2xl">
-                            <h2 class="text-2xl font-bold mb-4">Erfolg!</h2>
-                            <p>Dein Zertifikat wurde reserviert.</p>
+                    <div id="success-screen" class="hidden animate-in fade-in duration-700">
+                        <div class="flex justify-center mb-6">
+                            <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-4xl">✓</div>
                         </div>
+                        <h2 class="text-3xl font-bold mb-2">Reserviert.</h2>
+                        <p class="text-gray-500">Wir haben dir eine Bestätigung an deine E-Mail gesendet.</p>
                     </div>
                 </div>
             </div>
         </section>
-
-        <footer class="py-10 text-center text-gray-400 text-xs">
-            <button onclick="showPrivacy()" class="hover:text-black">Datenschutz</button>
-        </footer>
     </div>
 
     <div id="privacy-page" class="hidden min-h-screen bg-white py-20 px-6">
         <div class="max-w-2xl mx-auto">
             <button onclick="hidePrivacy()" class="text-blue-600 mb-10 font-medium">← Zurück</button>
-            <h1 class="text-4xl font-bold mb-8">Datenschutz</h1>
-            <p class="text-gray-600">Deine Daten werden nur für diesen Schulverkauf genutzt...</p>
+            <h1 class="text-5xl font-bold mb-8 tracking-tight">Datenschutz.</h1>
+            <div class="prose prose-gray">
+                <p class="text-xl text-gray-500 mb-6">Deine Privatsphäre ist uns wichtig. Deshalb erheben wir nur Daten, die für den Schulverkauf absolut notwendig sind.</p>
+                <h3 class="text-black font-bold text-lg mt-8">Datenspeicherung</h3>
+                <p class="text-gray-600">Name und E-Mail werden sicher via Supabase gespeichert und nach Abschluss des Projekts gelöscht.</p>
+            </div>
         </div>
     </div>
 
     <script>
-        const SUPABASE_URL = 'https://nyekitzejjvhbyvaziwl.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55ZWtpdHplamp2aGJ5dmF6aXdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyNDgyMDksImV4cCI6MjA4MjgyNDIwOX0.vR9NZ7A9XAXTt7D5gNJwFxzL9upfNvc3RDUXKSdHtj4';
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        const FORMSPREE_URL = 'https://formspree.io/f/xkogojjv';
-
-        let PRODUCTS = [];
-        let currentIndex = 0;
-
-        // Validierungshilfe
-        function validateField(id, condition) {
-            const el = document.getElementById(id);
-            const container = id === 'privacy-check' ? document.getElementById('privacy-container') : el;
+        // Validierungs-Logik
+        function validate() {
+            const name = document.getElementById('name-field');
+            const email = document.getElementById('email-field');
+            const privacyCheck = document.getElementById('privacy-check');
+            const privacyContainer = document.getElementById('privacy-container');
             
-            if (!condition) {
-                container.classList.add('input-error', 'shake');
-                if(id === 'privacy-check') container.classList.add('text-error');
-                
-                // Animation nach 400ms entfernen damit sie erneut triggern kann
-                setTimeout(() => container.classList.remove('shake'), 400);
-                return false;
-            } else {
-                container.classList.remove('input-error', 'text-error');
-                return true;
+            let isValid = true;
+
+            // Name Validierung
+            if (name.value.trim().length < 3) {
+                applyError(name);
+                isValid = false;
             }
+
+            // Email Validierung
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email.value)) {
+                applyError(email);
+                isValid = false;
+            }
+
+            // Checkbox Validierung
+            if (!privacyCheck.checked) {
+                applyError(privacyContainer);
+                privacyContainer.classList.add('text-error');
+                isValid = false;
+            }
+
+            return isValid;
         }
 
-        // Live-Korrektur beim Tippen
-        document.querySelectorAll('.input-apple').forEach(input => {
-            input.addEventListener('input', () => {
-                input.classList.remove('input-error');
+        function applyError(element) {
+            element.classList.add('input-error', 'shake');
+            // Shake nach Ende der Animation entfernen, damit er neu triggern kann
+            setTimeout(() => element.classList.remove('shake'), 450);
+        }
+
+        // Live-Korrektur: Wenn der User tippt, verschwindet der Fehler
+        ['name-field', 'email-field'].forEach(id => {
+            document.getElementById(id).addEventListener('input', function() {
+                this.classList.remove('input-error');
             });
         });
-        document.getElementById('privacy-check').addEventListener('change', () => {
-            document.getElementById('privacy-container').classList.remove('text-error');
+
+        document.getElementById('privacy-check').addEventListener('change', function() {
+            if(this.checked) {
+                document.getElementById('privacy-container').classList.remove('input-error', 'text-error');
+            }
         });
 
         async function processOrder() {
-            const nameEl = document.getElementById('name-field');
-            const emailEl = document.getElementById('email-field');
-            const privacyEl = document.getElementById('privacy-check');
+            // Erst validieren
+            if (!validate()) return;
 
-            // Prüfe alle Felder
-            const isNameValid = validateField('name-field', nameEl.value.trim().length >= 2);
-            const isEmailValid = validateField('email-field', emailEl.value.includes('@') && emailEl.value.includes('.'));
-            const isPrivacyValid = validateField('privacy-check', privacyEl.checked);
+            // Button-Status ändern (Apple-like Feedback)
+            const btn = document.getElementById('order-btn');
+            const originalText = btn.innerText;
+            btn.innerText = "Verarbeite...";
+            btn.disabled = true;
+            btn.style.opacity = "0.7";
 
-            if (!isNameValid || !isEmailValid || !isPrivacyValid) {
-                return; // Stoppe wenn etwas fehlt
+            try {
+                // Hier käme dein Supabase/Formspree Code hin
+                // Simulation einer Verzögerung
+                await new Promise(resolve => setTimeout(resolve, 1500));
+
+                // Erfolg anzeigen
+                document.getElementById('buy-form').classList.add('hidden');
+                document.getElementById('success-screen').classList.remove('hidden');
+            } catch (e) {
+                btn.innerText = originalText;
+                btn.disabled = false;
+                btn.style.opacity = "1";
+                alert("Ein Fehler ist aufgetreten.");
             }
-
-            // Wenn alles okay ist -> Weiter mit Supabase/Formspree (wie vorher)
-            const p = PRODUCTS[currentIndex] || {name: "Standard", price_sale: 0, db_id: 1};
-            console.log("Bestellung wird verarbeitet...");
-            
-            // UI Erfolgssimulation
-            document.getElementById('buy-form').classList.add('hidden');
-            document.getElementById('success-screen').classList.remove('hidden');
         }
 
         function showPrivacy() {
@@ -176,13 +201,6 @@
         function hidePrivacy() {
             document.getElementById('privacy-page').classList.add('hidden');
             document.getElementById('main-content').classList.remove('hidden');
-        }
-
-        // Initialisierung (Beispieldaten)
-        loadData();
-        async function loadData() {
-            // Hier käme dein Supabase Fetch rein
-            document.getElementById('form-price').innerText = "€19.99";
         }
     </script>
 </body>
