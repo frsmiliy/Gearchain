@@ -224,7 +224,7 @@
             }, 250);
         }
 
-        async function processOrder() {
+       async function processOrder() {
             const nameField = document.getElementById('name-field');
             const emailField = document.getElementById('email-field');
             const privacyCheck = document.getElementById('privacy-check');
@@ -248,17 +248,39 @@
             btn.innerText = "Verarbeitung...";
             btn.disabled = true;
 
+            const currentProduct = PRODUCTS[currentIndex];
             const gcCode = "GC-" + Math.random().toString(36).substring(2, 7).toUpperCase();
-            const finalPrice = PRODUCTS[currentIndex].stock > 0 ? PRODUCTS[currentIndex].price_sale : PRODUCTS[currentIndex].price_preorder;
+            const isPreorder = currentProduct.stock <= 0;
+            const finalPrice = isPreorder ? currentProduct.price_preorder : currentProduct.price_sale;
 
-            const { error } = await supabaseClient.from('orders').insert([{
-                product_id: PRODUCTS[currentIndex].db_id,
+            // 1. Bestellung in 'orders' anlegen
+            const { error: orderError } = await supabaseClient.from('orders').insert([{
+                product_id: currentProduct.db_id,
                 customer_name: nameField.value,
                 customer_email: emailField.value,
                 gc_code: gcCode
             }]);
 
-            if (!error) {
+            if (orderError) {
+                alert("Fehler beim Speichern: " + orderError.message);
+                btn.disabled = false;
+                btn.innerText = "Zertifikat sichern";
+                return;
+            }
+
+            // 2. Bestand in 'products' verringern
+            // Wir nutzen rpc() für eine atomare Operation (verhindert Race Conditions)
+            // Falls du keine SQL-Function hast, nutzen wir hier das direkte Update:
+            const stockField = isPreorder ? 'stock_incoming' : 'stock_ready';
+            const newValue = isPreorder ? (currentProduct.preorder - 1) : (currentProduct.stock - 1);
+
+            const { error: updateError } = await supabaseClient
+                .from('products')
+                .update({ [stockField]: newValue })
+                .eq('id', currentProduct.db_id);
+
+            if (!updateError) {
+                // UI Erfolgsschleife (SVG & Zertifikat)
                 document.getElementById('buy-form').innerHTML = `
                     <div class="animate-in fade-in zoom-in duration-500 text-left">
                         <div class="flex justify-center mb-6">
@@ -282,12 +304,12 @@
                             <div class="flex justify-between items-center">
                                 <div>
                                     <p class="text-[10px] uppercase tracking-widest text-gray-400">Modell</p>
-                                    <p class="font-semibold text-gray-800">${PRODUCTS[currentIndex].name} Edition</p>
+                                    <p class="font-semibold text-gray-800">${currentProduct.name} Edition</p>
                                 </div>
                                 <div class="text-right">
                                     <p class="text-[10px] uppercase tracking-widest text-gray-400">Status</p>
-                                    <p class="font-semibold ${PRODUCTS[currentIndex].stock > 0 ? 'text-green-600' : 'text-orange-600'}">
-                                        ${PRODUCTS[currentIndex].stock > 0 ? 'Lagernd' : 'Vorbestellt'}
+                                    <p class="font-semibold ${!isPreorder ? 'text-green-600' : 'text-orange-600'}">
+                                        ${!isPreorder ? 'Lagernd' : 'Vorbestellt'}
                                     </p>
                                 </div>
                             </div>
@@ -297,10 +319,6 @@
                             <div class="flex justify-between text-xs">
                                 <span class="text-gray-400">Inhaber:</span>
                                 <span class="font-medium text-gray-800">${nameField.value}</span>
-                            </div>
-                            <div class="flex justify-between text-xs">
-                                <span class="text-gray-400">E-Mail:</span>
-                                <span class="font-medium text-gray-800">${emailField.value}</span>
                             </div>
                         </div>
 
@@ -315,9 +333,8 @@
                         </p>
                     </div>`;
             } else {
-                alert("Fehler: " + error.message);
+                alert("Bestands-Update fehlgeschlagen: " + updateError.message);
                 btn.disabled = false;
-                btn.innerText = "Zertifikat sichern";
             }
         }
 
