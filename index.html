@@ -225,131 +225,132 @@
         }
 
        async function processOrder() {
-            const nameField = document.getElementById('name-field');
-            const emailField = document.getElementById('email-field');
-            const privacyCheck = document.getElementById('privacy-check');
-            const card = document.getElementById('main-buy-card');
-            const btn = document.getElementById('order-btn');
+    const nameField = document.getElementById('name-field');
+    const emailField = document.getElementById('email-field');
+    const privacyCheck = document.getElementById('privacy-check');
+    const card = document.getElementById('main-buy-card');
+    const btn = document.getElementById('order-btn');
 
-            // Validierung zurücksetzen
-            nameField.classList.remove('input-error');
-            emailField.classList.remove('input-error');
-            card.classList.remove('shake');
+    // Validierung zurücksetzen
+    nameField.classList.remove('input-error');
+    emailField.classList.remove('input-error');
+    card.classList.remove('shake');
 
-            // Validierung prüfen
-            let hasError = false;
-            if (!nameField.value.trim()) { nameField.classList.add('input-error'); hasError = true; }
-            if (!emailField.value.trim() || !emailField.value.includes('@')) { emailField.classList.add('input-error'); hasError = true; }
-            if (!privacyCheck.checked) { hasError = true; }
+    // Validierung prüfen
+    let hasError = false;
+    if (!nameField.value.trim()) { nameField.classList.add('input-error'); hasError = true; }
+    if (!emailField.value.trim() || !emailField.value.includes('@')) { emailField.classList.add('input-error'); hasError = true; }
+    if (!privacyCheck.checked) { hasError = true; }
 
-            if (hasError) {
-                setTimeout(() => card.classList.add('shake'), 10);
-                return;
-            }
+    if (hasError) {
+        setTimeout(() => card.classList.add('shake'), 10);
+        return;
+    }
 
-            // Button-Status ändern
-            btn.innerText = "Verarbeitung...";
-            btn.disabled = true;
+    // Button-Status ändern
+    btn.innerText = "Verarbeitung...";
+    btn.disabled = true;
 
-            const currentProduct = PRODUCTS[currentIndex];
-            const gcCode = "GC-" + Math.random().toString(36).substring(2, 7).toUpperCase();
-            const isPreorder = currentProduct.stock <= 0;
-            const finalPrice = isPreorder ? currentProduct.price_preorder : currentProduct.price_sale;
+    const currentProduct = PRODUCTS[currentIndex];
+    const gcCode = "GC-" + Math.random().toString(36).substring(2, 7).toUpperCase();
+    const isPreorder = currentProduct.stock <= 0;
+    const finalPrice = isPreorder ? currentProduct.price_preorder : currentProduct.price_sale;
 
-            try {
-                // 1. Bestellung in Supabase Tabelle 'orders' anlegen
-                const { error: orderError } = await supabaseClient.from('orders').insert([{
-                    product_id: currentProduct.db_id,
-                    customer_name: nameField.value,
-                    customer_email: emailField.value,
-                    gc_code: gcCode
-                }]);
+    try {
+        // 1. Bestellung in Supabase Tabelle 'orders' anlegen
+        const { error: orderError } = await supabaseClient.from('orders').insert([{
+            product_id: currentProduct.db_id,
+            customer_name: nameField.value,
+            customer_email: emailField.value,
+            gc_code: gcCode
+        }]);
 
-                if (orderError) throw orderError;
+        if (orderError) throw orderError;
 
-                // 2. Bestand in 'products' verringern
-                const stockField = isPreorder ? 'stock_incoming' : 'stock_ready';
-                const newValue = isPreorder ? (currentProduct.preorder - 1) : (currentProduct.stock - 1);
+        // 2. Bestand in 'products' verringern
+        const stockField = isPreorder ? 'stock_incoming' : 'stock_ready';
+        const newValue = isPreorder ? (currentProduct.preorder - 1) : (currentProduct.stock - 1);
 
-                const { error: updateError } = await supabaseClient
-                    .from('products')
-                    .update({ [stockField]: newValue })
-                    .eq('id', currentProduct.db_id);
+        const { error: updateError } = await supabaseClient
+            .from('products')
+            .update({ [stockField]: newValue })
+            .eq('id', currentProduct.db_id);
 
-                if (updateError) throw updateError;
+        if (updateError) throw updateError;
 
-                // 3. E-Mail Versand triggern (Edge Function)
-                // Hinweis: Die Function 'send-confirmation' muss in Supabase angelegt sein
-                supabaseClient.functions.invoke('send-confirmation', {
-                    body: { 
-                        email: emailField.value, 
-                        name: nameField.value, 
-                        gcCode: gcCode,
-                        product: currentProduct.name,
-                        price: finalPrice
-                    }
-                }).catch(e => console.error("Mail-Trigger Fehler:", e));
+        // 3. E-Mail Versand über Vercel API triggern
+        fetch('/api/send-mail', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                email: emailField.value,
+                name: nameField.value,
+                gcCode: gcCode,
+                product: currentProduct.name
+            })
+        }).then(res => console.log("Mail-Anfrage an Vercel gesendet"))
+          .catch(e => console.error("Mail-Trigger Fehler:", e));
 
-                // 4. Erfolgserlebnis anzeigen (Apple Style Checkmark)
-                document.getElementById('buy-form').innerHTML = `
-                    <div class="animate-in fade-in zoom-in duration-500 text-left">
-                        <div class="flex justify-center mb-6">
-                            <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="50" cy="50" r="48" fill="url(#paint0_linear)" />
-                                <path d="M30 52L44 66L70 34" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-                                <defs>
-                                    <linearGradient id="paint0_linear" x1="50" y1="0" x2="50" y2="100" gradientUnits="userSpaceOnUse">
-                                        <stop stop-color="#34C759"/>
-                                        <stop offset="1" stop-color="#28CD41"/>
-                                    </linearGradient>
-                                </defs>
-                            </svg>
+        // 4. Erfolgserlebnis anzeigen (Apple Style Checkmark)
+        document.getElementById('buy-form').innerHTML = `
+            <div class="animate-in fade-in zoom-in duration-500 text-left">
+                <div class="flex justify-center mb-6">
+                    <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="48" fill="url(#paint0_linear)" />
+                        <path d="M30 52L44 66L70 34" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="paint0_linear" x1="50" y1="0" x2="50" y2="100" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#34C759"/>
+                                <stop offset="1" stop-color="#28CD41"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <h3 class="text-3xl font-bold text-center mb-8 tracking-tight">Reserviert!</h3>
+                
+                <div class="bg-[#f5f5f7] rounded-3xl p-6 mb-6 border border-gray-100">
+                    <p class="text-[10px] uppercase tracking-widest text-gray-400 mb-1">Zertifikat-ID</p>
+                    <p class="text-2xl font-mono font-bold text-[#0071e3] tracking-wider">${gcCode}</p>
+                    <hr class="my-4 border-gray-200">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-[10px] uppercase tracking-widest text-gray-400">Modell</p>
+                            <p class="font-semibold text-gray-800">${currentProduct.name} Edition</p>
                         </div>
-                        <h3 class="text-3xl font-bold text-center mb-8 tracking-tight">Reserviert!</h3>
-                        
-                        <div class="bg-[#f5f5f7] rounded-3xl p-6 mb-6 border border-gray-100">
-                            <p class="text-[10px] uppercase tracking-widest text-gray-400 mb-1">Zertifikat-ID</p>
-                            <p class="text-2xl font-mono font-bold text-[#0071e3] tracking-wider">${gcCode}</p>
-                            <hr class="my-4 border-gray-200">
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <p class="text-[10px] uppercase tracking-widest text-gray-400">Modell</p>
-                                    <p class="font-semibold text-gray-800">${currentProduct.name} Edition</p>
-                                </div>
-                                <div class="text-right">
-                                    <p class="text-[10px] uppercase tracking-widest text-gray-400">Status</p>
-                                    <p class="font-semibold ${!isPreorder ? 'text-green-600' : 'text-orange-600'}">
-                                        ${!isPreorder ? 'Lagernd' : 'Vorbestellt'}
-                                    </p>
-                                </div>
-                            </div>
+                        <div class="text-right">
+                            <p class="text-[10px] uppercase tracking-widest text-gray-400">Status</p>
+                            <p class="font-semibold ${!isPreorder ? 'text-green-600' : 'text-orange-600'}">
+                                ${!isPreorder ? 'Lagernd' : 'Vorbestellt'}
+                            </p>
                         </div>
+                    </div>
+                </div>
 
-                        <div class="space-y-3 px-2 mb-8">
-                            <div class="flex justify-between text-xs">
-                                <span class="text-gray-400">Inhaber:</span>
-                                <span class="font-medium text-gray-800">${nameField.value}</span>
-                            </div>
-                        </div>
+                <div class="space-y-3 px-2 mb-8">
+                    <div class="flex justify-between text-xs">
+                        <span class="text-gray-400">Inhaber:</span>
+                        <span class="font-medium text-gray-800">${nameField.value}</span>
+                    </div>
+                </div>
 
-                        <div class="bg-[#0071e3] text-white rounded-2xl p-5 flex justify-between items-center shadow-xl shadow-blue-200">
-                            <span class="font-medium">Gesamtbetrag</span>
-                            <span class="text-2xl font-bold">€${finalPrice}</span>
-                        </div>
+                <div class="bg-[#0071e3] text-white rounded-2xl p-5 flex justify-between items-center shadow-xl shadow-blue-200">
+                    <span class="font-medium">Gesamtbetrag</span>
+                    <span class="text-2xl font-bold">€${finalPrice}</span>
+                </div>
 
-                        <p class="text-center text-[10px] text-gray-400 mt-8 italic">
-                            Bitte mache jetzt einen Screenshot für deine Unterlagen.<br>
-                            Bestätigung wird an ${emailField.value} gesendet.
-                        </p>
-                    </div>`;
+                <p class="text-center text-[10px] text-gray-400 mt-8 italic">
+                    Bitte mache jetzt einen Screenshot für deine Unterlagen.<br>
+                    Bestätigung wird an ${emailField.value} gesendet.
+                </p>
+            </div>`;
 
-            } catch (err) {
-                console.error("Prozess-Fehler:", err);
-                alert("Ein Fehler ist aufgetreten: " + err.message);
-                btn.disabled = false;
-                btn.innerText = "Zertifikat sichern";
-            }
-        }
+    } catch (err) {
+        console.error("Prozess-Fehler:", err);
+        alert("Ein Fehler ist aufgetreten: " + err.message);
+        btn.disabled = false;
+        btn.innerText = "Zertifikat sichern";
+    }
+}
 
         function updateTimer() {
             if(!DEADLINE) return;
