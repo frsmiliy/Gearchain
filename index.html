@@ -37,16 +37,19 @@
         .reveal-item.active { opacity: 1; transform: translateY(0); }
         
         #hero-content { transition: opacity 0.1s linear; }
-        #gallery-img { transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        #gallery-img { transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); touch-action: pan-y; }
         .slide-exit { opacity: 0; transform: scale(0.95); }
         
         .color-dot { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
-        .color-dot:hover { transform: scale(1.2); }
-        .color-dot.active::after { content: ''; position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px; border: 2px solid #0071e3; border-radius: 50%; }
         
-        .color-tooltip { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); margin-bottom: 10px; padding: 4px 10px; background: black; color: white; font-size: 10px; border-radius: 6px; opacity: 0; pointer-events: none; transition: 0.3s; white-space: nowrap; }
-        .color-dot:hover .color-tooltip { opacity: 1; transform: translateX(-50%) translateY(-5px); }
+        /* Hover nur auf Desktop */
+        @media (min-width: 1024px) {
+            .color-dot:hover { transform: scale(1.2); }
+            .color-tooltip { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); margin-bottom: 10px; padding: 4px 10px; background: black; color: white; font-size: 10px; border-radius: 6px; opacity: 0; pointer-events: none; transition: 0.3s; white-space: nowrap; }
+            .color-dot:hover .color-tooltip { opacity: 1; transform: translateX(-50%) translateY(-5px); }
+        }
 
+        .color-dot.active::after { content: ''; position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px; border: 2px solid #0071e3; border-radius: 50%; }
         .checkbox-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 24px; margin-bottom: 24px; font-size: 14px; color: #86868b; }
     </style>
 </head>
@@ -88,7 +91,7 @@
             <div class="reveal-item">
                 <h2 class="text-5xl md:text-6xl font-semibold mb-4 text-white tracking-tight">Wähle deinen Stil.</h2>
                 <div class="relative w-full max-w-lg px-6 mb-16 mx-auto flex justify-center items-center">
-                    <img id="gallery-img" src="silber.png" alt="GearChain" class="w-full h-auto object-contain select-none">
+                    <img id="gallery-img" src="silber.png" alt="GearChain" class="w-full h-auto object-contain select-none cursor-grab active:cursor-grabbing">
                 </div>
                 <div class="flex justify-center gap-10 mb-8">
                     <div onmouseover="updateHoverLabel('Silber')" onmouseout="updateHoverLabel('')" onclick="updateByClick(0)" class="color-dot active bg-[#e5e5e5]" id="dot-0"><span class="color-tooltip">Silber</span></div>
@@ -157,6 +160,7 @@
         let currentIndex = 0;
         let DEADLINE;
 
+        // Scroll-Parallax
         window.addEventListener('scroll', () => {
             const heroContent = document.getElementById('hero-content');
             const scrollPercent = window.scrollY / (window.innerHeight * 0.6);
@@ -208,9 +212,14 @@
             document.getElementById('gallery-img').src = p.img;
         }
 
+        // Hover-Fix: Nur das Label ändern, nicht das gesamte Produkt-Umschalten
         function updateHoverLabel(name) {
-            if (name === "") { updateGalleryUI(); } 
-            else { document.getElementById('gallery-label').innerText = name; }
+            if (window.innerWidth < 1024) return; // Kein Hover auf Mobile
+            if (name === "") { 
+                document.getElementById('gallery-label').innerText = PRODUCTS[currentIndex].name + " Edition"; 
+            } else { 
+                document.getElementById('gallery-label').innerText = name + " Edition"; 
+            }
         }
 
         function updateByClick(index) {
@@ -224,133 +233,125 @@
             }, 250);
         }
 
-       async function processOrder() {
-    const nameField = document.getElementById('name-field');
-    const emailField = document.getElementById('email-field');
-    const privacyCheck = document.getElementById('privacy-check');
-    const card = document.getElementById('main-buy-card');
-    const btn = document.getElementById('order-btn');
+        // Swipe-Funktion für Mobile
+        let touchstartX = 0;
+        let touchendX = 0;
+        const slider = document.getElementById('gallery-img');
 
-    // Validierung zurücksetzen
-    nameField.classList.remove('input-error');
-    emailField.classList.remove('input-error');
-    card.classList.remove('shake');
+        slider.addEventListener('touchstart', e => touchstartX = e.changedTouches[0].screenX);
+        slider.addEventListener('touchend', e => {
+            touchendX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
 
-    // Validierung prüfen
-    let hasError = false;
-    if (!nameField.value.trim()) { nameField.classList.add('input-error'); hasError = true; }
-    if (!emailField.value.trim() || !emailField.value.includes('@')) { emailField.classList.add('input-error'); hasError = true; }
-    if (!privacyCheck.checked) { hasError = true; }
+        function handleSwipe() {
+            if (touchendX < touchstartX - 50) { // Swipe Links
+                let next = (currentIndex + 1) % PRODUCTS.length;
+                updateByClick(next);
+            }
+            if (touchendX > touchstartX + 50) { // Swipe Rechts
+                let prev = (currentIndex - 1 + PRODUCTS.length) % PRODUCTS.length;
+                updateByClick(prev);
+            }
+        }
 
-    if (hasError) {
-        setTimeout(() => card.classList.add('shake'), 10);
-        return;
-    }
+        async function processOrder() {
+            const nameField = document.getElementById('name-field');
+            const emailField = document.getElementById('email-field');
+            const privacyCheck = document.getElementById('privacy-check');
+            const card = document.getElementById('main-buy-card');
+            const btn = document.getElementById('order-btn');
 
-    // Button-Status ändern
-    btn.innerText = "Verarbeitung...";
-    btn.disabled = true;
+            nameField.classList.remove('input-error');
+            emailField.classList.remove('input-error');
+            card.classList.remove('shake');
 
-    const currentProduct = PRODUCTS[currentIndex];
-    const gcCode = "GC-" + Math.random().toString(36).substring(2, 7).toUpperCase();
-    const isPreorder = currentProduct.stock <= 0;
-    const finalPrice = isPreorder ? currentProduct.price_preorder : currentProduct.price_sale;
+            let hasError = false;
+            if (!nameField.value.trim()) { nameField.classList.add('input-error'); hasError = true; }
+            if (!emailField.value.trim() || !emailField.value.includes('@')) { emailField.classList.add('input-error'); hasError = true; }
+            if (!privacyCheck.checked) { hasError = true; }
 
-    try {
-        // 1. Bestellung in Supabase Tabelle 'orders' anlegen
-        const { error: orderError } = await supabaseClient.from('orders').insert([{
-            product_id: currentProduct.db_id,
-            customer_name: nameField.value,
-            customer_email: emailField.value,
-            gc_code: gcCode
-        }]);
+            if (hasError) {
+                setTimeout(() => card.classList.add('shake'), 10);
+                return;
+            }
 
-        if (orderError) throw orderError;
+            btn.innerText = "Verarbeitung...";
+            btn.disabled = true;
 
-        // 2. Bestand in 'products' verringern
-        const stockField = isPreorder ? 'stock_incoming' : 'stock_ready';
-        const newValue = isPreorder ? (currentProduct.preorder - 1) : (currentProduct.stock - 1);
+            const currentProduct = PRODUCTS[currentIndex];
+            const gcCode = "GC-" + Math.random().toString(36).substring(2, 7).toUpperCase();
+            const isPreorder = currentProduct.stock <= 0;
+            const finalPrice = isPreorder ? currentProduct.price_preorder : currentProduct.price_sale;
 
-        const { error: updateError } = await supabaseClient
-            .from('products')
-            .update({ [stockField]: newValue })
-            .eq('id', currentProduct.db_id);
+            try {
+                const { error: orderError } = await supabaseClient.from('orders').insert([{
+                    product_id: currentProduct.db_id,
+                    customer_name: nameField.value,
+                    customer_email: emailField.value,
+                    gc_code: gcCode
+                }]);
 
-        if (updateError) throw updateError;
+                if (orderError) throw orderError;
 
-        // 3. E-Mail Versand über Vercel API triggern
-        fetch('/api/send-mail', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                email: emailField.value,
-                name: nameField.value,
-                gcCode: gcCode,
-                product: currentProduct.name
-            })
-        }).then(res => console.log("Mail-Anfrage an Vercel gesendet"))
-          .catch(e => console.error("Mail-Trigger Fehler:", e));
+                const stockField = isPreorder ? 'stock_incoming' : 'stock_ready';
+                const newValue = isPreorder ? (currentProduct.preorder - 1) : (currentProduct.stock - 1);
 
-        // 4. Erfolgserlebnis anzeigen (Apple Style Checkmark)
-        document.getElementById('buy-form').innerHTML = `
-            <div class="animate-in fade-in zoom-in duration-500 text-left">
-                <div class="flex justify-center mb-6">
-                    <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="50" cy="50" r="48" fill="url(#paint0_linear)" />
-                        <path d="M30 52L44 66L70 34" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-                        <defs>
-                            <linearGradient id="paint0_linear" x1="50" y1="0" x2="50" y2="100" gradientUnits="userSpaceOnUse">
-                                <stop stop-color="#34C759"/>
-                                <stop offset="1" stop-color="#28CD41"/>
-                            </linearGradient>
-                        </defs>
-                    </svg>
-                </div>
-                <h3 class="text-3xl font-bold text-center mb-8 tracking-tight">Reserviert!</h3>
-                
-                <div class="bg-[#f5f5f7] rounded-3xl p-6 mb-6 border border-gray-100">
-                    <p class="text-[10px] uppercase tracking-widest text-gray-400 mb-1">Zertifikat-ID</p>
-                    <p class="text-2xl font-mono font-bold text-[#0071e3] tracking-wider">${gcCode}</p>
-                    <hr class="my-4 border-gray-200">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <p class="text-[10px] uppercase tracking-widest text-gray-400">Modell</p>
-                            <p class="font-semibold text-gray-800">${currentProduct.name} Edition</p>
+                const { error: updateError } = await supabaseClient
+                    .from('products')
+                    .update({ [stockField]: newValue })
+                    .eq('id', currentProduct.db_id);
+
+                if (updateError) throw updateError;
+
+                // Mail über Vercel API
+                fetch('/api/send-mail', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: emailField.value,
+                        name: nameField.value,
+                        gcCode: gcCode,
+                        product: currentProduct.name
+                    })
+                }).catch(e => console.error("Mail-Fehler:", e));
+
+                document.getElementById('buy-form').innerHTML = `
+                    <div class="animate-in fade-in zoom-in duration-500 text-left">
+                        <div class="flex justify-center mb-6">
+                            <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="50" cy="50" r="48" fill="url(#paint0_linear)" />
+                                <path d="M30 52L44 66L70 34" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                                <defs>
+                                    <linearGradient id="paint0_linear" x1="50" y1="0" x2="50" y2="100" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#34C759"/>
+                                        <stop offset="1" stop-color="#28CD41"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
                         </div>
-                        <div class="text-right">
-                            <p class="text-[10px] uppercase tracking-widest text-gray-400">Status</p>
-                            <p class="font-semibold ${!isPreorder ? 'text-green-600' : 'text-orange-600'}">
-                                ${!isPreorder ? 'Lagernd' : 'Vorbestellt'}
-                            </p>
+                        <h3 class="text-3xl font-bold text-center mb-8 tracking-tight">Reserviert!</h3>
+                        <div class="bg-[#f5f5f7] rounded-3xl p-6 mb-6 border border-gray-100">
+                            <p class="text-[10px] uppercase tracking-widest text-gray-400 mb-1">Zertifikat-ID</p>
+                            <p class="text-2xl font-mono font-bold text-[#0071e3] tracking-wider">${gcCode}</p>
+                            <hr class="my-4 border-gray-200">
+                            <div class="flex justify-between items-center">
+                                <div><p class="text-[10px] uppercase tracking-widest text-gray-400">Modell</p><p class="font-semibold text-gray-800">${currentProduct.name} Edition</p></div>
+                                <div class="text-right"><p class="text-[10px] uppercase tracking-widest text-gray-400">Status</p><p class="font-semibold ${!isPreorder ? 'text-green-600' : 'text-orange-600'}">${!isPreorder ? 'Lagernd' : 'Vorbestellt'}</p></div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                        <div class="bg-[#0071e3] text-white rounded-2xl p-5 flex justify-between items-center shadow-xl shadow-blue-200">
+                            <span class="font-medium">Gesamtbetrag</span><span class="text-2xl font-bold">€${finalPrice}</span>
+                        </div>
+                        <p class="text-center text-[10px] text-gray-400 mt-8 italic">Screenshot machen. Bestätigung an ${emailField.value}.</p>
+                    </div>`;
 
-                <div class="space-y-3 px-2 mb-8">
-                    <div class="flex justify-between text-xs">
-                        <span class="text-gray-400">Inhaber:</span>
-                        <span class="font-medium text-gray-800">${nameField.value}</span>
-                    </div>
-                </div>
-
-                <div class="bg-[#0071e3] text-white rounded-2xl p-5 flex justify-between items-center shadow-xl shadow-blue-200">
-                    <span class="font-medium">Gesamtbetrag</span>
-                    <span class="text-2xl font-bold">€${finalPrice}</span>
-                </div>
-
-                <p class="text-center text-[10px] text-gray-400 mt-8 italic">
-                    Bitte mache jetzt einen Screenshot für deine Unterlagen.<br>
-                    Bestätigung wird an ${emailField.value} gesendet.
-                </p>
-            </div>`;
-
-    } catch (err) {
-        console.error("Prozess-Fehler:", err);
-        alert("Ein Fehler ist aufgetreten: " + err.message);
-        btn.disabled = false;
-        btn.innerText = "Zertifikat sichern";
-    }
-}
+            } catch (err) {
+                alert("Fehler: " + err.message);
+                btn.disabled = false;
+                btn.innerText = "Zertifikat sichern";
+            }
+        }
 
         function updateTimer() {
             if(!DEADLINE) return;
