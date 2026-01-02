@@ -264,59 +264,60 @@
                     product: currentProduct.name
                 });
 
-               // 4. Erfolg anzeigen
+              // 4. Erfolg anzeigen
                 document.getElementById('buy-form').innerHTML = `
-                    <div class="animate-in fade-in zoom-in duration-700 flex flex-col items-center">
+                    <div style="display: flex; flex-direction: column; align-items: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #1d1d1f; animation: fadeIn 0.6s ease-out;">
                         
-                        <div class="w-16 h-16 bg-[#34c759] rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-green-100">
-                            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" stroke-width="4.5" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                        <div style="width: 64px; height: 64px; background-color: #34c759; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; box-shadow: 0 10px 25px rgba(52, 199, 89, 0.2);">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
                         </div>
 
-                        <h3 class="text-4xl font-bold mb-10 tracking-tight text-gray-900">Reserviert!</h3>
+                        <h3 style="font-size: 32px; font-weight: 700; margin: 0 0 40px 0; letter-spacing: -0.5px;">Reserviert!</h3>
                         
-                        <div class="bg-[#f5f5f7] rounded-[32px] p-8 mb-8 w-full text-left">
-                            <div class="mb-6">
-                                <p class="text-[10px] uppercase tracking-[0.15em] text-gray-400 font-bold mb-2">Zertifikat-ID</p>
-                                <p class="text-3xl font-bold text-[#0071e3] tracking-wider font-mono">${gcCode}</p>
+                        <div style="background-color: #f5f5f7; border-radius: 28px; padding: 32px; width: 100%; box-sizing: border-box; margin-bottom: 32px; text-align: left;">
+                            <div style="margin-bottom: 20px;">
+                                <p style="font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #86868b; font-weight: 700; margin: 0 0 8px 0;">Zertifikat-ID</p>
+                                <p style="font-size: 28px; font-weight: 700; color: #0071e3; margin: 0; font-family: monospace;">${gcCode}</p>
                             </div>
                             
-                            <div class="h-[1px] bg-gray-200 mb-6"></div>
+                            <div style="height: 1px; background-color: #d2d2d7; margin-bottom: 24px;"></div>
                             
-                            <div class="flex justify-between items-start">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                                 <div>
-                                    <p class="text-[10px] uppercase tracking-[0.15em] text-gray-400 font-bold mb-1">Modell</p>
-                                    <p class="font-bold text-gray-900 text-lg">${currentProduct.name} Edition</p>
+                                    <p style="font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #86868b; font-weight: 700; margin: 0 0 4px 0;">Modell</p>
+                                    <p style="font-size: 18px; font-weight: 700; margin: 0;">${currentProduct.name} Edition</p>
                                 </div>
-                                <div class="text-right">
-                                    <p class="text-[10px] uppercase tracking-[0.15em] text-gray-400 font-bold mb-1">Status</p>
-                                    <p class="font-bold text-[#34c759] text-lg">${isPreorder ? 'Bestätigt' : 'Lagernd'}</p>
+                                <div style="text-align: right;">
+                                    <p style="font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #86868b; font-weight: 700; margin: 0 0 4px 0;">Status</p>
+                                    <p style="font-size: 18px; font-weight: 700; color: #34c759; margin: 0;">${isPreorder ? 'Bestätigt' : 'Lagernd'}</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="w-full px-2 space-y-3 mb-10">
-                            <div class="flex justify-between text-sm">
-                                <span class="text-gray-400">Inhaber:</span>
-                                <span class="text-gray-900 font-semibold">${nameField.value}</span>
+                        <div style="width: 100%; margin-bottom: 32px; padding: 0 8px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px;">
+                                <span style="color: #86868b;">Inhaber:</span>
+                                <span style="font-weight: 600;">${nameField.value}</span>
                             </div>
-                            <div class="flex justify-between text-sm">
-                                <span class="text-gray-400">E-Mail:</span>
-                                <span class="text-gray-900 font-semibold">${emailField.value}</span>
+                            <div style="display: flex; justify-content: space-between; font-size: 14px;">
+                                <span style="color: #86868b;">E-Mail:</span>
+                                <span style="font-weight: 600;">${emailField.value}</span>
                             </div>
                         </div>
 
-                        <div class="w-full bg-[#0071e3] text-white py-5 px-8 rounded-[22px] flex justify-between items-center shadow-xl shadow-blue-100 mb-8">
-                            <span class="text-lg font-medium">Gesamtbetrag</span>
-                            <span class="text-2xl font-bold">€${isPreorder ? currentProduct.price_preorder : currentProduct.price_sale}</span>
+                        <div style="width: 100%; background-color: #0071e3; border-radius: 20px; padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; color: white; margin-bottom: 24px; box-shadow: 0 15px 30px rgba(0, 113, 227, 0.25);">
+                            <span style="font-size: 17px; font-weight: 500;">Gesamtbetrag</span>
+                            <span style="font-size: 22px; font-weight: 700;">€${isPreorder ? currentProduct.price_preorder : currentProduct.price_sale}</span>
                         </div>
 
-                        <p class="text-gray-400 italic text-[11px] leading-relaxed text-center px-4">
+                        <p style="font-size: 11px; color: #86868b; font-style: italic; line-height: 1.5; text-align: center; margin: 0;">
                             Bitte mache jetzt einen Screenshot für deine Unterlagen.<br>
                             Zertifikat wird per Mail validiert.
                         </p>
-                    </div>`;
+                    </div>
+                `;
             } catch (err) {
                 alert("Fehler: " + err.message);
                 btn.disabled = false;
