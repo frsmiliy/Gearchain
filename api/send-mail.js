@@ -1,38 +1,33 @@
-export default async function handler(req, res) {
-  // CORS erlauben, damit deine Website die API aufrufen darf
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+import { Resend } from 'resend';
 
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
+// Aktualisierter API-Key
+const resend = new Resend('re_FRW4ie1U_NNgJiydEd3H5EfYtzGMUC1yZ');
+
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   const { email, name, gcCode, product } = req.body;
 
   try {
-    const response = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer re_deFWHWSm_AxHSzRiYuGucdSqvRj4LJCcF`, // Dein Key aus dem Screenshot
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from: 'GearChain <onboarding@resend.dev>',
-        to: [email],
-        subject: `Zertifikat reserviert: ${gcCode}`,
-        html: `
-          <div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
-            <h2 style="color: #0071e3;">Hallo ${name},</h2>
-            <p>Deine Reservierung für das <b>${product}</b> war erfolgreich.</p>
-            <p>Dein Zertifikat-Code: <span style="font-family: monospace; font-size: 1.2em; font-weight: bold;">${gcCode}</span></p>
-            <p>Bewahre diesen Code gut auf.</p>
-          </div>`
-      }),
+    const data = await resend.emails.send({
+      from: 'GearChain <robert.vogt@mailbox.org>',
+      to: [email],
+      subject: 'Deine GearChain Reservierung',
+      html: `
+        <div style="font-family: -apple-system, sans-serif; max-width: 600px; margin: auto; padding: 40px; color: #1d1d1f;">
+          <h1 style="font-size: 24px; font-weight: 600;">Vielen Dank, ${name}.</h1>
+          <p style="font-size: 17px; color: #424245;">Deine Reservierung für die <strong>GearChain ${product} Edition</strong> ist bestätigt.</p>
+          <div style="background-color: #f5f5f7; border-radius: 18px; padding: 30px; margin: 32px 0; text-align: center;">
+            <p style="text-transform: uppercase; font-size: 12px; color: #86868b;">Zertifikat-ID</p>
+            <p style="font-size: 32px; font-weight: 700; color: #0071e3; font-family: monospace;">${gcCode}</p>
+          </div>
+          <p style="font-size: 12px; color: #86868b;">© 2026 GearChain – Precision Engineering.</p>
+        </div>
+      `,
     });
-
-    const data = await response.json();
-    return res.status(200).json({ success: true, data });
+    return res.status(200).json({ success: true });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
