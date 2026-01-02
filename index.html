@@ -40,12 +40,12 @@
         #gallery-img { transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); touch-action: pan-y; }
         .slide-exit { opacity: 0; transform: scale(0.95); }
         
-        .color-dot { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
+        .color-dot { width: 44px; height: 44px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.2s; position: relative; display: flex; align-items: center; justify-content: center; }
         
-        @media (min-width: 1024px) {
-            .color-dot:hover { transform: scale(1.2); }
-            .color-tooltip { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); margin-bottom: 10px; padding: 4px 10px; background: black; color: white; font-size: 10px; border-radius: 6px; opacity: 0; pointer-events: none; transition: 0.3s; white-space: nowrap; }
-            .color-dot:hover .color-tooltip { opacity: 1; transform: translateX(-50%) translateY(-5px); }
+        /* Tooltip auf Handy ausblenden, da es die Kreise überdeckt */
+        @media (max-width: 768px) {
+            .color-tooltip { display: none !important; }
+            .color-dot { width: 50px; height: 50px; } /* Größere Touch-Fläche */
         }
 
         .color-dot.active::after { content: ''; position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px; border: 2px solid #0071e3; border-radius: 50%; }
@@ -59,9 +59,6 @@
             <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
                 <span class="text-xl font-semibold tracking-tight">GearChain</span>
                 <div class="flex items-center">
-                    <div class="flex items-center border-r border-gray-300 pr-3 mr-3 md:pr-4 md:mr-4">
-                        <span class="text-[8px] md:text-[10px] font-medium uppercase tracking-[0.15em] text-gray-500">Made in Germany</span>
-                    </div>
                     <a href="#buy" class="btn-apple">Sichern</a>
                 </div>
             </div>
@@ -75,7 +72,6 @@
                 
                 <div class="flex items-center gap-4 mb-10 justify-center">
                     <span id="hero-price-sale" class="text-4xl font-semibold text-black">--.--€</span>
-                    <span id="hero-price-regular" class="text-gray-300 line-through text-2xl">--.--€</span>
                 </div>
                 
                 <div class="mb-12 px-6 py-2 bg-gray-50 rounded-full border border-gray-100 inline-block">
@@ -84,19 +80,19 @@
             </div>
         </section>
 
-        <div class="h-10"></div>
-
         <section id="explore" class="relative z-10 bg-black py-32 text-center overflow-hidden">
             <div class="reveal-item">
                 <h2 class="text-5xl md:text-6xl font-semibold mb-4 text-white tracking-tight">Wähle deinen Stil.</h2>
                 <div class="relative w-full max-w-lg px-6 mb-16 mx-auto flex justify-center items-center">
-                    <img id="gallery-img" src="silber.png" alt="GearChain" class="w-full h-auto object-contain select-none cursor-grab active:cursor-grabbing">
+                    <img id="gallery-img" src="silber.png" alt="GearChain" class="w-full h-auto object-contain select-none">
                 </div>
-                <div class="flex justify-center gap-10 mb-8">
-                    <div onmouseover="updateHoverLabel('Silber')" onmouseout="updateHoverLabel('')" onclick="updateByClick(0)" class="color-dot active bg-[#e5e5e5]" id="dot-0"><span class="color-tooltip">Silber</span></div>
-                    <div onmouseover="updateHoverLabel('Gold')" onmouseout="updateHoverLabel('')" onclick="updateByClick(1)" class="color-dot bg-[#b4923e]" id="dot-1"><span class="color-tooltip">Gold</span></div>
-                    <div onmouseover="updateHoverLabel('Schwarz')" onmouseout="updateHoverLabel('')" onclick="updateByClick(2)" class="color-dot bg-[#333333]" id="dot-2"><span class="color-tooltip">Schwarz</span></div>
+                
+                <div class="flex justify-center gap-8 mb-8">
+                    <div onmouseenter="previewColor('Silber')" onmouseleave="resetColor()" onclick="updateByClick(0)" class="color-dot active bg-[#e5e5e5]" id="dot-0"></div>
+                    <div onmouseenter="previewColor('Gold')" onmouseleave="resetColor()" onclick="updateByClick(1)" class="color-dot bg-[#b4923e]" id="dot-1"></div>
+                    <div onmouseenter="previewColor('Schwarz')" onmouseleave="resetColor()" onclick="updateByClick(2)" class="color-dot bg-[#333333]" id="dot-2"></div>
                 </div>
+
                 <p id="gallery-label" class="text-2xl font-medium mb-2 text-white italic">Modelle laden...</p>
                 <span id="stock-display" class="transition-all duration-300 px-4 py-1 rounded-full uppercase tracking-widest text-[10px] font-bold">Warten</span>
             </div>
@@ -113,7 +109,7 @@
                             <input type="email" id="email-field" placeholder="E-Mail Adresse" class="input-apple">
                             <div class="checkbox-container">
                                 <input type="checkbox" id="privacy-check" class="w-4 h-4">
-                                <span>Ich akzeptiere die <button onclick="showPrivacy()" class="text-blue-600 underline">Datenschutzerklärung</button>.</span>
+                                <span>Datenschutz akzeptiert</span>
                             </div>
                             <button onclick="processOrder()" id="order-btn" class="btn-order">Zertifikat sichern</button>
                         </div>
@@ -121,33 +117,6 @@
                 </div>
             </div>
         </section>
-
-        <footer class="relative z-10 py-10 text-center text-gray-400 text-xs border-t border-gray-100 bg-white">
-            <div class="flex justify-center gap-6 mb-2">
-                <button onclick="showPrivacy()" class="hover:text-black">Datenschutzerklärung</button>
-                <button onclick="showImpressum()" class="hover:text-black">Impressum</button>
-            </div>
-            <p>© 2026 GearChain – Precision Engineering</p>
-        </footer>
-    </div>
-
-    <div id="privacy-page" class="hidden min-h-screen bg-white py-20 px-6 z-[100] relative">
-        <div class="max-w-2xl mx-auto">
-            <button onclick="hidePages()" class="text-blue-600 mb-10 font-medium">← Zurück</button>
-            <h1 class="text-5xl font-bold mb-8 tracking-tight">Datenschutzerklärung</h1>
-            <p class="text-gray-600 text-lg">Wir speichern deine Daten ausschließlich zur Abwicklung der Reservierung.</p>
-            <button onclick="hidePages()" class="mt-12 btn-apple w-full py-4 text-lg">Verstanden</button>
-        </div>
-    </div>
-
-    <div id="impressum-page" class="hidden min-h-screen bg-white py-20 px-6 z-[100] relative">
-        <div class="max-w-2xl mx-auto">
-            <button onclick="hidePages()" class="text-blue-600 mb-10 font-medium">← Zurück</button>
-            <h1 class="text-5xl font-bold mb-8 tracking-tight">Impressum</h1>
-            <p class="text-gray-600 text-lg"><strong>GearChain i.G.</strong><br>Robert Vogt<br>Boyenstraße 27<br>10115 Berlin</p>
-            <p class="text-gray-600 text-lg mt-4">E-Mail: robert.vogt@mailbox.org<br>Telefon: +49 (0) 1743580 329</p>
-            <button onclick="hidePages()" class="mt-12 btn-apple w-full py-4 text-lg">Schließen</button>
-        </div>
     </div>
 
     <script>
@@ -157,36 +126,30 @@
 
         let PRODUCTS = [];
         let currentIndex = 0;
-        let DEADLINE;
-        let isMobile = false;
-
-        // Check if touch device
-        window.addEventListener('touchstart', () => isMobile = true, {once: true});
-
-        window.addEventListener('scroll', () => {
-            const heroContent = document.getElementById('hero-content');
-            const scrollPercent = window.scrollY / (window.innerHeight * 0.6);
-            heroContent.style.opacity = Math.max(0, 1 - scrollPercent);
-        });
-
-        function showPrivacy() { document.getElementById('main-content').classList.add('hidden'); document.getElementById('privacy-page').classList.remove('hidden'); window.scrollTo(0,0); }
-        function showImpressum() { document.getElementById('main-content').classList.add('hidden'); document.getElementById('impressum-page').classList.remove('hidden'); window.scrollTo(0,0); }
-        function hidePages() { document.getElementById('privacy-page').classList.add('hidden'); document.getElementById('impressum-page').classList.add('hidden'); document.getElementById('main-content').classList.remove('hidden'); }
 
         async function loadData() {
-            const { data: prodData } = await supabaseClient.from('products').select('*').order('id', { ascending: true });
-            if (prodData && prodData.length > 0) {
-                PRODUCTS = prodData.map(item => ({
+            const { data } = await supabaseClient.from('products').select('*').order('id', { ascending: true });
+            if (data) {
+                PRODUCTS = data.map(item => ({
                     db_id: item.id, name: item.name, img: item.name.toLowerCase() + ".png",
                     stock: item.stock_ready, preorder: item.stock_incoming,
                     price_sale: item.price_sale, price_regular: item.price_regular, price_preorder: item.price_preorder
                 }));
                 document.getElementById('hero-price-sale').innerText = `€${PRODUCTS[0].price_sale}`;
-                document.getElementById('hero-price-regular').innerText = `€${PRODUCTS[0].price_regular}`;
                 updateGalleryUI();
             }
-            const { data: setData } = await supabaseClient.from('settings').select('value').eq('name', 'sale_deadline').single();
-            DEADLINE = setData ? new Date(setData.value).getTime() : new Date("2026-01-10T23:59:59").getTime();
+        }
+
+        // Diese Funktion wird beim Hovern aufgerufen
+        function previewColor(name) {
+            document.getElementById('gallery-label').innerText = name + " Edition";
+        }
+
+        // Diese Funktion setzt den Text zurück, wenn die Maus weggeht
+        function resetColor() {
+            if (PRODUCTS.length > 0) {
+                document.getElementById('gallery-label').innerText = PRODUCTS[currentIndex].name + " Edition";
+            }
         }
 
         function updateGalleryUI() {
@@ -194,171 +157,37 @@
             const p = PRODUCTS[currentIndex];
             const sEl = document.getElementById('stock-display');
             const priceDisplay = document.getElementById('form-price');
-            const tag = document.getElementById('preorder-tag');
             
-            // Setzt das Label immer auf das aktuell gewählte Produkt
+            // Text unten festlegen
             document.getElementById('gallery-label').innerText = p.name + " Edition";
             
+            // Bild und Status
+            document.getElementById('gallery-img').src = p.img;
+            
             if (p.stock > 0) {
-                sEl.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5 mb-0.5"></span> ${p.stock} sofort verfügbar`;
-                sEl.className = "bg-green-500/10 text-green-500 text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest";
+                sEl.innerHTML = `${p.stock} SOFORT VERFÜGBAR`;
+                sEl.className = "bg-green-500/10 text-green-500 px-4 py-1 rounded-full text-[10px] font-bold";
                 priceDisplay.innerText = `€${p.price_sale}`;
-                tag.classList.add('hidden');
             } else {
-                sEl.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-red-500 mr-1.5 mb-0.5"></span> ${p.preorder} Plätze (Vorbestellung)`;
-                sEl.className = "bg-red-500/10 text-red-500 text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest";
+                sEl.innerHTML = `${p.preorder} PLÄTZE FREI`;
+                sEl.className = "bg-orange-500/10 text-orange-500 px-4 py-1 rounded-full text-[10px] font-bold";
                 priceDisplay.innerText = `€${p.price_preorder}`;
-                tag.classList.remove('hidden');
             }
             
-            document.querySelectorAll('.color-dot').forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
-            document.getElementById('gallery-img').src = p.img;
-        }
-
-        // Fix: Hover ändert Label, aber MouseOut setzt es auf das gewählte Produkt zurück
-        function updateHoverLabel(name) {
-            if (isMobile) return; 
-            if (name === "") { 
-                document.getElementById('gallery-label').innerText = PRODUCTS[currentIndex].name + " Edition"; 
-            } else { 
-                document.getElementById('gallery-label').innerText = name + " Edition"; 
-            }
+            // Aktiven Punkt markieren
+            document.querySelectorAll('.color-dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentIndex);
+            });
         }
 
         function updateByClick(index) {
-            if (currentIndex === index) return;
-            const img = document.getElementById('gallery-img');
-            img.classList.add('slide-exit');
-            setTimeout(() => {
-                currentIndex = index;
-                updateGalleryUI();
-                img.classList.remove('slide-exit');
-            }, 250);
+            currentIndex = index;
+            updateGalleryUI();
         }
 
-        // Swipe-Logik
-        let touchstartX = 0;
-        let touchendX = 0;
-        const slider = document.getElementById('gallery-img');
-
-        slider.addEventListener('touchstart', e => touchstartX = e.changedTouches[0].screenX, {passive: true});
-        slider.addEventListener('touchend', e => {
-            touchendX = e.changedTouches[0].screenX;
-            handleSwipe();
-        }, {passive: true});
-
-        function handleSwipe() {
-            if (touchendX < touchstartX - 60) { // Links
-                updateByClick((currentIndex + 1) % PRODUCTS.length);
-            }
-            if (touchendX > touchstartX + 60) { // Rechts
-                updateByClick((currentIndex - 1 + PRODUCTS.length) % PRODUCTS.length);
-            }
-        }
-
-        async function processOrder() {
-            const nameField = document.getElementById('name-field');
-            const emailField = document.getElementById('email-field');
-            const privacyCheck = document.getElementById('privacy-check');
-            const card = document.getElementById('main-buy-card');
-            const btn = document.getElementById('order-btn');
-
-            nameField.classList.remove('input-error');
-            emailField.classList.remove('input-error');
-            card.classList.remove('shake');
-
-            let hasError = false;
-            if (!nameField.value.trim()) { nameField.classList.add('input-error'); hasError = true; }
-            if (!emailField.value.trim() || !emailField.value.includes('@')) { emailField.classList.add('input-error'); hasError = true; }
-            if (!privacyCheck.checked) { hasError = true; }
-
-            if (hasError) {
-                setTimeout(() => card.classList.add('shake'), 10);
-                return;
-            }
-
-            btn.innerText = "Verarbeitung...";
-            btn.disabled = true;
-
-            const currentProduct = PRODUCTS[currentIndex];
-            const gcCode = "GC-" + Math.random().toString(36).substring(2, 7).toUpperCase();
-            const isPreorder = currentProduct.stock <= 0;
-            const finalPrice = isPreorder ? currentProduct.price_preorder : currentProduct.price_sale;
-
-            try {
-                const { error: orderError } = await supabaseClient.from('orders').insert([{
-                    product_id: currentProduct.db_id,
-                    customer_name: nameField.value,
-                    customer_email: emailField.value,
-                    gc_code: gcCode
-                }]);
-
-                if (orderError) throw orderError;
-
-                const stockField = isPreorder ? 'stock_incoming' : 'stock_ready';
-                const newValue = isPreorder ? (currentProduct.preorder - 1) : (currentProduct.stock - 1);
-
-                await supabaseClient.from('products').update({ [stockField]: newValue }).eq('id', currentProduct.db_id);
-
-                fetch('/api/send-mail', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        email: emailField.value,
-                        name: nameField.value,
-                        gcCode: gcCode,
-                        product: currentProduct.name
-                    })
-                }).catch(e => console.error("Mail-Fehler:", e));
-
-                document.getElementById('buy-form').innerHTML = `
-                    <div class="animate-in fade-in zoom-in duration-500 text-left">
-                        <div class="flex justify-center mb-6">
-                            <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="50" cy="50" r="48" fill="url(#paint0_linear)" />
-                                <path d="M30 52L44 66L70 34" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-                                <defs>
-                                    <linearGradient id="paint0_linear" x1="50" y1="0" x2="50" y2="100" gradientUnits="userSpaceOnUse">
-                                        <stop stop-color="#34C759"/>
-                                        <stop offset="1" stop-color="#28CD41"/>
-                                    </linearGradient>
-                                </defs>
-                            </svg>
-                        </div>
-                        <h3 class="text-3xl font-bold text-center mb-8 tracking-tight">Reserviert!</h3>
-                        <div class="bg-[#f5f5f7] rounded-3xl p-6 mb-6 border border-gray-100">
-                            <p class="text-[10px] uppercase tracking-widest text-gray-400 mb-1">Zertifikat-ID</p>
-                            <p class="text-2xl font-mono font-bold text-[#0071e3] tracking-wider">${gcCode}</p>
-                            <hr class="my-4 border-gray-200">
-                            <div class="flex justify-between items-center">
-                                <div><p class="text-[10px] uppercase tracking-widest text-gray-400">Modell</p><p class="font-semibold text-gray-800">${currentProduct.name} Edition</p></div>
-                                <div class="text-right"><p class="text-[10px] uppercase tracking-widest text-gray-400">Status</p><p class="font-semibold ${!isPreorder ? 'text-green-600' : 'text-orange-600'}">${!isPreorder ? 'Lagernd' : 'Vorbestellt'}</p></div>
-                            </div>
-                        </div>
-                        <div class="bg-[#0071e3] text-white rounded-2xl p-5 flex justify-between items-center shadow-xl shadow-blue-200">
-                            <span class="font-medium">Gesamtbetrag</span><span class="text-2xl font-bold">€${finalPrice}</span>
-                        </div>
-                        <p class="text-center text-[10px] text-gray-400 mt-8 italic">Screenshot machen. Bestätigung an ${emailField.value}.</p>
-                    </div>`;
-
-            } catch (err) {
-                alert("Fehler: " + err.message);
-                btn.disabled = false;
-                btn.innerText = "Zertifikat sichern";
-            }
-        }
-
-        function updateTimer() {
-            if(!DEADLINE) return;
-            const diff = DEADLINE - new Date().getTime();
-            if (diff <= 0) { document.getElementById('countdown').innerText = "BEENDET"; return; }
-            const d = Math.floor(diff / (1000 * 60 * 60 * 24)), h = Math.floor((diff / (1000 * 60 * 60)) % 24), m = Math.floor((diff / (1000 * 60)) % 60), s = Math.floor((diff / 1000) % 60);
-            document.getElementById('countdown').innerText = `${d > 0 ? d + 'D ' : ''}${h}H ${m}M ${s}S`;
-        }
-
-        setInterval(updateTimer, 1000);
         loadData();
 
+        // Animation beim Scrollen
         const observer = new IntersectionObserver(entries => {
             entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); });
         }, { threshold: 0.1 });
