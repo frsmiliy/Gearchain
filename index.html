@@ -6,6 +6,7 @@
     <title>GearChain - Apple Experience</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     
     <style>
@@ -39,13 +40,12 @@
         #gallery-img { transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
         .slide-exit { opacity: 0; transform: scale(0.95); }
         
+        /* FIX FÜR FARBPUNKTE / IPHONE */
         .color-dot { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
+        .color-dot span { display: none !important; } /* Verhindert Überlappung */
         .color-dot:hover { transform: scale(1.2); }
         .color-dot.active::after { content: ''; position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px; border: 2px solid #0071e3; border-radius: 50%; }
         
-        .color-tooltip { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); margin-bottom: 10px; padding: 4px 10px; background: black; color: white; font-size: 10px; border-radius: 6px; opacity: 0; pointer-events: none; transition: 0.3s; white-space: nowrap; }
-        .color-dot:hover .color-tooltip { opacity: 1; transform: translateX(-50%) translateY(-5px); }
-
         .checkbox-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 24px; margin-bottom: 24px; font-size: 14px; color: #86868b; }
     </style>
 </head>
@@ -90,9 +90,9 @@
                     <img id="gallery-img" src="silber.png" alt="GearChain" class="w-full h-auto object-contain select-none">
                 </div>
                 <div class="flex justify-center gap-10 mb-8">
-                    <div onmouseover="updateHoverLabel('Silber')" onmouseout="updateHoverLabel('')" onclick="updateByClick(0)" class="color-dot active bg-[#e5e5e5]" id="dot-0"><span class="color-tooltip">Silber</span></div>
-                    <div onmouseover="updateHoverLabel('Gold')" onmouseout="updateHoverLabel('')" onclick="updateByClick(1)" class="color-dot bg-[#b4923e]" id="dot-1"><span class="color-tooltip">Gold</span></div>
-                    <div onmouseover="updateHoverLabel('Schwarz')" onmouseout="updateHoverLabel('')" onclick="updateByClick(2)" class="color-dot bg-[#333333]" id="dot-2"><span class="color-tooltip">Schwarz</span></div>
+                    <div onclick="updateByClick(0)" class="color-dot active bg-[#e5e5e5]" id="dot-0"></div>
+                    <div onclick="updateByClick(1)" class="color-dot bg-[#b4923e]" id="dot-1"></div>
+                    <div onclick="updateByClick(2)" class="color-dot bg-[#333333]" id="dot-2"></div>
                 </div>
                 <p id="gallery-label" class="text-2xl font-medium mb-2 text-white italic">Modelle laden...</p>
                 <span id="stock-display" class="transition-all duration-300 px-4 py-1 rounded-full uppercase tracking-widest text-[10px] font-bold">Warten</span>
@@ -134,72 +134,32 @@
             <h1 class="text-5xl font-bold mb-8 tracking-tight">Datenschutzerklärung</h1>
             <div class="space-y-6 text-gray-600 text-lg leading-relaxed text-left">
                 <p>Wir nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Die von Ihnen im Rahmen der Reservierung eingegebenen Daten (Name, E-Mail) werden ausschließlich zur Abwicklung dieses Vorgangs und zur Zusendung Ihres digitalen Zertifikats verwendet.</p>
-                <p>Eine Weitergabe Ihrer Daten an unbefugte Dritte erfolgt nicht. Wir nutzen moderne Verschlüsselungstechnologien, um Ihre Daten vor Zugriffen zu schützen.</p>
-                <p>Sie haben jederzeit das Recht auf Auskunft, Korrektur oder Löschung Ihrer gespeicherten Daten. Wenden Sie sich dazu bitte an die im Impressum angegebene Adresse.</p>
             </div>
             <button onclick="hidePages()" class="mt-12 btn-apple w-full py-4 text-lg">Alles klar</button>
         </div>
     </div>
 
     <div id="impressum-page" class="hidden min-h-screen bg-white py-24 px-6 z-[100] relative animate-in fade-in duration-500">
-        <div class="max-w-2xl mx-auto">
+        <div class="max-w-2xl mx-auto text-left">
             <button onclick="hidePages()" class="text-blue-600 mb-10 font-medium flex items-center">← Zurück</button>
             <h1 class="text-5xl font-bold mb-8 tracking-tight">Impressum</h1>
-            <div class="space-y-8 text-left text-gray-800">
-                <div>
-                    <h2 class="text-xs uppercase tracking-widest text-gray-400 font-bold mb-2">Angaben gemäß § 5 TMG</h2>
-                    <p class="text-xl font-medium">GearChain i.G.</p>
-                    <p class="text-lg text-gray-600">Robert Vogt<br>Boyenstraße 27<br>10115 Berlin</p>
-                </div>
-                <div>
-                    <h2 class="text-xs uppercase tracking-widest text-gray-400 font-bold mb-2">Kontakt</h2>
-                    <p class="text-lg text-gray-600">E-Mail: robert.vogt@mailbox.org<br>Telefon: +49 (0) 174 3580 329</p>
-                </div>
-                <div>
-                    <h2 class="text-xs uppercase tracking-widest text-gray-400 font-bold mb-2">Haftungsausschluss</h2>
-                    <p class="text-sm text-gray-500 italic">GearChain ist eine eingetragene Marke in Gründung. Alle Rechte vorbehalten.</p>
-                </div>
-            </div>
+            <p class="text-lg text-gray-600">Robert Vogt<br>Boyenstraße 27<br>10115 Berlin</p>
             <button onclick="hidePages()" class="mt-12 btn-apple w-full py-4 text-lg">Schließen</button>
         </div>
     </div>
 
     <script>
+        // CONFIG
         const SUPABASE_URL = 'https://nyekitzejjvhbyvaziwl.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55ZWtpdHplamp2aGJ5dmF6aXdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyNDgyMDksImV4cCI6MjA4MjgyNDIwOX0.vR9NZ7A9XAXTt7D5gNJwFxzL9upfNvc3RDUXKSdHtj4';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+        // EMAILJS INIT
+        emailjs.init("F5cjv5ufT9CjYDpAJ");
+
         let PRODUCTS = [];
         let currentIndex = 0;
         let DEADLINE;
-        let isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-
-        window.addEventListener('scroll', () => {
-            const heroContent = document.getElementById('hero-content');
-            if(heroContent) {
-                const scrollPercent = window.scrollY / (window.innerHeight * 0.6);
-                heroContent.style.opacity = Math.max(0, 1 - scrollPercent);
-            }
-        });
-
-        // GEFIXTE NAVIGATION-LOGIK
-        function showPrivacy() { 
-            document.getElementById('main-content').classList.add('hidden'); 
-            document.getElementById('impressum-page').classList.add('hidden');
-            document.getElementById('privacy-page').classList.remove('hidden'); 
-            window.scrollTo(0,0); 
-        }
-        function showImpressum() { 
-            document.getElementById('main-content').classList.add('hidden'); 
-            document.getElementById('privacy-page').classList.add('hidden');
-            document.getElementById('impressum-page').classList.remove('hidden'); 
-            window.scrollTo(0,0); 
-        }
-        function hidePages() { 
-            document.getElementById('privacy-page').classList.add('hidden'); 
-            document.getElementById('impressum-page').classList.add('hidden'); 
-            document.getElementById('main-content').classList.remove('hidden'); 
-        }
 
         async function loadData() {
             const { data: prodData } = await supabaseClient.from('products').select('*').order('id', { ascending: true });
@@ -242,16 +202,6 @@
             document.getElementById('gallery-img').src = p.img;
         }
 
-        function updateHoverLabel(name) {
-            if (isTouchDevice) return;
-            if (name === "") {
-                const selectedProduct = PRODUCTS[currentIndex];
-                document.getElementById('gallery-label').innerText = selectedProduct ? selectedProduct.name + " Edition" : "";
-            } else {
-                document.getElementById('gallery-label').innerText = name + " Edition";
-            }
-        }
-
         function updateByClick(index) {
             if (currentIndex === index) return;
             const img = document.getElementById('gallery-img');
@@ -290,25 +240,35 @@
             const currentProduct = PRODUCTS[currentIndex];
             const gcCode = "GC-" + Math.random().toString(36).substring(2, 7).toUpperCase();
             const isPreorder = currentProduct.stock <= 0;
-            const finalPrice = isPreorder ? currentProduct.price_preorder : currentProduct.price_sale;
 
             try {
+                // 1. In Supabase speichern
                 const { error: orderError } = await supabaseClient.from('orders').insert([{
                     product_id: currentProduct.db_id,
                     customer_name: nameField.value,
                     customer_email: emailField.value,
                     gc_code: gcCode
                 }]);
-
                 if (orderError) throw orderError;
 
+                // 2. Stock updaten
                 const stockField = isPreorder ? 'stock_incoming' : 'stock_ready';
                 const newValue = isPreorder ? (currentProduct.preorder - 1) : (currentProduct.stock - 1);
                 await supabaseClient.from('products').update({ [stockField]: newValue }).eq('id', currentProduct.db_id);
 
+                // 3. EMAIL VERSENDEN (EmailJS)
+                await emailjs.send("service_0rlticn", "template_lzg5z6n", {
+                    name: nameField.value,
+                    email: emailField.value,
+                    code: gcCode,
+                    product: currentProduct.name
+                });
+
+                // 4. Erfolg anzeigen
                 document.getElementById('buy-form').innerHTML = `
                     <div class="animate-in fade-in zoom-in duration-500 text-left">
                         <h3 class="text-3xl font-bold text-center mb-8 tracking-tight">Reserviert!</h3>
+                        <p class="text-center text-gray-500 -mt-6 mb-8 text-sm">Bestätigung an ${emailField.value} gesendet.</p>
                         <div class="bg-[#f5f5f7] rounded-3xl p-6 mb-6 border border-gray-100">
                             <p class="text-[10px] uppercase tracking-widest text-gray-400 mb-1">Zertifikat-ID</p>
                             <p class="text-2xl font-mono font-bold text-[#0071e3] tracking-wider">${gcCode}</p>
@@ -325,6 +285,11 @@
                 btn.innerText = "Zertifikat sichern";
             }
         }
+
+        // Hilfsfunktionen für Navigation
+        function showPrivacy() { document.getElementById('main-content').classList.add('hidden'); document.getElementById('privacy-page').classList.remove('hidden'); window.scrollTo(0,0); }
+        function showImpressum() { document.getElementById('main-content').classList.add('hidden'); document.getElementById('impressum-page').classList.remove('hidden'); window.scrollTo(0,0); }
+        function hidePages() { document.getElementById('privacy-page').classList.add('hidden'); document.getElementById('impressum-page').classList.add('hidden'); document.getElementById('main-content').classList.remove('hidden'); }
 
         function updateTimer() {
             if(!DEADLINE) return;
