@@ -266,58 +266,56 @@
 
                // 4. Erfolg anzeigen
                 document.getElementById('buy-form').innerHTML = `
-                    <div class="animate-in fade-in zoom-in duration-700 text-center flex flex-col items-center">
-                        <div class="w-20 h-20 bg-[#34c759] rounded-full flex items-center justify-center mb-6 shadow-sm">
-                            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" stroke-width="4" viewBox="0 0 24 24">
+                    <div class="animate-in fade-in zoom-in duration-700 flex flex-col items-center">
+                        
+                        <div class="w-16 h-16 bg-[#34c759] rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-green-100">
+                            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" stroke-width="4.5" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                             </svg>
                         </div>
 
-                        <h3 class="text-4xl font-bold mb-8 tracking-tight text-black">Reserviert!</h3>
+                        <h3 class="text-4xl font-bold mb-10 tracking-tight text-gray-900">Reserviert!</h3>
                         
-                        <div class="bg-[#f5f5f7] rounded-[32px] p-8 mb-8 w-full border border-gray-100 shadow-sm text-left">
+                        <div class="bg-[#f5f5f7] rounded-[32px] p-8 mb-8 w-full text-left">
                             <div class="mb-6">
-                                <p class="text-[11px] uppercase tracking-[0.1em] text-gray-400 font-semibold mb-1">Zertifikat-ID</p>
-                                <p class="text-3xl font-bold text-[#0071e3] tracking-tight">${gcCode}</p>
+                                <p class="text-[10px] uppercase tracking-[0.15em] text-gray-400 font-bold mb-2">Zertifikat-ID</p>
+                                <p class="text-3xl font-bold text-[#0071e3] tracking-wider font-mono">${gcCode}</p>
                             </div>
                             
                             <div class="h-[1px] bg-gray-200 mb-6"></div>
                             
-                            <div class="grid grid-cols-2 gap-4">
+                            <div class="flex justify-between items-start">
                                 <div>
-                                    <p class="text-[11px] uppercase tracking-[0.1em] text-gray-400 font-semibold mb-1">Modell</p>
+                                    <p class="text-[10px] uppercase tracking-[0.15em] text-gray-400 font-bold mb-1">Modell</p>
                                     <p class="font-bold text-gray-900 text-lg">${currentProduct.name} Edition</p>
                                 </div>
                                 <div class="text-right">
-                                    <p class="text-[11px] uppercase tracking-[0.1em] text-gray-400 font-semibold mb-1">Status</p>
-                                    <p class="font-bold text-[#34c759] text-lg">Lagernd</p>
-                                </div>
-                            </div>
-
-                            <div class="mt-8 pt-6 border-t border-gray-200">
-                                <div class="flex flex-col gap-1 text-sm text-gray-500">
-                                    <div class="flex justify-between text-gray-400">
-                                        <span>Inhaber:</span>
-                                        <span class="text-gray-900 font-medium">${nameField.value}</span>
-                                    </div>
-                                    <div class="flex justify-between text-gray-400">
-                                        <span>E-Mail:</span>
-                                        <span class="text-gray-900 font-medium">${emailField.value}</span>
-                                    </div>
+                                    <p class="text-[10px] uppercase tracking-[0.15em] text-gray-400 font-bold mb-1">Status</p>
+                                    <p class="font-bold text-[#34c759] text-lg">${isPreorder ? 'Bestätigt' : 'Lagernd'}</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="space-y-4 px-4">
-                            <p class="text-gray-400 italic text-sm leading-relaxed">
-                                Bitte mache jetzt einen <b>Screenshot</b> für deine Unterlagen.<br>
-                                Das Zertifikat wird per Mail validiert.
-                            </p>
-                            <div class="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-full">
-                                <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
-                                <p class="text-blue-600 text-xs font-medium">Bestätigung an ${emailField.value} gesendet</p>
+                        <div class="w-full px-2 space-y-3 mb-10">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-400">Inhaber:</span>
+                                <span class="text-gray-900 font-semibold">${nameField.value}</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-400">E-Mail:</span>
+                                <span class="text-gray-900 font-semibold">${emailField.value}</span>
                             </div>
                         </div>
+
+                        <div class="w-full bg-[#0071e3] text-white py-5 px-8 rounded-[22px] flex justify-between items-center shadow-xl shadow-blue-100 mb-8">
+                            <span class="text-lg font-medium">Gesamtbetrag</span>
+                            <span class="text-2xl font-bold">€${isPreorder ? currentProduct.price_preorder : currentProduct.price_sale}</span>
+                        </div>
+
+                        <p class="text-gray-400 italic text-[11px] leading-relaxed text-center px-4">
+                            Bitte mache jetzt einen Screenshot für deine Unterlagen.<br>
+                            Zertifikat wird per Mail validiert.
+                        </p>
                     </div>`;
             } catch (err) {
                 alert("Fehler: " + err.message);
