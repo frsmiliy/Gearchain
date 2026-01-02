@@ -18,10 +18,10 @@
         .input-apple:focus { background-color: white; border-color: #0071e3 !important; box-shadow: 0 0 0 4px rgba(0,113,227,0.1); }
         .input-error { border-color: #ff3b30 !important; background-color: #fff2f1 !important; }
 
-        .btn-apple { background-color: #0071e3; color: white; border-radius: 980px; padding: 10px 22px; font-size: 14px; font-weight: 500; transition: all 0.3s; cursor: pointer; }
+        .btn-apple { background-color: #0071e3; color: white; border-radius: 980px; padding: 10px 22px; font-size: 14px; font-weight: 500; transition: all 0.3s; cursor: pointer; border: none; }
         .btn-apple:hover { background-color: #0077ed; transform: scale(1.02); }
         
-        .btn-order { background-color: #0071e3; color: white; padding: 20px; border-radius: 18px; width: 100%; font-weight: 600; font-size: 17px; transition: all 0.2s; }
+        .btn-order { background-color: #0071e3; color: white; padding: 20px; border-radius: 18px; width: 100%; font-weight: 600; font-size: 17px; transition: all 0.2s; border: none; cursor: pointer; }
         .btn-order:hover { background-color: #0077ed; }
 
         @keyframes appleShake {
@@ -36,14 +36,7 @@
         .reveal-item { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
         .reveal-item.active { opacity: 1; transform: translateY(0); }
         
-        #hero-content { transition: opacity 0.1s linear; }
-        #gallery-img { transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
-        .slide-exit { opacity: 0; transform: scale(0.95); }
-        
-        /* FIX FÜR FARBPUNKTE / IPHONE */
         .color-dot { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
-        .color-dot span { display: none !important; } /* Verhindert Überlappung */
-        .color-dot:hover { transform: scale(1.2); }
         .color-dot.active::after { content: ''; position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px; border: 2px solid #0071e3; border-radius: 50%; }
         
         .checkbox-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 24px; margin-bottom: 24px; font-size: 14px; color: #86868b; }
@@ -81,8 +74,6 @@
             </div>
         </section>
 
-        <div class="h-10"></div>
-
         <section id="explore" class="relative z-10 bg-black py-32 text-center overflow-hidden">
             <div class="reveal-item">
                 <h2 class="text-5xl md:text-6xl font-semibold mb-4 text-white tracking-tight">Wähle deinen Stil.</h2>
@@ -101,7 +92,7 @@
 
         <section id="buy" class="relative z-10 min-h-screen bg-[#f5f5f7] flex flex-col items-center justify-center py-24 px-6">
             <div class="max-w-md w-full reveal-item">
-                <div id="main-buy-card" class="bg-white rounded-[40px] p-10 md:p-16 text-center shadow-sm">
+                <div id="main-buy-card" class="bg-white rounded-[40px] p-8 md:p-12 text-center shadow-xl">
                     <div id="buy-form">
                         <p id="preorder-tag" class="text-orange-600 font-bold text-xs tracking-widest uppercase mb-4 hidden">Vorbestellung</p>
                         <div id="form-price" class="text-6xl font-bold mb-12 tracking-tighter text-black">€--.--</div>
@@ -128,33 +119,11 @@
         </footer>
     </div>
 
-    <div id="privacy-page" class="hidden min-h-screen bg-white py-24 px-6 z-[100] relative animate-in fade-in duration-500">
-        <div class="max-w-2xl mx-auto">
-            <button onclick="hidePages()" class="text-blue-600 mb-10 font-medium flex items-center">← Zurück</button>
-            <h1 class="text-5xl font-bold mb-8 tracking-tight">Datenschutzerklärung</h1>
-            <div class="space-y-6 text-gray-600 text-lg leading-relaxed text-left">
-                <p>Wir nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Die von Ihnen im Rahmen der Reservierung eingegebenen Daten (Name, E-Mail) werden ausschließlich zur Abwicklung dieses Vorgangs und zur Zusendung Ihres digitalen Zertifikats verwendet.</p>
-            </div>
-            <button onclick="hidePages()" class="mt-12 btn-apple w-full py-4 text-lg">Alles klar</button>
-        </div>
-    </div>
-
-    <div id="impressum-page" class="hidden min-h-screen bg-white py-24 px-6 z-[100] relative animate-in fade-in duration-500">
-        <div class="max-w-2xl mx-auto text-left">
-            <button onclick="hidePages()" class="text-blue-600 mb-10 font-medium flex items-center">← Zurück</button>
-            <h1 class="text-5xl font-bold mb-8 tracking-tight">Impressum</h1>
-            <p class="text-lg text-gray-600">Robert Vogt<br>Boyenstraße 27<br>10115 Berlin</p>
-            <button onclick="hidePages()" class="mt-12 btn-apple w-full py-4 text-lg">Schließen</button>
-        </div>
-    </div>
-
     <script>
-        // CONFIG
         const SUPABASE_URL = 'https://nyekitzejjvhbyvaziwl.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55ZWtpdHplamp2aGJ5dmF6aXdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyNDgyMDksImV4cCI6MjA4MjgyNDIwOX0.vR9NZ7A9XAXTt7D5gNJwFxzL9upfNvc3RDUXKSdHtj4';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // EMAILJS INIT
         emailjs.init("F5cjv5ufT9CjYDpAJ");
 
         let PRODUCTS = [];
@@ -205,11 +174,11 @@
         function updateByClick(index) {
             if (currentIndex === index) return;
             const img = document.getElementById('gallery-img');
-            img.classList.add('slide-exit');
+            img.style.opacity = '0';
             setTimeout(() => {
                 currentIndex = index;
                 updateGalleryUI();
-                img.classList.remove('slide-exit');
+                img.style.opacity = '1';
             }, 250);
         }
 
@@ -220,64 +189,88 @@
             const card = document.getElementById('main-buy-card');
             const btn = document.getElementById('order-btn');
 
-            nameField.classList.remove('input-error');
-            emailField.classList.remove('input-error');
-            card.classList.remove('shake');
-
             let hasError = false;
             if (!nameField.value.trim()) { nameField.classList.add('input-error'); hasError = true; }
             if (!emailField.value.trim() || !emailField.value.includes('@')) { emailField.classList.add('input-error'); hasError = true; }
             if (!privacyCheck.checked) { hasError = true; }
 
             if (hasError) {
-                setTimeout(() => card.classList.add('shake'), 10);
+                card.classList.add('shake');
+                setTimeout(() => card.classList.remove('shake'), 400);
                 return;
             }
 
-            btn.innerText = "Verarbeitung...";
+            btn.innerText = "Wird verarbeitet...";
             btn.disabled = true;
 
             const currentProduct = PRODUCTS[currentIndex];
             const gcCode = "GC-" + Math.random().toString(36).substring(2, 7).toUpperCase();
             const isPreorder = currentProduct.stock <= 0;
+            const finalPrice = isPreorder ? currentProduct.price_preorder : currentProduct.price_sale;
 
             try {
-                // 1. In Supabase speichern
-                const { error: orderError } = await supabaseClient.from('orders').insert([{
+                // 1. Supabase
+                await supabaseClient.from('orders').insert([{
                     product_id: currentProduct.db_id,
                     customer_name: nameField.value,
                     customer_email: emailField.value,
                     gc_code: gcCode
                 }]);
-                if (orderError) throw orderError;
 
-                // 2. Stock updaten
-                const stockField = isPreorder ? 'stock_incoming' : 'stock_ready';
-                const newValue = isPreorder ? (currentProduct.preorder - 1) : (currentProduct.stock - 1);
-                await supabaseClient.from('products').update({ [stockField]: newValue }).eq('id', currentProduct.db_id);
-
-                // 3. EMAIL VERSENDEN (EmailJS)
+                // 2. EmailJS
                 await emailjs.send("service_0rlticn", "template_lzg5z6n", {
                     name: nameField.value,
-                    email: emailField.value,
+                    to_email: emailField.value, // Wichtig: Muss im EmailJS Template exakt so heißen
                     code: gcCode,
-                    product: currentProduct.name
+                    product: currentProduct.name,
+                    price: finalPrice
                 });
 
-                // 4. Erfolg anzeigen
+                // 3. Erfolg UI
                 document.getElementById('buy-form').innerHTML = `
-                    <div class="animate-in fade-in zoom-in duration-500 text-left">
-                        <h3 class="text-3xl font-bold text-center mb-8 tracking-tight">Reserviert!</h3>
-                        <p class="text-center text-gray-500 -mt-6 mb-8 text-sm">Bestätigung an ${emailField.value} gesendet.</p>
-                        <div class="bg-[#f5f5f7] rounded-3xl p-6 mb-6 border border-gray-100">
-                            <p class="text-[10px] uppercase tracking-widest text-gray-400 mb-1">Zertifikat-ID</p>
-                            <p class="text-2xl font-mono font-bold text-[#0071e3] tracking-wider">${gcCode}</p>
-                            <hr class="my-4 border-gray-200">
-                            <div class="flex justify-between items-center">
-                                <div><p class="text-[10px] uppercase tracking-widest text-gray-400">Modell</p><p class="font-semibold text-gray-800">${currentProduct.name} Edition</p></div>
-                                <div class="text-right"><p class="text-[10px] uppercase tracking-widest text-gray-400">Status</p><p class="font-semibold text-green-600">Bestätigt</p></div>
+                    <div class="animate-in fade-in zoom-in duration-700">
+                        <div class="flex justify-center mb-6">
+                            <div class="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center shadow-lg shadow-green-200">
+                                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" stroke-width="4" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                                </svg>
                             </div>
                         </div>
+                        <h3 class="text-4xl font-bold text-gray-900 mb-2 tracking-tight">Reserviert!</h3>
+                        <p class="text-gray-500 mb-8 font-medium">Bestätigung an ${emailField.value} gesendet.</p>
+                        
+                        <div class="bg-[#f5f5f7] rounded-[32px] p-8 mb-8 border border-gray-100 text-left relative overflow-hidden">
+                            <div class="absolute top-0 right-0 p-4 opacity-10">
+                                <span class="text-4xl font-bold">GC</span>
+                            </div>
+                            <p class="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold mb-1">Zertifikat-ID</p>
+                            <p class="text-3xl font-mono font-bold text-[#0071e3] mb-6">${gcCode}</p>
+                            
+                            <div class="space-y-4 border-t border-gray-200 pt-6">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400 text-sm font-medium">Inhaber</span>
+                                    <span class="text-gray-800 font-semibold">${nameField.value}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400 text-sm font-medium">Modell</span>
+                                    <span class="text-gray-800 font-semibold">${currentProduct.name} Edition</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400 text-sm font-medium">Status</span>
+                                    <span class="text-green-600 font-bold uppercase text-xs tracking-widest bg-green-50 px-2 py-1 rounded-md">Lagernd</span>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-8 pt-6 border-t border-dashed border-gray-300 flex justify-between items-center">
+                                <span class="text-gray-500 font-medium">Gesamtbetrag</span>
+                                <span class="text-2xl font-bold text-black">€${finalPrice}</span>
+                            </div>
+                        </div>
+                        
+                        <p class="text-gray-400 text-xs italic leading-relaxed">
+                            Bitte mache jetzt einen <b>Screenshot</b> für deine Unterlagen.<br>
+                            Dein Zertifikat wird in Kürze per Mail validiert.
+                        </p>
                     </div>`;
             } catch (err) {
                 alert("Fehler: " + err.message);
@@ -285,11 +278,6 @@
                 btn.innerText = "Zertifikat sichern";
             }
         }
-
-        // Hilfsfunktionen für Navigation
-        function showPrivacy() { document.getElementById('main-content').classList.add('hidden'); document.getElementById('privacy-page').classList.remove('hidden'); window.scrollTo(0,0); }
-        function showImpressum() { document.getElementById('main-content').classList.add('hidden'); document.getElementById('impressum-page').classList.remove('hidden'); window.scrollTo(0,0); }
-        function hidePages() { document.getElementById('privacy-page').classList.add('hidden'); document.getElementById('impressum-page').classList.add('hidden'); document.getElementById('main-content').classList.remove('hidden'); }
 
         function updateTimer() {
             if(!DEADLINE) return;
