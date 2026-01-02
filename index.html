@@ -42,7 +42,6 @@
         
         .color-dot { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
         
-        /* Hover nur auf Desktop */
         @media (min-width: 1024px) {
             .color-dot:hover { transform: scale(1.2); }
             .color-tooltip { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); margin-bottom: 10px; padding: 4px 10px; background: black; color: white; font-size: 10px; border-radius: 6px; opacity: 0; pointer-events: none; transition: 0.3s; white-space: nowrap; }
@@ -159,8 +158,11 @@
         let PRODUCTS = [];
         let currentIndex = 0;
         let DEADLINE;
+        let isMobile = false;
 
-        // Scroll-Parallax
+        // Check if touch device
+        window.addEventListener('touchstart', () => isMobile = true, {once: true});
+
         window.addEventListener('scroll', () => {
             const heroContent = document.getElementById('hero-content');
             const scrollPercent = window.scrollY / (window.innerHeight * 0.6);
@@ -194,6 +196,7 @@
             const priceDisplay = document.getElementById('form-price');
             const tag = document.getElementById('preorder-tag');
             
+            // Setzt das Label immer auf das aktuell gewählte Produkt
             document.getElementById('gallery-label').innerText = p.name + " Edition";
             
             if (p.stock > 0) {
@@ -212,9 +215,9 @@
             document.getElementById('gallery-img').src = p.img;
         }
 
-        // Hover-Fix: Nur das Label ändern, nicht das gesamte Produkt-Umschalten
+        // Fix: Hover ändert Label, aber MouseOut setzt es auf das gewählte Produkt zurück
         function updateHoverLabel(name) {
-            if (window.innerWidth < 1024) return; // Kein Hover auf Mobile
+            if (isMobile) return; 
             if (name === "") { 
                 document.getElementById('gallery-label').innerText = PRODUCTS[currentIndex].name + " Edition"; 
             } else { 
@@ -233,25 +236,23 @@
             }, 250);
         }
 
-        // Swipe-Funktion für Mobile
+        // Swipe-Logik
         let touchstartX = 0;
         let touchendX = 0;
         const slider = document.getElementById('gallery-img');
 
-        slider.addEventListener('touchstart', e => touchstartX = e.changedTouches[0].screenX);
+        slider.addEventListener('touchstart', e => touchstartX = e.changedTouches[0].screenX, {passive: true});
         slider.addEventListener('touchend', e => {
             touchendX = e.changedTouches[0].screenX;
             handleSwipe();
-        });
+        }, {passive: true});
 
         function handleSwipe() {
-            if (touchendX < touchstartX - 50) { // Swipe Links
-                let next = (currentIndex + 1) % PRODUCTS.length;
-                updateByClick(next);
+            if (touchendX < touchstartX - 60) { // Links
+                updateByClick((currentIndex + 1) % PRODUCTS.length);
             }
-            if (touchendX > touchstartX + 50) { // Swipe Rechts
-                let prev = (currentIndex - 1 + PRODUCTS.length) % PRODUCTS.length;
-                updateByClick(prev);
+            if (touchendX > touchstartX + 60) { // Rechts
+                updateByClick((currentIndex - 1 + PRODUCTS.length) % PRODUCTS.length);
             }
         }
 
@@ -297,14 +298,8 @@
                 const stockField = isPreorder ? 'stock_incoming' : 'stock_ready';
                 const newValue = isPreorder ? (currentProduct.preorder - 1) : (currentProduct.stock - 1);
 
-                const { error: updateError } = await supabaseClient
-                    .from('products')
-                    .update({ [stockField]: newValue })
-                    .eq('id', currentProduct.db_id);
+                await supabaseClient.from('products').update({ [stockField]: newValue }).eq('id', currentProduct.db_id);
 
-                if (updateError) throw updateError;
-
-                // Mail über Vercel API
                 fetch('/api/send-mail', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
