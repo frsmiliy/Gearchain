@@ -14,6 +14,7 @@
         body { font-family: 'Inter', sans-serif; background-color: #ffffff; color: #1d1d1f; overflow-x: hidden; }
         .apple-blur { backdrop-filter: saturate(180%) blur(20px); background: rgba(255, 255, 255, 0.72); }
         
+        /* STANDARD INPUTS */
         .input-apple { width: 100%; padding: 20px; border-radius: 16px; background-color: #f5f5f7; border: 1px solid #e5e5e7; margin-bottom: 12px; outline: none; transition: all 0.3s; text-align: center; font-size: 16px; }
         .input-apple:focus { background-color: white; border-color: #0071e3 !important; box-shadow: 0 0 0 4px rgba(0,113,227,0.1); }
         .input-error { border-color: #ff3b30 !important; background-color: #fff2f1 !important; }
@@ -22,32 +23,33 @@
         .btn-apple:hover { background-color: #0077ed; transform: scale(1.02); }
         
         .btn-order { background-color: #0071e3; color: white; padding: 20px; border-radius: 18px; width: 100%; font-weight: 600; font-size: 17px; transition: all 0.2s; }
-        .btn-order:hover { background-color: #0077ed; }
 
-        @keyframes appleShake {
-            0%, 100% { transform: translateX(0); }
-            20% { transform: translateX(-8px); }
-            40% { transform: translateX(8px); }
-            60% { transform: translateX(-8px); }
-            80% { transform: translateX(8px); }
-        }
-        .shake { animation: appleShake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+        /* --- APPLE ANIMATIONS --- */
+        .reveal-base { opacity: 0; transition: all 1s cubic-bezier(0.23, 1, 0.32, 1); }
+        .reveal-base.active { opacity: 1; transform: translate(0, 0) scale(1); filter: blur(0); }
 
-        .reveal-item { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
-        .reveal-item.active { opacity: 1; transform: translateY(0); }
-        
-        #hero-content { transition: opacity 0.1s linear; }
-        #gallery-img { transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
-        .slide-exit { opacity: 0; transform: scale(0.95); }
+        /* 1. Slide Up & Scale (Innovation) */
+        .anim-slide-up { transform: translateY(60px) scale(0.95); }
+
+        /* 2. Blur In (Nachhaltigkeit) */
+        .anim-blur { filter: blur(20px); transform: translateY(20px); }
+
+        /* 3. Slide In Left/Right (Headers) */
+        .anim-left { transform: translateX(-40px); }
+        .anim-right { transform: translateX(40px); }
+
+        /* 4. Zoom Fade (Gallery) */
+        .anim-zoom { transform: scale(1.1); }
+
+        /* --- GALLERY & UI --- */
+        #gallery-img { transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .slide-exit { opacity: 0; transform: scale(0.9); filter: blur(10px); }
         
         .color-dot { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
-        .color-dot:hover { transform: scale(1.2); }
         .color-dot.active::after { content: ''; position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px; border: 2px solid #0071e3; border-radius: 50%; }
         
-        .checkbox-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 24px; margin-bottom: 24px; font-size: 14px; color: #86868b; }
-
-        /* VIDEO QUADRAT FIX */
-        .video-box { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 24px; }
+        .video-box { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 32px; }
+        .checkbox-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 24px; color: #86868b; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -66,38 +68,35 @@
         </nav>
 
         <section id="hero-section" class="h-screen flex flex-col items-center justify-center text-center px-4 bg-white">
-            <div id="hero-content">
+            <div class="reveal-base anim-slide-up active">
                 <p class="text-orange-600 text-sm font-semibold mb-3 tracking-wide uppercase">Limited Preorder</p>
                 <h1 class="text-7xl md:text-9xl font-semibold tracking-tighter mb-4">GearChain</h1>
                 <p class="text-gray-400 text-sm font-medium uppercase tracking-[0.2em] mb-10">Präzisions-Engineering aus Deutschland</p>
-                
                 <div class="flex items-center gap-4 mb-10 justify-center">
-                    <span id="hero-price-sale" class="text-4xl font-semibold text-black">--.--€</span>
+                    <span id="hero-price-sale" class="text-4xl font-semibold">--.--€</span>
                     <span id="hero-price-regular" class="text-gray-300 line-through text-2xl">--.--€</span>
                 </div>
-                
-                <div class="mb-12 px-6 py-2 bg-gray-50 rounded-full border border-gray-100 inline-block">
-                    <p class="text-xs font-medium text-gray-500 uppercase tracking-widest">Aktion endet: <span id="countdown" class="text-black font-bold ml-1">Lädt...</span></p>
+                <div class="px-6 py-2 bg-gray-50 rounded-full border border-gray-100 inline-block">
+                    <p class="text-xs font-medium text-gray-500 uppercase tracking-widest">Aktion endet: <span id="countdown" class="text-black font-bold">Lädt...</span></p>
                 </div>
             </div>
         </section>
 
         <section id="innovation-section" class="py-24 bg-white border-t border-gray-50">
             <div class="container mx-auto px-6">
-                <div class="text-center mb-16 reveal-item">
-                    <h2 class="text-5xl md:text-6xl font-bold tracking-tight mb-4">Die Zukunft ist GearChain.</h2>
+                <div class="text-center mb-16 reveal-base anim-slide-up">
+                    <h2 class="text-5xl md:text-6xl font-bold tracking-tight">Die Zukunft ist GearChain.</h2>
                 </div>
-
                 <div class="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
-                    <div class="reveal-item text-center">
-                        <video src="video1.mp4" autoplay loop muted playsinline class="video-box shadow-lg mb-6"></video>
+                    <div class="reveal-base anim-slide-up text-center">
+                        <video src="video1.mp4" autoplay loop muted playsinline class="video-box shadow-2xl mb-6"></video>
                         <h3 class="text-2xl font-bold mb-2">Innovation.</h3>
-                        <p class="text-gray-500 font-medium">Fokus schärfen. Stress abbauen. Präzision fühlen.</p>
+                        <p class="text-gray-500 font-medium">Fokus schärfen. Stress abbauen.</p>
                     </div>
-                    <div class="reveal-item text-center" style="transition-delay: 100ms;">
-                        <video src="video2.mp4" autoplay loop muted playsinline class="video-box shadow-lg mb-6"></video>
+                    <div class="reveal-base anim-slide-up text-center" style="transition-delay: 200ms;">
+                        <video src="video2.mp4" autoplay loop muted playsinline class="video-box shadow-2xl mb-6"></video>
                         <h3 class="text-2xl font-bold mb-2">Evolution.</h3>
-                        <p class="text-gray-500 font-medium">Zwei Wege. Endlose Bewegung. 2026 braucht das.</p>
+                        <p class="text-gray-500 font-medium">Zwei Wege. Endlose Bewegung.</p>
                     </div>
                 </div>
             </div>
@@ -105,33 +104,32 @@
 
         <section id="sustainability-section" class="py-32 bg-[#f5f5f7]">
             <div class="container mx-auto px-6 text-center">
-                <div class="reveal-item mb-16">
-                    <h2 class="text-5xl md:text-7xl font-bold mb-6 text-black">Echt. Ehrlich. Edel.</h2>
-                    <p class="text-xl text-gray-500 uppercase tracking-widest font-semibold">Nachhaltigkeit als Standard</p>
+                <div class="reveal-base anim-blur mb-16">
+                    <h2 class="text-5xl md:text-7xl font-bold mb-6">Echt. Ehrlich. Edel.</h2>
+                    <p class="text-xl text-gray-400 uppercase tracking-widest font-semibold">Nachhaltigkeit als Standard</p>
                 </div>
-
-                <div class="grid md:grid-cols-3 gap-8 reveal-item">
-                    <div class="bg-white p-10 rounded-[30px] shadow-sm">
-                        <div class="text-blue-600 text-4xl mb-4">♻️</div>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="reveal-base anim-blur bg-white p-10 rounded-[40px] shadow-sm" style="transition-delay: 100ms;">
+                        <div class="text-4xl mb-4">♻️</div>
                         <h4 class="text-xl font-bold mb-2">Recycelt</h4>
                         <p class="text-gray-500">100% Edelstahl.</p>
                     </div>
-                    <div class="bg-white p-10 rounded-[30px] shadow-sm">
-                        <div class="text-blue-600 text-4xl mb-4">🇩🇪</div>
-                        <h4 class="text-xl font-bold mb-2">Upcycling</h4>
-                        <p class="text-gray-500">Deutsche Fabriken.</p>
+                    <div class="reveal-base anim-blur bg-white p-10 rounded-[40px] shadow-sm" style="transition-delay: 200ms;">
+                        <div class="text-4xl mb-4">🇩🇪</div>
+                        <h4 class="text-xl font-bold mb-2">Manufaktur</h4>
+                        <p class="text-gray-500">Berliner Handarbeit.</p>
                     </div>
-                    <div class="bg-white p-10 rounded-[30px] shadow-sm">
-                        <div class="text-blue-600 text-4xl mb-4">🌿</div>
+                    <div class="reveal-base anim-blur bg-white p-10 rounded-[40px] shadow-sm" style="transition-delay: 300ms;">
+                        <div class="text-4xl mb-4">🌿</div>
                         <h4 class="text-xl font-bold mb-2">Ökologisch</h4>
-                        <p class="text-gray-500">Minimale Wege.</p>
+                        <p class="text-gray-500">Plastikfrei verpackt.</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <section id="explore" class="bg-black py-32 text-center relative z-20">
-            <div class="reveal-item">
+            <div class="reveal-base anim-zoom">
                 <h2 class="text-5xl md:text-6xl font-semibold mb-4 text-white tracking-tight">Wähle deinen Stil.</h2>
                 <div class="relative w-full max-w-lg px-6 mb-16 mx-auto flex justify-center items-center">
                     <img id="gallery-img" src="silber.png" alt="GearChain" class="w-full h-auto object-contain select-none">
@@ -142,52 +140,52 @@
                     <div onclick="updateByClick(2)" class="color-dot bg-[#333333]" id="dot-2"></div>
                 </div>
                 <p id="gallery-label" class="text-2xl font-medium mb-2 text-white italic">Modelle laden...</p>
-                <span id="stock-display" class="transition-all duration-300 px-4 py-1 rounded-full uppercase tracking-widest text-[10px] font-bold">Warten</span>
+                <span id="stock-display" class="px-4 py-1 rounded-full uppercase tracking-widest text-[10px] font-bold">Warten</span>
             </div>
         </section>
 
         <section id="buy" class="relative z-30 min-h-screen bg-[#f5f5f7] flex flex-col items-center justify-center py-24 px-6">
-            <div class="max-w-md w-full reveal-item">
-                <div id="main-buy-card" class="bg-white rounded-[40px] p-10 md:p-16 text-center shadow-sm">
+            <div class="max-w-md w-full reveal-base anim-slide-up">
+                <div id="main-buy-card" class="bg-white rounded-[40px] p-10 md:p-16 text-center shadow-2xl">
                     <div id="buy-form">
                         <p id="preorder-tag" class="text-orange-600 font-bold text-xs tracking-widest uppercase mb-4 hidden">Vorbestellung</p>
-                        <div id="form-price" class="text-6xl font-bold mb-12 tracking-tighter text-black">€--.--</div>
+                        <div id="form-price" class="text-6xl font-bold mb-12 tracking-tighter">€--.--</div>
                         <div class="space-y-1">
                             <input type="text" id="name-field" placeholder="Vollständiger Name" class="input-apple">
                             <input type="email" id="email-field" placeholder="E-Mail Adresse" class="input-apple">
                             <div class="checkbox-container">
                                 <input type="checkbox" id="privacy-check" class="w-4 h-4">
-                                <span>Ich akzeptiere die <button onclick="showPrivacy()" class="text-blue-600 underline">Datenschutzerklärung</button>.</span>
+                                <span>Ich akzeptiere die <button onclick="showPrivacy()" class="text-blue-600 underline">Datenschutzrichtlinie</button>.</span>
                             </div>
-                            <button onclick="processOrder()" id="order-btn" class="btn-order">Zertifikat sichern</button>
+                            <button onclick="processOrder()" id="order-btn" class="btn-order mt-6">Zertifikat sichern</button>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <footer class="relative z-30 py-10 text-center text-gray-400 text-xs border-t border-gray-100 bg-white">
+        <footer class="relative z-30 py-10 text-center text-gray-400 text-xs bg-white">
             <div class="flex justify-center gap-6 mb-2">
-                <button onclick="showPrivacy()" class="hover:text-black">Datenschutzerklärung</button>
+                <button onclick="showPrivacy()" class="hover:text-black">Datenschutz</button>
                 <button onclick="showImpressum()" class="hover:text-black">Impressum</button>
             </div>
             <p>© 2026 GearChain – Precision Engineering</p>
         </footer>
     </div>
 
-    <div id="privacy-page" class="hidden min-h-screen bg-white py-24 px-6 z-[100] relative">
+    <div id="privacy-page" class="hidden fixed inset-0 bg-white z-[100] p-10 overflow-y-auto">
         <div class="max-w-2xl mx-auto">
-            <button onclick="hidePages()" class="text-blue-600 mb-10 font-medium">← Zurück</button>
-            <h1 class="text-5xl font-bold mb-8">Datenschutzerklärung</h1>
-            <p>Wir schützen Ihre Daten...</p>
+            <button onclick="hidePages()" class="text-blue-600 mb-10">← Zurück</button>
+            <h1 class="text-4xl font-bold mb-6">Datenschutz</h1>
+            <p>Ihre Daten sind bei uns sicher...</p>
         </div>
     </div>
 
-    <div id="impressum-page" class="hidden min-h-screen bg-white py-24 px-6 z-[100] relative">
-        <div class="max-w-2xl mx-auto text-left">
-            <button onclick="hidePages()" class="text-blue-600 mb-10 font-medium">← Zurück</button>
-            <h1 class="text-5xl font-bold mb-8">Impressum</h1>
-            <p class="text-lg text-gray-600">Robert Vogt<br>Boyenstraße 27<br>10115 Berlin</p>
+    <div id="impressum-page" class="hidden fixed inset-0 bg-white z-[100] p-10 overflow-y-auto">
+        <div class="max-w-2xl mx-auto">
+            <button onclick="hidePages()" class="text-blue-600 mb-10">← Zurück</button>
+            <h1 class="text-4xl font-bold mb-6">Impressum</h1>
+            <p>Robert Vogt<br>Boyenstraße 27<br>10115 Berlin</p>
         </div>
     </div>
 
@@ -226,12 +224,12 @@
             document.getElementById('gallery-label').innerText = p.name + " Edition";
             
             if (p.stock > 0) {
-                sEl.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5 mb-0.5"></span> ${p.stock} sofort verfügbar`;
+                sEl.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5"></span> ${p.stock} sofort verfügbar`;
                 sEl.className = "bg-green-500/10 text-green-500 text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest";
                 priceDisplay.innerText = `€${p.price_sale}`;
                 tag.classList.add('hidden');
             } else {
-                sEl.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-red-500 mr-1.5 mb-0.5"></span> ${p.preorder} Plätze (Vorbestellung)`;
+                sEl.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-red-500 mr-1.5"></span> ${p.preorder} Plätze (Vorbestellung)`;
                 sEl.className = "bg-red-500/10 text-red-500 text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest";
                 priceDisplay.innerText = `€${p.price_preorder}`;
                 tag.classList.remove('hidden');
@@ -248,19 +246,17 @@
                 currentIndex = index;
                 updateGalleryUI();
                 img.classList.remove('slide-exit');
-            }, 250);
+            }, 300);
         }
 
         async function processOrder() {
             const nameField = document.getElementById('name-field');
             const emailField = document.getElementById('email-field');
             const privacyCheck = document.getElementById('privacy-check');
-            const card = document.getElementById('main-buy-card');
             const btn = document.getElementById('order-btn');
 
             if (!nameField.value.trim() || !emailField.value.includes('@') || !privacyCheck.checked) {
-                card.classList.add('shake');
-                setTimeout(() => card.classList.remove('shake'), 400);
+                alert("Bitte alle Felder korrekt ausfüllen.");
                 return;
             }
 
@@ -271,38 +267,33 @@
 
             try {
                 await supabaseClient.from('orders').insert([{ product_id: currentProduct.db_id, customer_name: nameField.value, customer_email: emailField.value, gc_code: gcCode }]);
-                const isPreorder = currentProduct.stock <= 0;
-                const stockField = isPreorder ? 'stock_incoming' : 'stock_ready';
-                const newValue = isPreorder ? (currentProduct.preorder - 1) : (currentProduct.stock - 1);
-                await supabaseClient.from('products').update({ [stockField]: newValue }).eq('id', currentProduct.db_id);
-                await emailjs.send("service_0rlticn", "template_lzg5z6n", { name: nameField.value, email: emailField.value, code: gcCode, product: currentProduct.name });
-
-                document.getElementById('buy-form').innerHTML = `<div class="text-center"><h3 class="text-3xl font-bold mb-4">Reserviert!</h3><p class="text-blue-600 text-2xl font-bold mb-4">${gcCode}</p><p class="text-gray-500">Check deine E-Mails.</p></div>`;
+                document.getElementById('buy-form').innerHTML = `<div class="text-center"><h3 class="text-3xl font-bold mb-4">Reserviert!</h3><p class="text-blue-600 text-2xl font-bold">${gcCode}</p></div>`;
             } catch (err) {
                 alert("Fehler");
                 btn.disabled = false;
             }
         }
 
-        function showPrivacy() { document.getElementById('main-content').classList.add('hidden'); document.getElementById('privacy-page').classList.remove('hidden'); window.scrollTo(0,0); }
-        function showImpressum() { document.getElementById('main-content').classList.add('hidden'); document.getElementById('impressum-page').classList.remove('hidden'); window.scrollTo(0,0); }
-        function hidePages() { document.getElementById('privacy-page').classList.add('hidden'); document.getElementById('impressum-page').classList.add('hidden'); document.getElementById('main-content').classList.remove('hidden'); }
+        function showPrivacy() { document.getElementById('privacy-page').classList.remove('hidden'); }
+        function showImpressum() { document.getElementById('impressum-page').classList.remove('hidden'); }
+        function hidePages() { document.getElementById('privacy-page').classList.add('hidden'); document.getElementById('impressum-page').classList.add('hidden'); }
 
         function updateTimer() {
             if(!DEADLINE) return;
             const diff = DEADLINE - new Date().getTime();
             if (diff <= 0) { document.getElementById('countdown').innerText = "BEENDET"; return; }
             const d = Math.floor(diff / (1000 * 60 * 60 * 24)), h = Math.floor((diff / (1000 * 60 * 60)) % 24), m = Math.floor((diff / (1000 * 60)) % 60), s = Math.floor((diff / 1000) % 60);
-            document.getElementById('countdown').innerText = `${d > 0 ? d + 'T ' : ''}${h}Std ${m}Min ${s}Sek`;
+            document.getElementById('countdown').innerText = `${d > 0 ? d + 'T ' : ''}${h}h ${m}m ${s}s`;
         }
 
         setInterval(updateTimer, 1000);
         loadData();
 
+        // OBSERVER FÜR DIE ANIMATIONEN
         const observer = new IntersectionObserver(entries => {
             entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.reveal-item').forEach(el => observer.observe(el));
+        }, { threshold: 0.15 });
+        document.querySelectorAll('.reveal-base').forEach(el => observer.observe(el));
     </script>
 </body>
 </html>
