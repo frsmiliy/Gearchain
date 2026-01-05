@@ -34,15 +34,16 @@
         .reveal-item { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
         .reveal-item.active { opacity: 1; transform: translateY(0); }
         
-        #gallery-img { transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
-        .slide-exit { opacity: 0; transform: scale(0.95); }
+        #gallery-img { transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
+        .slide-exit { opacity: 0; transform: scale(0.9); filter: blur(10px); }
         
         .color-dot { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
-        .color-dot:hover { transform: scale(1.2); }
         .color-dot.active::after { content: ''; position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px; border: 2px solid #0071e3; border-radius: 50%; }
 
-        /* SWIPE UP / REVEAL EFFEKT */
-        .sticky-gallery { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        /* FIX: STICKY GALLERY LOGIC */
+        .sticky-wrapper { height: 300vh; position: relative; background: black; }
+        .sticky-content { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; overflow: hidden; }
+        
         .video-container { max-width: 400px; margin: 0 auto; }
         video { object-fit: cover; }
     </style>
@@ -82,7 +83,6 @@
                 <div class="text-center mb-16 reveal-item">
                     <h2 class="text-5xl md:text-6xl font-bold tracking-tight mb-4">Die Zukunft ist GearChain.</h2>
                 </div>
-
                 <div class="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
                     <div class="reveal-item text-center">
                         <div class="video-container aspect-square mb-6 overflow-hidden rounded-[32px] bg-gray-100 shadow-2xl">
@@ -102,10 +102,10 @@
             </div>
         </section>
 
-        <div class="h-[200vh] relative" id="scroll-container">
-            <section id="explore" class="sticky-gallery bg-black text-center overflow-hidden">
-                <div class="reveal-item w-full">
-                    <h2 class="text-5xl md:text-6xl font-semibold mb-4 text-white tracking-tight">Wähle deinen Stil.</h2>
+        <div class="sticky-wrapper" id="scroll-trigger">
+            <section class="sticky-content">
+                <div class="w-full text-center px-6">
+                    <h2 class="text-5xl md:text-7xl font-semibold mb-8 text-white tracking-tight">Wähle deinen Stil.</h2>
                     <div class="relative w-full max-w-md px-6 mb-12 mx-auto flex justify-center items-center">
                         <img id="gallery-img" src="silber.png" alt="GearChain" class="w-full h-auto object-contain select-none">
                     </div>
@@ -149,7 +149,6 @@
         const SUPABASE_URL = 'https://nyekitzejjvhbyvaziwl.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55ZWtpdHplamp2aGJ5dmF6aXdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyNDgyMDksImV4cCI6MjA4MjgyNDIwOX0.vR9NZ7A9XAXTt7D5gNJwFxzL9upfNvc3RDUXKSdHtj4';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        emailjs.init("F5cjv5ufT9CjYDpAJ");
 
         let PRODUCTS = [];
         let currentIndex = 0;
@@ -167,8 +166,6 @@
                 document.getElementById('hero-price-regular').innerText = `€${PRODUCTS[0].price_regular}`;
                 updateGalleryUI();
             }
-            const { data: setData } = await supabaseClient.from('settings').select('value').eq('name', 'sale_deadline').single();
-            DEADLINE = setData ? new Date(setData.value).getTime() : new Date("2026-01-10T23:59:59").getTime();
         }
 
         function updateGalleryUI() {
@@ -204,8 +201,31 @@
                 currentIndex = index;
                 updateGalleryUI();
                 img.classList.remove('slide-exit');
-            }, 250);
+            }, 300);
         }
+
+        // AUTO-SCROLL SWITCH LOGIC
+        window.addEventListener('scroll', () => {
+            const wrapper = document.getElementById('scroll-trigger');
+            if (!wrapper || PRODUCTS.length < 3) return;
+            
+            const rect = wrapper.getBoundingClientRect();
+            const scrollPercent = Math.min(Math.max(-rect.top / (rect.height - window.innerHeight), 0), 1);
+            
+            let newIndex = 0;
+            if (scrollPercent > 0.33) newIndex = 1;
+            if (scrollPercent > 0.66) newIndex = 2;
+            
+            if (newIndex !== currentIndex) {
+                const img = document.getElementById('gallery-img');
+                img.classList.add('slide-exit');
+                setTimeout(() => {
+                    currentIndex = newIndex;
+                    updateGalleryUI();
+                    img.classList.remove('slide-exit');
+                }, 150);
+            }
+        });
 
         async function processOrder() {
             const nameField = document.getElementById('name-field');
@@ -234,10 +254,9 @@
                     gc_code: gcCode
                 }]);
                 
-                // EXAKTER ERFOLG-EFFEKT WIE GEFORDERT
                 card.classList.remove('reveal-item', 'active'); 
                 document.getElementById('buy-form').innerHTML = `
-                    <div style="display: flex; flex-direction: column; align-items: center; font-family: 'Inter', -apple-system, sans-serif; background: white; border-radius: 40px; padding: 10px; width: 100%; box-sizing: border-box; animation: fadeIn 0.5s ease-out;">
+                    <div style="display: flex; flex-direction: column; align-items: center; font-family: 'Inter', -apple-system, sans-serif; background: white; border-radius: 40px; padding: 10px; width: 100%; box-sizing: border-box;">
                         <div style="width: 70px; height: 70px; background-color: #34c759; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 30px; box-shadow: 0 8px 20px rgba(52, 199, 89, 0.2);">
                             <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="20 6 9 17 4 12"></polyline>
@@ -276,7 +295,7 @@
                             <span style="font-size: 24px; font-weight: 700;">€${isPreorder ? currentProduct.price_preorder : currentProduct.price_sale}</span>
                         </div>
                         <p style="font-size: 12px; color: #a1a1a6; font-style: italic; line-height: 1.6; text-align: center; max-width: 250px;">
-                            Bitte mache jetzt einen Screenshot für deine Unterlagen. Zertifikat wird per Mail validiert.
+                            Bitte mache jetzt einen Screenshot für deine Unterlagen.
                         </p>
                     </div>
                 `;
@@ -287,15 +306,6 @@
             }
         }
 
-        function updateTimer() {
-            if(!DEADLINE) return;
-            const diff = DEADLINE - new Date().getTime();
-            if (diff <= 0) { document.getElementById('countdown').innerText = "BEENDET"; return; }
-            const h = Math.floor((diff / (1000 * 60 * 60)) % 24), m = Math.floor((diff / (1000 * 60)) % 60), s = Math.floor((diff / 1000) % 60);
-            document.getElementById('countdown').innerText = `${h}H ${m}M ${s}S`;
-        }
-
-        setInterval(updateTimer, 1000);
         loadData();
 
         const observer = new IntersectionObserver(entries => {
