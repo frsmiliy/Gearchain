@@ -16,11 +16,13 @@
         
         .input-apple { width: 100%; padding: 20px; border-radius: 16px; background-color: #f5f5f7; border: 1px solid #e5e5e7; margin-bottom: 12px; outline: none; transition: all 0.3s; text-align: center; font-size: 16px; }
         .input-apple:focus { background-color: white; border-color: #0071e3 !important; box-shadow: 0 0 0 4px rgba(0,113,227,0.1); }
-        
+        .input-error { border-color: #ff3b30 !important; background-color: #fff2f1 !important; }
+
         .btn-apple { background-color: #0071e3; color: white; border-radius: 980px; padding: 10px 22px; font-size: 14px; font-weight: 500; transition: all 0.3s; cursor: pointer; }
         .btn-apple:hover { background-color: #0077ed; transform: scale(1.02); }
         
         .btn-order { background-color: #0071e3; color: white; padding: 20px; border-radius: 18px; width: 100%; font-weight: 600; font-size: 17px; transition: all 0.2s; }
+        .btn-order:hover { background-color: #0077ed; }
 
         @keyframes appleShake {
             0%, 100% { transform: translateX(0); }
@@ -34,17 +36,21 @@
         .reveal-item { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
         .reveal-item.active { opacity: 1; transform: translateY(0); }
         
+        #hero-content { transition: opacity 0.1s linear; }
         #gallery-img { transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
         .slide-exit { opacity: 0; transform: scale(0.95); }
         
+        /* FIX FÜR FARBPUNKTE / IPHONE */
         .color-dot { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
+        .color-dot span { display: none !important; } 
         .color-dot:hover { transform: scale(1.2); }
         .color-dot.active::after { content: ''; position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px; border: 2px solid #0071e3; border-radius: 50%; }
+        
+        .checkbox-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 24px; margin-bottom: 24px; font-size: 14px; color: #86868b; }
 
-        /* SWIPE UP / REVEAL EFFEKT */
-        .sticky-gallery { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .video-container { max-width: 400px; margin: 0 auto; }
-        video { object-fit: cover; }
+        /* NEUER SWIPE UP EFFEKT */
+        .sticky-container { position: relative; }
+        #explore { position: sticky; top: 0; z-index: 30; box-shadow: 0 -20px 50px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
@@ -54,8 +60,8 @@
             <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
                 <span class="text-xl font-semibold tracking-tight">GearChain</span>
                 <div class="flex items-center">
-                    <div class="flex items-center border-r border-gray-300 pr-3 mr-3">
-                        <span class="text-[10px] font-medium uppercase tracking-[0.15em] text-gray-500">Made in Germany</span>
+                    <div class="flex items-center border-r border-gray-300 pr-3 mr-3 md:pr-4 md:mr-4">
+                        <span class="text-[8px] md:text-[10px] font-medium uppercase tracking-[0.15em] text-gray-500">Made in Germany</span>
                     </div>
                     <a href="#buy" class="btn-apple">Sichern</a>
                 </div>
@@ -67,10 +73,12 @@
                 <p class="text-orange-600 text-sm font-semibold mb-3 tracking-wide uppercase">Limited Preorder</p>
                 <h1 class="text-7xl md:text-9xl font-semibold tracking-tighter mb-4">GearChain</h1>
                 <p class="text-gray-400 text-sm font-medium uppercase tracking-[0.2em] mb-10">Präzisions-Engineering aus Deutschland</p>
+                
                 <div class="flex items-center gap-4 mb-10 justify-center">
                     <span id="hero-price-sale" class="text-4xl font-semibold text-black">--.--€</span>
                     <span id="hero-price-regular" class="text-gray-300 line-through text-2xl">--.--€</span>
                 </div>
+                
                 <div class="mb-12 px-6 py-2 bg-gray-50 rounded-full border border-gray-100 inline-block">
                     <p class="text-xs font-medium text-gray-500 uppercase tracking-widest">Aktion endet: <span id="countdown" class="text-black font-bold ml-1">Lädt...</span></p>
                 </div>
@@ -83,42 +91,63 @@
                     <h2 class="text-5xl md:text-6xl font-bold tracking-tight mb-4">Die Zukunft ist GearChain.</h2>
                 </div>
 
-                <div class="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
-                    <div class="reveal-item text-center">
-                        <div class="video-container aspect-square mb-6 overflow-hidden rounded-[32px] bg-gray-100 shadow-2xl">
-                            <video src="video1.mp4" autoplay loop muted playsinline class="w-full h-full"></video>
-                        </div>
+                <div class="grid md:grid-cols-2 gap-8 mb-12">
+                    <div class="reveal-item">
+                        <video src="video1.mp4" autoplay loop muted playsinline class="rounded-[24px] w-full shadow-sm mb-6"></video>
                         <h3 class="text-2xl font-bold mb-2">Innovation.</h3>
-                        <p class="text-gray-500 font-medium">Fokus schärfen. Stress abbauen.</p>
+                        <p class="text-gray-500 font-medium">Fokus schärfen. Stress abbauen. Präzision fühlen.</p>
                     </div>
-                    <div class="reveal-item text-center" style="transition-delay: 150ms;">
-                        <div class="video-container aspect-square mb-6 overflow-hidden rounded-[32px] bg-gray-100 shadow-2xl">
-                            <video src="video2.mp4" autoplay loop muted playsinline class="w-full h-full"></video>
-                        </div>
+                    <div class="reveal-item" style="transition-delay: 100ms;">
+                        <video src="video2.mp4" autoplay loop muted playsinline class="rounded-[24px] w-full shadow-sm mb-6"></video>
                         <h3 class="text-2xl font-bold mb-2">Evolution.</h3>
-                        <p class="text-gray-500 font-medium">Zwei Wege. Endlose Bewegung.</p>
+                        <p class="text-gray-500 font-medium">Zwei Wege. Endlose Bewegung. 2026 braucht das.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <div class="h-[200vh] relative" id="scroll-container">
-            <section id="explore" class="sticky-gallery bg-black text-center overflow-hidden">
-                <div class="reveal-item w-full">
-                    <h2 class="text-5xl md:text-6xl font-semibold mb-4 text-white tracking-tight">Wähle deinen Stil.</h2>
-                    <div class="relative w-full max-w-md px-6 mb-12 mx-auto flex justify-center items-center">
-                        <img id="gallery-img" src="silber.png" alt="GearChain" class="w-full h-auto object-contain select-none">
-                    </div>
-                    <div class="flex justify-center gap-10 mb-8">
-                        <div onclick="updateByClick(0)" class="color-dot active bg-[#e5e5e5]" id="dot-0"></div>
-                        <div onclick="updateByClick(1)" class="color-dot bg-[#b4923e]" id="dot-1"></div>
-                        <div onclick="updateByClick(2)" class="color-dot bg-[#333333]" id="dot-2"></div>
-                    </div>
-                    <p id="gallery-label" class="text-2xl font-medium mb-4 text-white italic">Modelle laden...</p>
-                    <span id="stock-display" class="transition-all duration-300 px-4 py-1 rounded-full uppercase tracking-widest text-[10px] font-bold">Warten</span>
+        <section id="sustainability-section" class="py-32 bg-[#f5f5f7]">
+            <div class="container mx-auto px-6 text-center">
+                <div class="reveal-item mb-16">
+                    <h2 class="text-5xl md:text-7xl font-bold mb-6 text-black">Echt. Ehrlich. Edel.</h2>
+                    <p class="text-xl text-gray-500 uppercase tracking-widest font-semibold">Nachhaltigkeit als Standard</p>
                 </div>
-            </section>
-        </div>
+
+                <div class="grid md:grid-cols-3 gap-8 reveal-item">
+                    <div class="bg-white p-10 rounded-[30px] shadow-sm">
+                        <div class="text-blue-600 text-4xl mb-4">♻️</div>
+                        <h4 class="text-xl font-bold mb-2">Recycelt</h4>
+                        <p class="text-gray-500">100% Edelstahl.</p>
+                    </div>
+                    <div class="bg-white p-10 rounded-[30px] shadow-sm">
+                        <div class="text-blue-600 text-4xl mb-4">🇩🇪</div>
+                        <h4 class="text-xl font-bold mb-2">Upcycling</h4>
+                        <p class="text-gray-500">Deutsche Fabriken.</p>
+                    </div>
+                    <div class="bg-white p-10 rounded-[30px] shadow-sm">
+                        <div class="text-blue-600 text-4xl mb-4">🌿</div>
+                        <h4 class="text-xl font-bold mb-2">Ökologisch</h4>
+                        <p class="text-gray-500">Minimale Wege.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="explore" class="bg-black py-32 text-center overflow-hidden">
+            <div class="reveal-item">
+                <h2 class="text-5xl md:text-6xl font-semibold mb-4 text-white tracking-tight">Wähle deinen Stil.</h2>
+                <div class="relative w-full max-w-lg px-6 mb-16 mx-auto flex justify-center items-center">
+                    <img id="gallery-img" src="silber.png" alt="GearChain" class="w-full h-auto object-contain select-none">
+                </div>
+                <div class="flex justify-center gap-10 mb-8">
+                    <div onclick="updateByClick(0)" class="color-dot active bg-[#e5e5e5]" id="dot-0"></div>
+                    <div onclick="updateByClick(1)" class="color-dot bg-[#b4923e]" id="dot-1"></div>
+                    <div onclick="updateByClick(2)" class="color-dot bg-[#333333]" id="dot-2"></div>
+                </div>
+                <p id="gallery-label" class="text-2xl font-medium mb-2 text-white italic">Modelle laden...</p>
+                <span id="stock-display" class="transition-all duration-300 px-4 py-1 rounded-full uppercase tracking-widest text-[10px] font-bold">Warten</span>
+            </div>
+        </section>
 
         <section id="buy" class="relative z-10 min-h-screen bg-[#f5f5f7] flex flex-col items-center justify-center py-24 px-6">
             <div class="max-w-md w-full reveal-item">
@@ -129,9 +158,9 @@
                         <div class="space-y-1">
                             <input type="text" id="name-field" placeholder="Vollständiger Name" class="input-apple">
                             <input type="email" id="email-field" placeholder="E-Mail Adresse" class="input-apple">
-                            <div class="flex items-center justify-center gap-2 my-6 text-sm text-gray-400">
+                            <div class="checkbox-container">
                                 <input type="checkbox" id="privacy-check" class="w-4 h-4">
-                                <span>Ich akzeptiere die <button onclick="showPrivacy()" class="text-blue-600 underline">Datenschutzregeln</button></span>
+                                <span>Ich akzeptiere die <button onclick="showPrivacy()" class="text-blue-600 underline">Datenschutzerklärung</button>.</span>
                             </div>
                             <button onclick="processOrder()" id="order-btn" class="btn-order">Zertifikat sichern</button>
                         </div>
@@ -140,15 +169,41 @@
             </div>
         </section>
 
-        <footer class="py-10 text-center text-gray-400 text-xs bg-white border-t border-gray-100">
+        <footer class="relative z-10 py-10 text-center text-gray-400 text-xs border-t border-gray-100 bg-white">
+            <div class="flex justify-center gap-6 mb-2">
+                <button onclick="showPrivacy()" class="hover:text-black">Datenschutzerklärung</button>
+                <button onclick="showImpressum()" class="hover:text-black">Impressum</button>
+            </div>
             <p>© 2026 GearChain – Precision Engineering</p>
         </footer>
     </div>
 
+    <div id="privacy-page" class="hidden min-h-screen bg-white py-24 px-6 z-[100] relative animate-in fade-in duration-500">
+        <div class="max-w-2xl mx-auto">
+            <button onclick="hidePages()" class="text-blue-600 mb-10 font-medium flex items-center">← Zurück</button>
+            <h1 class="text-5xl font-bold mb-8 tracking-tight">Datenschutzerklärung</h1>
+            <div class="space-y-6 text-gray-600 text-lg leading-relaxed text-left">
+                <p>Wir nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Die von Ihnen im Rahmen der Reservierung eingegebenen Daten (Name, E-Mail) werden ausschließlich zur Abwicklung dieses Vorgangs und zur Zusendung Ihres digitalen Zertifikats verwendet.</p>
+            </div>
+            <button onclick="hidePages()" class="mt-12 btn-apple w-full py-4 text-lg">Alles klar</button>
+        </div>
+    </div>
+
+    <div id="impressum-page" class="hidden min-h-screen bg-white py-24 px-6 z-[100] relative animate-in fade-in duration-500">
+        <div class="max-w-2xl mx-auto text-left">
+            <button onclick="hidePages()" class="text-blue-600 mb-10 font-medium flex items-center">← Zurück</button>
+            <h1 class="text-5xl font-bold mb-8 tracking-tight">Impressum</h1>
+            <p class="text-lg text-gray-600">Robert Vogt<br>Boyenstraße 27<br>10115 Berlin</p>
+            <button onclick="hidePages()" class="mt-12 btn-apple w-full py-4 text-lg">Schließen</button>
+        </div>
+    </div>
+
     <script>
+        // CONFIG
         const SUPABASE_URL = 'https://nyekitzejjvhbyvaziwl.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55ZWtpdHplamp2aGJ5dmF6aXdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyNDgyMDksImV4cCI6MjA4MjgyNDIwOX0.vR9NZ7A9XAXTt7D5gNJwFxzL9upfNvc3RDUXKSdHtj4';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
         emailjs.init("F5cjv5ufT9CjYDpAJ");
 
         let PRODUCTS = [];
@@ -181,12 +236,12 @@
             document.getElementById('gallery-label').innerText = p.name + " Edition";
             
             if (p.stock > 0) {
-                sEl.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5"></span> ${p.stock} auf Lager`;
+                sEl.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5 mb-0.5"></span> ${p.stock} sofort verfügbar`;
                 sEl.className = "bg-green-500/10 text-green-500 text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest";
                 priceDisplay.innerText = `€${p.price_sale}`;
                 tag.classList.add('hidden');
             } else {
-                sEl.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-red-500 mr-1.5"></span> ${p.preorder} Plätze frei`;
+                sEl.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-red-500 mr-1.5 mb-0.5"></span> ${p.preorder} Plätze (Vorbestellung)`;
                 sEl.className = "bg-red-500/10 text-red-500 text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest";
                 priceDisplay.innerText = `€${p.price_preorder}`;
                 tag.classList.remove('hidden');
@@ -208,34 +263,88 @@
         }
 
         async function processOrder() {
+            const nameField = document.getElementById('name-field');
+            const emailField = document.getElementById('email-field');
+            const privacyCheck = document.getElementById('privacy-check');
+            const card = document.getElementById('main-buy-card');
             const btn = document.getElementById('order-btn');
+
+            nameField.classList.remove('input-error');
+            emailField.classList.remove('input-error');
+            card.classList.remove('shake');
+
+            let hasError = false;
+            if (!nameField.value.trim()) { nameField.classList.add('input-error'); hasError = true; }
+            if (!emailField.value.trim() || !emailField.value.includes('@')) { emailField.classList.add('input-error'); hasError = true; }
+            if (!privacyCheck.checked) { hasError = true; }
+
+            if (hasError) {
+                setTimeout(() => card.classList.add('shake'), 10);
+                return;
+            }
+
             btn.innerText = "Verarbeitung...";
             btn.disabled = true;
+
             const currentProduct = PRODUCTS[currentIndex];
             const gcCode = "GC-" + Math.random().toString(36).substring(2, 7).toUpperCase();
-            
+            const isPreorder = currentProduct.stock <= 0;
+
             try {
                 await supabaseClient.from('orders').insert([{
                     product_id: currentProduct.db_id,
-                    customer_name: document.getElementById('name-field').value,
-                    customer_email: document.getElementById('email-field').value,
+                    customer_name: nameField.value,
+                    customer_email: emailField.value,
                     gc_code: gcCode
                 }]);
-                
-                // Success UI ... (verkürzt für Übersicht)
-                document.getElementById('buy-form').innerHTML = `<h3 class="text-3xl font-bold">Reserviert!</h3><p class="mt-4 text-blue-600 font-bold text-2xl">${gcCode}</p>`;
+
+                const stockField = isPreorder ? 'stock_incoming' : 'stock_ready';
+                const newValue = isPreorder ? (currentProduct.preorder - 1) : (currentProduct.stock - 1);
+                await supabaseClient.from('products').update({ [stockField]: newValue }).eq('id', currentProduct.db_id);
+
+                await emailjs.send("service_0rlticn", "template_lzg5z6n", {
+                    name: nameField.value,
+                    email: emailField.value,
+                    code: gcCode,
+                    product: currentProduct.name
+                });
+
+                document.getElementById('buy-form').innerHTML = `
+                    <div style="display: flex; flex-direction: column; align-items: center; font-family: 'Inter', sans-serif; background: white; border-radius: 40px; padding: 10px; width: 100%; animation: fadeIn 0.5s ease-out;">
+                        <div style="width: 70px; height: 70px; background-color: #34c759; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 30px;">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                        <h3 style="font-size: 34px; font-weight: 700; margin-bottom: 40px; color: #1d1d1f;">Reserviert!</h3>
+                        <div style="background-color: #f5f5f7; border-radius: 30px; padding: 35px; width: 100%; text-align: left;">
+                            <p style="font-size: 11px; text-transform: uppercase; color: #86868b; font-weight: 700; margin-bottom: 10px;">Zertifikat-ID</p>
+                            <p style="font-size: 32px; font-weight: 700; color: #0071e3; margin-bottom: 25px;">${gcCode}</p>
+                            <div style="height: 1px; background-color: #e5e5e7; margin-bottom: 25px;"></div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <div><p style="font-size: 11px; color: #86868b; font-weight: 700;">Modell</p><p style="font-size: 20px; font-weight: 700;">${currentProduct.name} Edition</p></div>
+                                <div style="text-align: right;"><p style="font-size: 11px; color: #86868b; font-weight: 700;">Status</p><p style="font-size: 20px; font-weight: 700; color: #34c759;">Bestätigt</p></div>
+                            </div>
+                        </div>
+                        <p style="font-size: 12px; color: #a1a1a6; margin-top: 30px;">Bitte mache einen Screenshot.</p>
+                    </div>`;
             } catch (err) {
-                alert("Fehler!");
+                alert("Fehler: " + err.message);
                 btn.disabled = false;
+                btn.innerText = "Zertifikat sichern";
             }
         }
+
+        function showPrivacy() { document.getElementById('main-content').classList.add('hidden'); document.getElementById('privacy-page').classList.remove('hidden'); window.scrollTo(0,0); }
+        function showImpressum() { document.getElementById('main-content').classList.add('hidden'); document.getElementById('impressum-page').classList.remove('hidden'); window.scrollTo(0,0); }
+        function hidePages() { document.getElementById('privacy-page').classList.add('hidden'); document.getElementById('impressum-page').classList.add('hidden'); document.getElementById('main-content').classList.remove('hidden'); }
 
         function updateTimer() {
             if(!DEADLINE) return;
             const diff = DEADLINE - new Date().getTime();
             if (diff <= 0) { document.getElementById('countdown').innerText = "BEENDET"; return; }
-            const h = Math.floor((diff / (1000 * 60 * 60)) % 24), m = Math.floor((diff / (1000 * 60)) % 60), s = Math.floor((diff / 1000) % 60);
-            document.getElementById('countdown').innerText = `${h}H ${m}M ${s}S`;
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24)), h = Math.floor((diff / (1000 * 60 * 60)) % 24), m = Math.floor((diff / (1000 * 60)) % 60), s = Math.floor((diff / 1000) % 60);
+            document.getElementById('countdown').innerText = `${d > 0 ? d + 'D ' : ''}${h}H ${m}M ${s}S`;
         }
 
         setInterval(updateTimer, 1000);
