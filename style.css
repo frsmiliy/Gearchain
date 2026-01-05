@@ -166,3 +166,40 @@ video {
 .reveal-item.active video {
     transform: scale(1.02);
 }
+/* ... (dein restlicher CSS Code) ... */
+
+    /* DER FIX FÜR DEN ÜBERGANG */
+    #innovation-section {
+        position: relative;
+        z-index: 10;
+        background: white;
+        margin-bottom: 0;
+    }
+
+    .sticky-container {
+        position: relative;
+        z-index: 20; /* Liegt über der Innovation-Sektion */
+        margin-top: -100vh; /* Zieht die Sektion hoch, damit sie überlappen kann */
+        height: 300vh; /* Genug Platz für das Scroll-Erlebnis */
+        pointer-events: none; /* Klicks gehen durch, solange nicht im Sichtfeld */
+    }
+
+    .sticky-gallery {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: black;
+        pointer-events: auto; /* Klicks hier wieder aktivieren */
+        box-shadow: 0 -20px 50px rgba(0,0,0,0.3); /* Schatten für Tiefeneffekt beim Überlappen */
+    }
+
+    /* Damit der Übergang nicht zu hart ist */
+    #buy {
+        position: relative;
+        z-index: 30;
+        background: #f5f5f7;
+    }
