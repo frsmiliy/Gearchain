@@ -28,17 +28,8 @@
         .reveal-base { opacity: 0; transition: all 1s cubic-bezier(0.23, 1, 0.32, 1); }
         .reveal-base.active { opacity: 1; transform: translate(0, 0) scale(1); filter: blur(0); }
 
-        /* 1. Slide Up & Scale (Innovation) */
         .anim-slide-up { transform: translateY(60px) scale(0.95); }
-
-        /* 2. Blur In (Nachhaltigkeit) */
         .anim-blur { filter: blur(20px); transform: translateY(20px); }
-
-        /* 3. Slide In Left/Right (Headers) */
-        .anim-left { transform: translateX(-40px); }
-        .anim-right { transform: translateX(40px); }
-
-        /* 4. Zoom Fade (Gallery) */
         .anim-zoom { transform: scale(1.1); }
 
         /* --- GALLERY & UI --- */
@@ -50,6 +41,9 @@
         
         .video-box { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 32px; }
         .checkbox-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 24px; color: #86868b; font-size: 14px; }
+
+        /* Custom Symbols */
+        .apple-symbol { font-size: 40px; color: #0071e3; margin-bottom: 24px; display: block; }
     </style>
 </head>
 <body>
@@ -102,47 +96,45 @@
             </div>
         </section>
 
-       <section id="sustainability-section" class="py-32 bg-[#f5f5f7]">
-    <div class="container mx-auto px-6 text-center">
-        <div class="reveal-base anim-blur mb-16">
-            <h2 class="text-5xl md:text-7xl font-bold mb-6 text-black tracking-tighter">Echt. Ehrlich. Edel.</h2>
-            <p class="text-xl text-gray-400 uppercase tracking-[0.2em] font-medium">Ressourcen neu gedacht</p>
-        </div>
+        <section id="sustainability-section" class="py-32 bg-[#f5f5f7]">
+            <div class="container mx-auto px-6 text-center">
+                <div class="reveal-base anim-blur mb-16">
+                    <h2 class="text-5xl md:text-7xl font-bold mb-6 text-black tracking-tighter">Echt. Ehrlich. Edel.</h2>
+                    <p class="text-xl text-gray-400 uppercase tracking-[0.2em] font-medium">Ressourcen neu gedacht</p>
+                </div>
 
-        <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            
-            <div class="reveal-base anim-blur bg-white p-10 rounded-[40px] shadow-sm hover:shadow-md transition-shadow duration-500">
-                <div class="text-5xl mb-6">🛡️</div>
-                <h4 class="text-2xl font-bold mb-3">Ultrawertig</h4>
-                <p class="text-gray-500 leading-relaxed">
-                    100% korrosionsfreier Industriestahl. Absolut <b>unverwüstlich</b> und für Generationen geschmiedet. Rost hat hier keine Chance.
-                </p>
+                <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    <div class="reveal-base anim-blur bg-white p-10 rounded-[40px] shadow-sm">
+                        <span class="apple-symbol">⌬</span>
+                        <h4 class="text-2xl font-bold mb-3">Ultrawertig</h4>
+                        <p class="text-gray-500 leading-relaxed">
+                            100% korrosionsfreier Industriestahl. Absolut <b>unverwüstlich</b> und für Generationen geschmiedet. Rost hat keine Chance.
+                        </p>
+                    </div>
+                    
+                    <div class="reveal-base anim-blur bg-white p-10 rounded-[40px] shadow-sm" style="transition-delay: 150ms;">
+                        <span class="apple-symbol">⚙︎</span>
+                        <h4 class="text-2xl font-bold mb-3">Industrie-Rettung</h4>
+                        <p class="text-gray-500 leading-relaxed">
+                            Wir nutzen Überproduktionen deutscher Fabriken. Präzisionsteile, die zu viel waren, werden bei uns zum Herzstück – <b>Upcycling</b> in Perfektion.
+                        </p>
+                    </div>
+                    
+                    <div class="reveal-base anim-blur bg-white p-10 rounded-[40px] shadow-sm" style="transition-delay: 300ms;">
+                        <span class="apple-symbol">✧</span>
+                        <h4 class="text-2xl font-bold mb-3">Pure Reinheit</h4>
+                        <p class="text-gray-500 leading-relaxed">
+                            Keine unnötigen Beschichtungen, keine Chemie. Nur purer Edelstahl und kurze Wege. <b>Ehrlich</b> gefertigt, plastikfrei geliefert.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="reveal-base anim-slide-up mt-20 inline-flex items-center gap-2 bg-white/50 border border-gray-200 px-6 py-3 rounded-full" style="transition-delay: 450ms;">
+                    <span class="flex h-2 w-2 rounded-full bg-green-500"></span>
+                    <span class="text-sm font-medium text-gray-600 tracking-wide uppercase">Circular Engineering – Made in Germany</span>
+                </div>
             </div>
-            
-            <div class="reveal-base anim-blur bg-white p-10 rounded-[40px] shadow-sm hover:shadow-md transition-shadow duration-500" style="transition-delay: 150ms;">
-                <div class="text-5xl mb-6">⚙️</div>
-                <h4 class="text-2xl font-bold mb-3">Industrie-Rettung</h4>
-                <p class="text-gray-500 leading-relaxed">
-                    Wir nutzen Überproduktionen deutscher Fabriken. Präzisionsteile, die zu viel waren, werden bei uns zum Herzstück – <b>Upcycling</b> in Perfektion.
-                </p>
-            </div>
-            
-            <div class="reveal-base anim-blur bg-white p-10 rounded-[40px] shadow-sm hover:shadow-md transition-shadow duration-500" style="transition-delay: 300ms;">
-                <div class="text-5xl mb-6">💎</div>
-                <h4 class="text-2xl font-bold mb-3">Pure Reinheit</h4>
-                <p class="text-gray-500 leading-relaxed">
-                    Keine unnötigen Beschichtungen, keine Chemie. Nur purer Edelstahl und kurze Wege. <b>Ehrlich</b> gefertigt, plastikfrei geliefert.
-                </p>
-            </div>
-
-        </div>
-        
-        <div class="reveal-base anim-slide-up mt-20 inline-flex items-center gap-2 bg-white/50 border border-gray-200 px-6 py-3 rounded-full" style="transition-delay: 450ms;">
-            <span class="flex h-2 w-2 rounded-full bg-green-500"></span>
-            <span class="text-sm font-medium text-gray-600 tracking-wide uppercase">Circular Engineering – Made in Germany</span>
-        </div>
-    </div>
-</section>
+        </section>
 
         <section id="explore" class="bg-black py-32 text-center relative z-20">
             <div class="reveal-base anim-zoom">
@@ -189,19 +181,65 @@
         </footer>
     </div>
 
-    <div id="privacy-page" class="hidden fixed inset-0 bg-white z-[100] p-10 overflow-y-auto">
-        <div class="max-w-2xl mx-auto">
-            <button onclick="hidePages()" class="text-blue-600 mb-10">← Zurück</button>
-            <h1 class="text-4xl font-bold mb-6">Datenschutz</h1>
-            <p>Ihre Daten sind bei uns sicher...</p>
+    <div id="privacy-page" class="hidden fixed inset-0 bg-white z-[100] p-6 md:p-20 overflow-y-auto">
+        <div class="max-w-3xl mx-auto text-left">
+            <button onclick="hidePages()" class="text-blue-600 mb-12 font-medium flex items-center gap-2">
+                <span class="text-xl">‹</span> Zurück
+            </button>
+            <h1 class="text-5xl font-bold mb-10 tracking-tight">Datenschutz bei GearChain</h1>
+            <div class="space-y-8 text-gray-600 leading-relaxed">
+                <section>
+                    <h2 class="text-2xl font-semibold text-black mb-4">1. Einleitung</h2>
+                    <p>GearChain nimmt den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend der gesetzlichen Datenschutzvorschriften sowie dieser Datenschutzerklärung.</p>
+                </section>
+                <section>
+                    <h2 class="text-2xl font-semibold text-black mb-4">2. Datenerfassung auf unserer Website</h2>
+                    <p>Die Datenerarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Die Kontaktdaten können Sie dem Impressum dieser Website entnehmen. Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen (z. B. durch Eingabe im Bestellformular).</p>
+                </section>
+                <section>
+                    <h2 class="text-2xl font-semibold text-black mb-4">3. Zweck der Datennutzung</h2>
+                    <p>Wir nutzen Ihre Daten ausschließlich zur Abwicklung Ihrer Reservierung und zur Kommunikation bezüglich Ihres GearChain Zertifikats. Eine Weitergabe an Dritte erfolgt nur, wenn dies zur Vertragserfüllung notwendig ist (z. B. Versanddienstleister oder Email-Service-Provider wie EmailJS).</p>
+                </section>
+                <section>
+                    <h2 class="text-2xl font-semibold text-black mb-4">4. Ihre Rechte</h2>
+                    <p>Sie haben jederzeit das Recht, unentgeltlich Auskunft über Herkunft, Empfänger und Zweck Ihrer gespeicherten personenbezogenen Daten zu erhalten. Sie haben außerdem ein Recht, die Berichtigung oder Löschung dieser Daten zu verlangen. Hierzu sowie zu weiteren Fragen zum Thema Datenschutz können Sie sich jederzeit unter der im Impressum angegebenen Adresse an uns wenden.</p>
+                </section>
+                <section>
+                    <h2 class="text-2xl font-semibold text-black mb-4">5. Analyse-Tools und Tools von Drittanbietern</h2>
+                    <p>Wir nutzen Supabase für unsere Datenbankdienste und EmailJS für den Versand von Bestätigungsmails. Diese Dienste verarbeiten Daten nach strengen Sicherheitsstandards und dienen der technischen Bereitstellung unserer Services.</p>
+                </section>
+            </div>
         </div>
     </div>
 
-    <div id="impressum-page" class="hidden fixed inset-0 bg-white z-[100] p-10 overflow-y-auto">
-        <div class="max-w-2xl mx-auto">
-            <button onclick="hidePages()" class="text-blue-600 mb-10">← Zurück</button>
-            <h1 class="text-4xl font-bold mb-6">Impressum</h1>
-            <p>Robert Vogt<br>Boyenstraße 27<br>10115 Berlin</p>
+    <div id="impressum-page" class="hidden fixed inset-0 bg-white z-[100] p-6 md:p-20 overflow-y-auto">
+        <div class="max-w-3xl mx-auto text-left">
+            <button onclick="hidePages()" class="text-blue-600 mb-12 font-medium flex items-center gap-2">
+                <span class="text-xl">‹</span> Zurück
+            </button>
+            <h1 class="text-5xl font-bold mb-10 tracking-tight">Impressum</h1>
+            <div class="space-y-8 text-gray-600 leading-relaxed text-lg">
+                <p>
+                    <strong class="text-black">Angaben gemäß § 5 TMG:</strong><br>
+                    Robert Vogt<br>
+                    Boyenstraße 27<br>
+                    10115 Berlin
+                </p>
+                <p>
+                    <strong class="text-black">Kontakt:</strong><br>
+                    E-Mail: kontakt@gearchain.de<br>
+                    Telefon: [Deine Telefonnummer]
+                </p>
+                <p>
+                    <strong class="text-black">Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:</strong><br>
+                    Robert Vogt<br>
+                    Boyenstraße 27<br>
+                    10115 Berlin
+                </p>
+                <p class="text-sm text-gray-400 pt-10">
+                    Haftungshinweis: Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich.
+                </p>
+            </div>
         </div>
     </div>
 
@@ -216,19 +254,21 @@
         let DEADLINE;
 
         async function loadData() {
-            const { data: prodData } = await supabaseClient.from('products').select('*').order('id', { ascending: true });
-            if (prodData && prodData.length > 0) {
-                PRODUCTS = prodData.map(item => ({
-                    db_id: item.id, name: item.name, img: item.name.toLowerCase() + ".png",
-                    stock: item.stock_ready, preorder: item.stock_incoming,
-                    price_sale: item.price_sale, price_regular: item.price_regular, price_preorder: item.price_preorder
-                }));
-                document.getElementById('hero-price-sale').innerText = `€${PRODUCTS[0].price_sale}`;
-                document.getElementById('hero-price-regular').innerText = `€${PRODUCTS[0].price_regular}`;
-                updateGalleryUI();
-            }
-            const { data: setData } = await supabaseClient.from('settings').select('value').eq('name', 'sale_deadline').single();
-            DEADLINE = setData ? new Date(setData.value).getTime() : new Date("2026-01-10T23:59:59").getTime();
+            try {
+                const { data: prodData } = await supabaseClient.from('products').select('*').order('id', { ascending: true });
+                if (prodData && prodData.length > 0) {
+                    PRODUCTS = prodData.map(item => ({
+                        db_id: item.id, name: item.name, img: item.name.toLowerCase() + ".png",
+                        stock: item.stock_ready, preorder: item.stock_incoming,
+                        price_sale: item.price_sale, price_regular: item.price_regular, price_preorder: item.price_preorder
+                    }));
+                    document.getElementById('hero-price-sale').innerText = `€${PRODUCTS[0].price_sale}`;
+                    document.getElementById('hero-price-regular').innerText = `€${PRODUCTS[0].price_regular}`;
+                    updateGalleryUI();
+                }
+                const { data: setData } = await supabaseClient.from('settings').select('value').eq('name', 'sale_deadline').single();
+                DEADLINE = setData ? new Date(setData.value).getTime() : new Date("2026-01-10T23:59:59").getTime();
+            } catch (e) { console.error("Data Load Error", e); }
         }
 
         function updateGalleryUI() {
@@ -283,16 +323,17 @@
 
             try {
                 await supabaseClient.from('orders').insert([{ product_id: currentProduct.db_id, customer_name: nameField.value, customer_email: emailField.value, gc_code: gcCode }]);
-                document.getElementById('buy-form').innerHTML = `<div class="text-center"><h3 class="text-3xl font-bold mb-4">Reserviert!</h3><p class="text-blue-600 text-2xl font-bold">${gcCode}</p></div>`;
+                document.getElementById('buy-form').innerHTML = `<div class="text-center"><h3 class="text-3xl font-bold mb-4">Reserviert!</h3><p class="text-blue-600 text-2xl font-bold">${gcCode}</p><p class="mt-4 text-gray-500">Check deine E-Mails.</p></div>`;
             } catch (err) {
-                alert("Fehler");
+                alert("Fehler bei der Reservierung.");
                 btn.disabled = false;
+                btn.innerText = "Zertifikat sichern";
             }
         }
 
-        function showPrivacy() { document.getElementById('privacy-page').classList.remove('hidden'); }
-        function showImpressum() { document.getElementById('impressum-page').classList.remove('hidden'); }
-        function hidePages() { document.getElementById('privacy-page').classList.add('hidden'); document.getElementById('impressum-page').classList.add('hidden'); }
+        function showPrivacy() { document.getElementById('privacy-page').classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
+        function showImpressum() { document.getElementById('impressum-page').classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
+        function hidePages() { document.getElementById('privacy-page').classList.add('hidden'); document.getElementById('impressum-page').classList.add('hidden'); document.body.style.overflow = 'auto'; }
 
         function updateTimer() {
             if(!DEADLINE) return;
@@ -305,7 +346,6 @@
         setInterval(updateTimer, 1000);
         loadData();
 
-        // OBSERVER FÜR DIE ANIMATIONEN
         const observer = new IntersectionObserver(entries => {
             entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); });
         }, { threshold: 0.15 });
