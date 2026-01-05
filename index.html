@@ -80,50 +80,53 @@
             </div>
         </section>
 
-        <div class="innovation-wrapper">
-            <section id="innovation-section" class="py-24 border-t border-gray-50">
-                <div class="container mx-auto px-6">
-                    <div class="text-center mb-16 reveal-item">
-                        <h2 class="text-5xl md:text-6xl font-bold tracking-tight mb-4">Die Zukunft ist GearChain.</h2>
+  <div id="main-content">
+    <section id="innovation-section" class="py-24">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 reveal-item">
+                <h2 class="text-5xl md:text-6xl font-bold tracking-tight mb-4">Die Zukunft ist GearChain.</h2>
+            </div>
+            <div class="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+                <div class="reveal-item text-center">
+                    <div class="video-container aspect-square mb-6 overflow-hidden rounded-[32px] bg-gray-100 shadow-2xl">
+                        <video src="video1.mp4" autoplay loop muted playsinline class="w-full h-full"></video>
                     </div>
-
-                    <div class="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
-                        <div class="reveal-item text-center">
-                            <div class="video-container aspect-square mb-6 overflow-hidden rounded-[32px] bg-gray-100 shadow-2xl">
-                                <video src="video1.mp4" autoplay loop muted playsinline class="w-full h-full"></video>
-                            </div>
-                            <h3 class="text-2xl font-bold mb-2">Innovation.</h3>
-                            <p class="text-gray-500 font-medium">Fokus schärfen. Stress abbauen.</p>
-                        </div>
-                        <div class="reveal-item text-center" style="transition-delay: 150ms;">
-                            <div class="video-container aspect-square mb-6 overflow-hidden rounded-[32px] bg-gray-100 shadow-2xl">
-                                <video src="video2.mp4" autoplay loop muted playsinline class="w-full h-full"></video>
-                            </div>
-                            <h3 class="text-2xl font-bold mb-2">Evolution.</h3>
-                            <p class="text-gray-500 font-medium">Zwei Wege. Endlose Bewegung.</p>
-                        </div>
-                    </div>
+                    <h3 class="text-2xl font-bold mb-2">Innovation.</h3>
+                    <p class="text-gray-500 font-medium">Fokus schärfen. Stress abbauen.</p>
                 </div>
-            </section>
-        </div>
-
-        <div class="sticky-container">
-            <section id="explore" class="sticky-gallery text-center overflow-hidden">
-                <div class="reveal-item w-full">
-                    <h2 class="text-5xl md:text-6xl font-semibold mb-4 text-white tracking-tight">Wähle deinen Stil.</h2>
-                    <div class="relative w-full max-w-md px-6 mb-12 mx-auto flex justify-center items-center">
-                        <img id="gallery-img" src="silber.png" alt="GearChain" class="w-full h-auto object-contain select-none">
+                <div class="reveal-item text-center">
+                    <div class="video-container aspect-square mb-6 overflow-hidden rounded-[32px] bg-gray-100 shadow-2xl">
+                        <video src="video2.mp4" autoplay loop muted playsinline class="w-full h-full"></video>
                     </div>
-                    <div class="flex justify-center gap-10 mb-8">
-                        <div onclick="updateByClick(0)" class="color-dot active bg-[#e5e5e5]" id="dot-0"></div>
-                        <div onclick="updateByClick(1)" class="color-dot bg-[#b4923e]" id="dot-1"></div>
-                        <div onclick="updateByClick(2)" class="color-dot bg-[#333333]" id="dot-2"></div>
-                    </div>
-                    <p id="gallery-label" class="text-2xl font-medium mb-4 text-white italic">Modelle laden...</p>
-                    <span id="stock-display" class="transition-all duration-300 px-4 py-1 rounded-full uppercase tracking-widest text-[10px] font-bold">Warten</span>
+                    <h3 class="text-2xl font-bold mb-2">Evolution.</h3>
+                    <p class="text-gray-500 font-medium">Zwei Wege. Endlose Bewegung.</p>
                 </div>
-            </section>
+            </div>
         </div>
+        <div class="h-96"></div> 
+    </section>
+
+    <div class="sticky-container">
+        <section id="explore" class="sticky-gallery">
+            <div class="reveal-item w-full text-center">
+                <h2 class="text-5xl md:text-6xl font-semibold mb-4 text-white tracking-tight">Wähle deinen Stil.</h2>
+                <div class="relative w-full max-w-md px-6 mb-12 mx-auto flex justify-center items-center">
+                    <img id="gallery-img" src="silber.png" alt="GearChain" class="w-full h-auto object-contain select-none">
+                </div>
+                <div class="flex justify-center gap-10 mb-8">
+                    <div onclick="updateByClick(0)" class="color-dot active bg-[#e5e5e5]" id="dot-0"></div>
+                    <div onclick="updateByClick(1)" class="color-dot bg-[#b4923e]" id="dot-1"></div>
+                    <div onclick="updateByClick(2)" class="color-dot bg-[#333333]" id="dot-2"></div>
+                </div>
+                <p id="gallery-label" class="text-2xl font-medium mb-4 text-white italic">Modelle laden...</p>
+                <span id="stock-display" class="px-4 py-1 rounded-full uppercase tracking-widest text-[10px] font-bold">Warten</span>
+            </div>
+        </section>
+    </div>
+
+    <section id="buy">
+        </section>
+</div>
 
         <section id="buy" class="relative z-30 min-h-screen bg-[#f5f5f7] flex flex-col items-center justify-center py-24 px-6 shadow-[0_-20px_50px_rgba(0,0,0,0.1)]">
             <div class="max-w-md w-full reveal-item">
