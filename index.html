@@ -181,72 +181,29 @@
         </footer>
     </div>
 
-    <div id="privacy-page" class="hidden fixed inset-0 bg-white z-[100] p-6 md:p-20 overflow-y-auto">
-        <div class="max-w-3xl mx-auto text-left">
-            <button onclick="hidePages()" class="text-blue-600 mb-12 font-medium flex items-center gap-2">
-                <span class="text-xl">‹</span> Zurück
-            </button>
-            <h1 class="text-5xl font-bold mb-10 tracking-tight">Datenschutz bei GearChain</h1>
-            <div class="space-y-8 text-gray-600 leading-relaxed">
-                <section>
-                    <h2 class="text-2xl font-semibold text-black mb-4">1. Einleitung</h2>
-                    <p>GearChain nimmt den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend der gesetzlichen Datenschutzvorschriften sowie dieser Datenschutzerklärung.</p>
-                </section>
-                <section>
-                    <h2 class="text-2xl font-semibold text-black mb-4">2. Datenerfassung auf unserer Website</h2>
-                    <p>Die Datenerarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Die Kontaktdaten können Sie dem Impressum dieser Website entnehmen. Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen (z. B. durch Eingabe im Bestellformular).</p>
-                </section>
-                <section>
-                    <h2 class="text-2xl font-semibold text-black mb-4">3. Zweck der Datennutzung</h2>
-                    <p>Wir nutzen Ihre Daten ausschließlich zur Abwicklung Ihrer Reservierung und zur Kommunikation bezüglich Ihres GearChain Zertifikats. Eine Weitergabe an Dritte erfolgt nur, wenn dies zur Vertragserfüllung notwendig ist (z. B. Versanddienstleister oder Email-Service-Provider wie EmailJS).</p>
-                </section>
-                <section>
-                    <h2 class="text-2xl font-semibold text-black mb-4">4. Ihre Rechte</h2>
-                    <p>Sie haben jederzeit das Recht, unentgeltlich Auskunft über Herkunft, Empfänger und Zweck Ihrer gespeicherten personenbezogenen Daten zu erhalten. Sie haben außerdem ein Recht, die Berichtigung oder Löschung dieser Daten zu verlangen. Hierzu sowie zu weiteren Fragen zum Thema Datenschutz können Sie sich jederzeit unter der im Impressum angegebenen Adresse an uns wenden.</p>
-                </section>
-                <section>
-                    <h2 class="text-2xl font-semibold text-black mb-4">5. Analyse-Tools und Tools von Drittanbietern</h2>
-                    <p>Wir nutzen Supabase für unsere Datenbankdienste und EmailJS für den Versand von Bestätigungsmails. Diese Dienste verarbeiten Daten nach strengen Sicherheitsstandards und dienen der technischen Bereitstellung unserer Services.</p>
-                </section>
-            </div>
+    <div id="privacy-page" class="hidden fixed inset-0 bg-white z-[100] p-6 md:p-20 overflow-y-auto text-left">
+        <div class="max-w-3xl mx-auto">
+            <button onclick="hidePages()" class="text-blue-600 mb-12 font-medium flex items-center gap-2">‹ Zurück</button>
+            <h1 class="text-5xl font-bold mb-10 tracking-tight">Datenschutz</h1>
+            <p class="text-gray-600 leading-relaxed mb-6">Wir nutzen Ihre Daten ausschließlich zur Abwicklung Ihrer Reservierung. Eine Weitergabe an Dritte erfolgt nur über die genutzten Dienstleister Supabase (Datenbank) und EmailJS (Versand).</p>
         </div>
     </div>
 
-    <div id="impressum-page" class="hidden fixed inset-0 bg-white z-[100] p-6 md:p-20 overflow-y-auto">
-        <div class="max-w-3xl mx-auto text-left">
-            <button onclick="hidePages()" class="text-blue-600 mb-12 font-medium flex items-center gap-2">
-                <span class="text-xl">‹</span> Zurück
-            </button>
+    <div id="impressum-page" class="hidden fixed inset-0 bg-white z-[100] p-6 md:p-20 overflow-y-auto text-left">
+        <div class="max-w-3xl mx-auto">
+            <button onclick="hidePages()" class="text-blue-600 mb-12 font-medium flex items-center gap-2">‹ Zurück</button>
             <h1 class="text-5xl font-bold mb-10 tracking-tight">Impressum</h1>
-            <div class="space-y-8 text-gray-600 leading-relaxed text-lg">
-                <p>
-                    <strong class="text-black">Angaben gemäß § 5 TMG:</strong><br>
-                    Robert Vogt<br>
-                    Boyenstraße 27<br>
-                    10115 Berlin
-                </p>
-                <p>
-                    <strong class="text-black">Kontakt:</strong><br>
-                    E-Mail: kontakt@gearchain.de<br>
-                    Telefon: [Deine Telefonnummer]
-                </p>
-                <p>
-                    <strong class="text-black">Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:</strong><br>
-                    Robert Vogt<br>
-                    Boyenstraße 27<br>
-                    10115 Berlin
-                </p>
-                <p class="text-sm text-gray-400 pt-10">
-                    Haftungshinweis: Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich.
-                </p>
-            </div>
+            <p>Robert Vogt<br>Boyenstraße 27<br>10115 Berlin</p>
         </div>
     </div>
 
     <script>
+        // CONFIG
         const SUPABASE_URL = 'https://nyekitzejjvhbyvaziwl.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55ZWtpdHplamp2aGJ5dmF6aXdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyNDgyMDksImV4cCI6MjA4MjgyNDIwOX0.vR9NZ7A9XAXTt7D5gNJwFxzL9upfNvc3RDUXKSdHtj4';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        // EMAILJS INIT
         emailjs.init("F5cjv5ufT9CjYDpAJ");
 
         let PRODUCTS = [];
@@ -268,7 +225,7 @@
                 }
                 const { data: setData } = await supabaseClient.from('settings').select('value').eq('name', 'sale_deadline').single();
                 DEADLINE = setData ? new Date(setData.value).getTime() : new Date("2026-01-10T23:59:59").getTime();
-            } catch (e) { console.error("Data Load Error", e); }
+            } catch (e) { console.error("Load Error:", e); }
         }
 
         function updateGalleryUI() {
@@ -280,12 +237,12 @@
             document.getElementById('gallery-label').innerText = p.name + " Edition";
             
             if (p.stock > 0) {
-                sEl.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5"></span> ${p.stock} sofort verfügbar`;
+                sEl.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5"></span> ${p.stock} verfügbar`;
                 sEl.className = "bg-green-500/10 text-green-500 text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest";
                 priceDisplay.innerText = `€${p.price_sale}`;
                 tag.classList.add('hidden');
             } else {
-                sEl.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-red-500 mr-1.5"></span> ${p.preorder} Plätze (Vorbestellung)`;
+                sEl.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-red-500 mr-1.5"></span> ${p.preorder} Plätze`;
                 sEl.className = "bg-red-500/10 text-red-500 text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest";
                 priceDisplay.innerText = `€${p.price_preorder}`;
                 tag.classList.remove('hidden');
@@ -312,7 +269,7 @@
             const btn = document.getElementById('order-btn');
 
             if (!nameField.value.trim() || !emailField.value.includes('@') || !privacyCheck.checked) {
-                alert("Bitte alle Felder korrekt ausfüllen.");
+                alert("Bitte fülle alle Felder aus.");
                 return;
             }
 
@@ -322,10 +279,31 @@
             const gcCode = "GC-" + Math.random().toString(36).substring(2, 7).toUpperCase();
 
             try {
-                await supabaseClient.from('orders').insert([{ product_id: currentProduct.db_id, customer_name: nameField.value, customer_email: emailField.value, gc_code: gcCode }]);
-                document.getElementById('buy-form').innerHTML = `<div class="text-center"><h3 class="text-3xl font-bold mb-4">Reserviert!</h3><p class="text-blue-600 text-2xl font-bold">${gcCode}</p><p class="mt-4 text-gray-500">Check deine E-Mails.</p></div>`;
+                // 1. SUPABASE SAVE
+                const { error } = await supabaseClient.from('orders').insert([
+                    { product_id: currentProduct.db_id, customer_name: nameField.value, customer_email: emailField.value, gc_code: gcCode }
+                ]);
+                if (error) throw error;
+
+                // 2. EMAILJS SEND (GEFIXED)
+                await emailjs.send("service_default", "template_default", {
+                    customer_name: nameField.value,
+                    customer_email: emailField.value,
+                    product_name: currentProduct.name,
+                    gc_code: gcCode
+                });
+
+                // 3. SUCCESS UI
+                document.getElementById('buy-form').innerHTML = `
+                    <div class="py-10">
+                        <h3 class="text-3xl font-bold mb-4">Erfolg!</h3>
+                        <p class="text-gray-500 mb-6 text-sm uppercase tracking-widest">Dein exklusiver Code:</p>
+                        <p class="text-blue-600 text-4xl font-mono font-bold tracking-tighter">${gcCode}</p>
+                        <p class="mt-8 text-gray-400 text-xs">Bestätigung wurde an ${emailField.value} gesendet.</p>
+                    </div>`;
             } catch (err) {
-                alert("Fehler bei der Reservierung.");
+                console.error(err);
+                alert("Fehler. Bitte versuche es erneut.");
                 btn.disabled = false;
                 btn.innerText = "Zertifikat sichern";
             }
