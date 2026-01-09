@@ -247,6 +247,8 @@
         const SUPABASE_URL = 'https://nyekitzejjvhbyvaziwl.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55ZWtpdHplamp2aGJ5dmF6aXdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyNDgyMDksImV4cCI6MjA4MjgyNDIwOX0.vR9NZ7A9XAXTt7D5gNJwFxzL9upfNvc3RDUXKSdHtj4';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        // Initialisiere EmailJS
         emailjs.init("F5cjv5ufT9CjYDpAJ");
 
         let PRODUCTS = [];
@@ -321,13 +323,42 @@
             const currentProduct = PRODUCTS[currentIndex];
             const gcCode = "GC-" + Math.random().toString(36).substring(2, 7).toUpperCase();
 
+            // Parameter für die Email vorbereiten
+            const emailParams = {
+                to_name: nameField.value,
+                to_email: emailField.value,
+                gc_code: gcCode,
+                product_name: currentProduct.name
+            };
+
             try {
-                await supabaseClient.from('orders').insert([{ product_id: currentProduct.db_id, customer_name: nameField.value, customer_email: emailField.value, gc_code: gcCode }]);
+                // HIER: Ersetze 'DEINE_SERVICE_ID' und 'DEINE_TEMPLATE_ID' mit deinen echten IDs von EmailJS!
+                const SERVICE_ID = "DEINE_SERVICE_ID"; 
+                const TEMPLATE_ID = "DEINE_TEMPLATE_ID";
+
+                // Wir senden an Supabase UND EmailJS gleichzeitig
+                await Promise.all([
+                    supabaseClient.from('orders').insert([{ 
+                        product_id: currentProduct.db_id, 
+                        customer_name: nameField.value, 
+                        customer_email: emailField.value, 
+                        gc_code: gcCode 
+                    }]),
+                    emailjs.send(SERVICE_ID, TEMPLATE_ID, emailParams)
+                ]);
+
                 document.getElementById('buy-form').innerHTML = `<div class="text-center"><h3 class="text-3xl font-bold mb-4">Reserviert!</h3><p class="text-blue-600 text-2xl font-bold">${gcCode}</p><p class="mt-4 text-gray-500">Check deine E-Mails.</p></div>`;
             } catch (err) {
-                alert("Fehler bei der Reservierung.");
-                btn.disabled = false;
-                btn.innerText = "Zertifikat sichern";
+                console.error("Order Error:", err);
+                // Fallback: Wenn Supabase geht, aber Email nicht, zeigen wir trotzdem Erfolg, loggen aber den Fehler
+                if(err.message && err.message.includes("emailjs")) {
+                     alert("Reservierung war erfolgreich, aber die E-Mail konnte nicht gesendet werden. Bitte Screenshot vom Code machen!");
+                     document.getElementById('buy-form').innerHTML = `<div class="text-center"><h3 class="text-3xl font-bold mb-4">Reserviert!</h3><p class="text-blue-600 text-2xl font-bold">${gcCode}</p></div>`;
+                } else {
+                    alert("Fehler bei der Reservierung. Bitte versuche es erneut.");
+                    btn.disabled = false;
+                    btn.innerText = "Zertifikat sichern";
+                }
             }
         }
 
