@@ -6,7 +6,6 @@
     <title>GearChain - Apple Experience</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     
     <style>
@@ -31,6 +30,10 @@
         .anim-slide-up { transform: translateY(60px) scale(0.95); }
         .anim-blur { filter: blur(20px); transform: translateY(20px); }
         .anim-zoom { transform: scale(1.1); }
+        
+        /* Success Animation */
+        @keyframes scaleIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .checkmark-anim { animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
 
         /* --- GALLERY & UI --- */
         #gallery-img { transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -154,7 +157,7 @@
 
         <section id="buy" class="relative z-30 min-h-screen bg-[#f5f5f7] flex flex-col items-center justify-center py-24 px-6">
             <div class="max-w-md w-full reveal-base anim-slide-up">
-                <div id="main-buy-card" class="bg-white rounded-[40px] p-10 md:p-16 text-center shadow-2xl">
+                <div id="main-buy-card" class="bg-white rounded-[40px] p-10 md:p-16 text-center shadow-2xl transition-all duration-500">
                     <div id="buy-form">
                         <p id="preorder-tag" class="text-orange-600 font-bold text-xs tracking-widest uppercase mb-4 hidden">Vorbestellung</p>
                         <div id="form-price" class="text-6xl font-bold mb-12 tracking-tighter">€--.--</div>
@@ -188,26 +191,7 @@
             </button>
             <h1 class="text-5xl font-bold mb-10 tracking-tight">Datenschutz bei GearChain</h1>
             <div class="space-y-8 text-gray-600 leading-relaxed">
-                <section>
-                    <h2 class="text-2xl font-semibold text-black mb-4">1. Einleitung</h2>
-                    <p>GearChain nimmt den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend der gesetzlichen Datenschutzvorschriften sowie dieser Datenschutzerklärung.</p>
-                </section>
-                <section>
-                    <h2 class="text-2xl font-semibold text-black mb-4">2. Datenerfassung auf unserer Website</h2>
-                    <p>Die Datenerarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Die Kontaktdaten können Sie dem Impressum dieser Website entnehmen. Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen (z. B. durch Eingabe im Bestellformular).</p>
-                </section>
-                <section>
-                    <h2 class="text-2xl font-semibold text-black mb-4">3. Zweck der Datennutzung</h2>
-                    <p>Wir nutzen Ihre Daten ausschließlich zur Abwicklung Ihrer Reservierung und zur Kommunikation bezüglich Ihres GearChain Zertifikats. Eine Weitergabe an Dritte erfolgt nur, wenn dies zur Vertragserfüllung notwendig ist (z. B. Versanddienstleister oder Email-Service-Provider wie EmailJS).</p>
-                </section>
-                <section>
-                    <h2 class="text-2xl font-semibold text-black mb-4">4. Ihre Rechte</h2>
-                    <p>Sie haben jederzeit das Recht, unentgeltlich Auskunft über Herkunft, Empfänger und Zweck Ihrer gespeicherten personenbezogenen Daten zu erhalten. Sie haben außerdem ein Recht, die Berichtigung oder Löschung dieser Daten zu verlangen. Hierzu sowie zu weiteren Fragen zum Thema Datenschutz können Sie sich jederzeit unter der im Impressum angegebenen Adresse an uns wenden.</p>
-                </section>
-                <section>
-                    <h2 class="text-2xl font-semibold text-black mb-4">5. Analyse-Tools und Tools von Drittanbietern</h2>
-                    <p>Wir nutzen Supabase für unsere Datenbankdienste und EmailJS für den Versand von Bestätigungsmails. Diese Dienste verarbeiten Daten nach strengen Sicherheitsstandards und dienen der technischen Bereitstellung unserer Services.</p>
-                </section>
+                <p>Wir nutzen Ihre Daten ausschließlich zur Abwicklung Ihrer Reservierung. Es erfolgt keine Weitergabe an Dritte, außer zur technischen Bereitstellung (Supabase).</p>
             </div>
         </div>
     </div>
@@ -219,26 +203,7 @@
             </button>
             <h1 class="text-5xl font-bold mb-10 tracking-tight">Impressum</h1>
             <div class="space-y-8 text-gray-600 leading-relaxed text-lg">
-                <p>
-                    <strong class="text-black">Angaben gemäß § 5 TMG:</strong><br>
-                    Robert Vogt<br>
-                    Boyenstraße 27<br>
-                    10115 Berlin
-                </p>
-                <p>
-                    <strong class="text-black">Kontakt:</strong><br>
-                    E-Mail: kontakt@gearchain.de<br>
-                    Telefon: [Deine Telefonnummer]
-                </p>
-                <p>
-                    <strong class="text-black">Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:</strong><br>
-                    Robert Vogt<br>
-                    Boyenstraße 27<br>
-                    10115 Berlin
-                </p>
-                <p class="text-sm text-gray-400 pt-10">
-                    Haftungshinweis: Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich.
-                </p>
+                <p>Robert Vogt<br>Boyenstraße 27<br>10115 Berlin<br>Kontakt: kontakt@gearchain.de</p>
             </div>
         </div>
     </div>
@@ -247,7 +212,8 @@
         const SUPABASE_URL = 'https://nyekitzejjvhbyvaziwl.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55ZWtpdHplamp2aGJ5dmF6aXdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyNDgyMDksImV4cCI6MjA4MjgyNDIwOX0.vR9NZ7A9XAXTt7D5gNJwFxzL9upfNvc3RDUXKSdHtj4';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        emailjs.init("F5cjv5ufT9CjYDpAJ");
+        
+        // EmailJS Init wurde entfernt
 
         let PRODUCTS = [];
         let currentIndex = 0;
@@ -320,12 +286,57 @@
             btn.disabled = true;
             const currentProduct = PRODUCTS[currentIndex];
             const gcCode = "GC-" + Math.random().toString(36).substring(2, 7).toUpperCase();
+            
+            // Datum für Anzeige
+            const date = new Date().toLocaleDateString('de-DE');
 
             try {
+                // Nur noch Datenbankeintrag
                 await supabaseClient.from('orders').insert([{ product_id: currentProduct.db_id, customer_name: nameField.value, customer_email: emailField.value, gc_code: gcCode }]);
-                document.getElementById('buy-form').innerHTML = `<div class="text-center"><h3 class="text-3xl font-bold mb-4">Reserviert!</h3><p class="text-blue-600 text-2xl font-bold">${gcCode}</p><p class="mt-4 text-gray-500">Check deine E-Mails.</p></div>`;
+                
+                // --- NEUE SUCCESS UI OHNE EMAIL ---
+                const card = document.getElementById('main-buy-card');
+                card.innerHTML = `
+                    <div class="text-center animate-fade-in pb-4">
+                        <div class="mx-auto w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mb-6 checkmark-anim shadow-lg shadow-green-500/30">
+                            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-2 tracking-tight">Reservierung bestätigt.</h3>
+                        <p class="text-gray-500 mb-8 font-medium">Deine GearChain ist gesichert.</p>
+
+                        <div class="bg-gray-50 rounded-2xl p-6 text-left space-y-4 mb-8 border border-gray-100 shadow-inner">
+                            <div class="flex justify-between items-center border-b border-gray-200 pb-3">
+                                <span class="text-xs uppercase text-gray-400 font-bold tracking-wider">Kunde</span>
+                                <span class="font-semibold text-gray-900">${nameField.value}</span>
+                            </div>
+                            <div class="flex justify-between items-center border-b border-gray-200 pb-3">
+                                <span class="text-xs uppercase text-gray-400 font-bold tracking-wider">Modell</span>
+                                <span class="font-semibold text-gray-900">${currentProduct.name}</span>
+                            </div>
+                             <div class="flex justify-between items-center border-b border-gray-200 pb-3">
+                                <span class="text-xs uppercase text-gray-400 font-bold tracking-wider">Email</span>
+                                <span class="font-semibold text-gray-900 text-sm">${emailField.value}</span>
+                            </div>
+                            
+                            <div class="pt-2">
+                                <span class="text-xs uppercase text-gray-400 font-bold tracking-wider block mb-1">Dein Reservierungs-Code</span>
+                                <div class="text-4xl font-mono font-bold text-blue-600 tracking-tighter">${gcCode}</div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col items-center justify-center gap-2">
+                            <div class="flex items-center gap-2 text-orange-600 font-bold text-sm bg-orange-50 px-5 py-3 rounded-full border border-orange-100">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                <span>Bitte Screenshot speichern</span>
+                            </div>
+                            <p class="text-[10px] text-gray-400 mt-3 uppercase tracking-widest">Nicht schließen bevor gesichert</p>
+                        </div>
+                    </div>
+                `;
+
             } catch (err) {
-                alert("Fehler bei der Reservierung.");
+                console.error(err);
+                alert("Fehler bei der Reservierung. Bitte Netzwerk prüfen.");
                 btn.disabled = false;
                 btn.innerText = "Zertifikat sichern";
             }
